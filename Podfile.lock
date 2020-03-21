@@ -1,0 +1,34 @@
+PODS:
+  - RxCocoa (5.0.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.0.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.1)
+  - SZMentionsSwift (2.1.3)
+  - Tagging (0.5.0)
+
+DEPENDENCIES:
+  - RxCocoa (~> 5)
+  - RxSwift (~> 5)
+  - SZMentionsSwift
+  - Tagging
+
+SPEC REPOS:
+  trunk:
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - SZMentionsSwift
+    - Tagging
+
+SPEC CHECKSUMS:
+  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
+  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
+  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
+  SZMentionsSwift: 1d9d4bf8bfc234c8d8bd79f480947663a096200c
+  Tagging: 51afaf28d0d49ea7cf8600b2bda33cb7bff1c5ff
+
+PODFILE CHECKSUM: 5b33a7d877f156f232535a1e59bb6ea463f8a2f7
+
+COCOAPODS: 1.8.4

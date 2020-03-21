@@ -1,0 +1,6 @@
+framework module SZMentionsSwift {
+  umbrella header "SZMentionsSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}
