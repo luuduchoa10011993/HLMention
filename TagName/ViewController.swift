@@ -67,8 +67,6 @@ class ViewController: UIViewController {
 
     }
 
-    
-    
     //attribute of String
     func attributeString(initialString: String , valueReplace: String) -> NSMutableAttributedString{
         let mutableAttributedString = NSMutableAttributedString(string: initialString)
@@ -107,36 +105,36 @@ class ViewController: UIViewController {
     @ string                  :  string after @ which will be replaced by value selected
     @ nameReplace     : the value which is selected
      */
-    func replaceString (textFieldString: String, range: (range: NSRange, foundString: String), stringNeedReplace: String, nameReplace: String) -> String? {
-//        if let range = tfText.text!.range(of: string) {
-//        guard let textInTextField = tfSearchName.text as? String else  {return nil}
-//        textInTextField.range(of: stringNeedReplace)
-        let substring = textFieldString[...range.range.lowerBound]
-            print("Substring: \(substring)")
-        self.stringNeedReplace = String(substring)
-            textFieldString.replaceSubrange(range , with: nameReplace + " ")
-            print(stringNeedReplace)
-            return stringNeedReplace
-        return nil
-    }
+//    func replaceString (textFieldString: String, range: (range: NSRange, foundString: String), stringNeedReplace: String, nameReplace: String) -> String? {
+////        if let range = tfText.text!.range(of: string) {
+////        guard let textInTextField = tfSearchName.text as? String else  {return nil}
+////        textInTextField.range(of: stringNeedReplace)
+//        let substring = textFieldString[...range.range.lowerBound]
+//            print("Substring: \(substring)")
+//        self.stringNeedReplace = String(substring)
+//            textFieldString.replaceSubrange(range , with: nameReplace + " ")
+//            print(stringNeedReplace)
+//            return stringNeedReplace
+//        return nil
+//    }
     
     
-//        func replaceString (textFieldString: String, string: String, nameReplace: String) -> String? {
-//    //        if let range = tfText.text!.range(of: string) {
-//            guard let textInTextField = tfSearchName.text as? String else  {return nil}
-//            textInTextField.range(of: string)
-//            print("String: \(string)")
-//            if let range = textInTextField.range(of: string) {
-//
-//                let substring = tfSearchName.text![...range.lowerBound]
-//                print("Substring: \(substring)")
-//                stringNeedReplace = String(substring)
-//                tfSearchName.text!.replaceSubrange(range , with: nameReplace + " ")
-//                print(stringNeedReplace)
-//                return stringNeedReplace
-//            }
-//            return nil
-//        }
+        func replaceString (textInTextField: String, stringAfterSymbol: String, nameReplace: String) -> String? {
+    //        if let range = tfText.text!.range(of: string) {
+//            guard let textInTextField = textInTextField else  {return nil}
+            textInTextField.range(of: stringAfterSymbol)
+            print("stringAfterSymbol: \(stringAfterSymbol)")
+            if let range = textInTextField.range(of: stringAfterSymbol) {
+
+                let substring = tfSearchName.text![...range.lowerBound]
+                print("Substring: \(substring)")
+                stringNeedReplace = String(substring)
+                tfSearchName.text!.replaceSubrange(range , with: nameReplace + " ")
+                print(stringNeedReplace)
+                return stringNeedReplace
+            }
+            return nil
+        }
 
     func valueChanges(range: NSRange, replacementString: String){
 //        handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
@@ -252,18 +250,18 @@ class ViewController: UIViewController {
         if currentChange != String(symbol), range.location >= 0{
 
 //            if let stringoutput = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
-                if let stringoutput = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
-                print("stringoutput: \(stringoutput)")
-                if stringoutput.count == 0 {
+                if let stringAfterSymbol = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
+                print("stringAfterSymbol: \(stringAfterSymbol)")
+                    stringNeedReplace = stringAfterSymbol
+                if stringAfterSymbol.count == 0 {
                     print(arrayData)
                 } else {
-                    filter(data: arrayData, string: stringoutput)
+                    filter(data: arrayData, string: stringAfterSymbol)
                 }
             }
         }
     }
 }
-
 
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
@@ -299,12 +297,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
             print (stringNeedReplace)
             guard let tfSearchNameText = tfSearchName.text else  {return}
             if let range = tfSearchNameText.range(of: stringNeedReplace) {
-                tfSearchName.text = replaceString(textFieldString: tfSearchNameText,
-                                              range: range,
-                                              stringNeedReplace: stringNeedReplace,
-                                              nameReplace: valueReplace)
+//                tfSearchName.text = replaceString(textFieldString: tfSearchNameText,
+//                                              range: range,
+//                                              stringNeedReplace: stringNeedReplace,
+//                                              nameReplace: valueReplace)
             }
-//            tfSearchName.text =  replaceString(textField: tfSearchName, string: stringNeedReplace, nameReplace: valueReplace)
+            tfSearchName.text =  replaceString(textInTextField: tfSearchName.text!, stringAfterSymbol: stringNeedReplace, nameReplace: valueReplace)
+            
             tbvUserName.isHidden = true
         }
         // check text Field has valueReplace
