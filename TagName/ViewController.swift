@@ -15,7 +15,8 @@ import SZMentionsSwift
 class ViewController: UIViewController {
 
     let kUsers: [UserModel] = [UserModel("00", "Hoa"), UserModel("01", "Vuong Khac Duy"), UserModel("02", "Dương"),
-                               UserModel("03", "Nguyễn Đoàn Nguyên An"), UserModel("04", "Nguyễn Kiều Vy"), UserModel("05", "Nguyễn Duy Ngân")]
+                               UserModel("03", "Nguyễn Đoàn Nguyên An"), UserModel("04", "Nguyễn Kiều Vy"), UserModel("05", "Nguyễn Duy Ngân"),
+                               UserModel("06", "Donald Trump"), UserModel("07", "Hoà cute phô mai que")]
     var range: NSRange = _NSRange()
     var replacementString: String = ""
     var text  = ""
@@ -243,6 +244,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if kUsersTableView.count > 5 {
+            return 5
+        }
         return kUsersTableView.count
     }
     
