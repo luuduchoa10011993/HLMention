@@ -13,23 +13,24 @@ import Tagging
 import SZMentionsSwift
 
 class ViewController: UIViewController {
-
+    
+    @IBOutlet weak var tfSearchName: UITextField!
+    @IBOutlet weak var tbListUserTag: UITableView!
+    
     let kUsers: [UserModel] = [UserModel("00", "Hoa"), UserModel("01", "Vuong Khac Duy"), UserModel("02", "Dương"),
                                UserModel("03", "Nguyễn Đoàn Nguyên An"), UserModel("04", "Nguyễn Kiều Vy"), UserModel("05", "Nguyễn Duy Ngân"),
                                UserModel("06", "Donald Trump"), UserModel("07", "Hoà cute phô mai que")]
     var range: NSRange = _NSRange()
     var replacementString: String = ""
-    var text  = ""
-    var kUsersTableView: [UserModel] = []
     var arrayNameDidChangeAttribute:[String] = []
     
     let disposeBag = DisposeBag()
     var stringNeedReplace = ""
     var textChange = ""
+    var text  = ""
     
-    @IBOutlet weak var tfSearchName: UITextField!
-    @IBOutlet weak var tbListUserTag: UITableView!
-    
+    //tableview data
+    var kUsersTableView: [UserModel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -257,34 +258,29 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = tbListUserTag.indexPathForSelectedRow!
-        let currentCell = tbListUserTag.cellForRow(at: indexPath)! as! NameTableViewCell
-        guard let valueReplace: String = currentCell.lbNameUser.text else {return}
-        if stringNeedReplace != nil {
-            print (stringNeedReplace)
-            guard let tfSearchNameText = tfSearchName.text else  {return}
-            if let range = tfSearchNameText.range(of: stringNeedReplace) {
+        let userModel = kUsersTableView[indexPath.row]
+//            guard let tfSearchNameText = tfSearchName.text else {return}
+//            if let range = tfSearchNameText.range(of: stringNeedReplace) {
 //                tfSearchName.text = replaceString(textFieldString: tfSearchNameText,
 //                                              range: range,
 //                                              stringNeedReplace: stringNeedReplace,
 //                                              nameReplace: valueReplace)
-            }
-            tfSearchName.text =  replaceString(textInTextField: tfSearchName.text!, stringAfterSymbol: stringNeedReplace, nameReplace: valueReplace)
-            
+//            }
+//            tfSearchName.text =  replaceString(textInTextField: tfSearchName.text!, stringAfterSymbol: stringNeedReplace, nameReplace: userModel.getDisplayName())
+    tfSearchName.insertString(insertString: userModel.getDisplayName(), atCurrentCursorPosition: true)
             tbListUserTag.isHidden = true
-        }
         // check text Field has valueReplace
-        if  (tfSearchName.text?.contains(valueReplace))!{
-            textChange = valueReplace
-            
-            // check if array name did Change attribute has textChange or not . if not -> append into array
-            if !arrayNameDidChangeAttribute.contains(textChange){
-                arrayNameDidChangeAttribute.append(textChange)
-            }
-            print(arrayNameDidChangeAttribute)
-            
-            tfSearchName.attributedText =  attributeString(initialString: tfSearchName.text!, valueReplace: valueReplace)
-        }
+//        if  (tfSearchName.text?.contains(valueReplace))!{
+//            textChange = valueReplace
+//
+//            // check if array name did Change attribute has textChange or not . if not -> append into array
+//            if !arrayNameDidChangeAttribute.contains(textChange){
+//                arrayNameDidChangeAttribute.append(textChange)
+//            }
+//            print(arrayNameDidChangeAttribute)
+//
+//            tfSearchName.attributedText =  attributeString(initialString: tfSearchName.text!, valueReplace: valueReplace)
+//        }
     }
 }
 

@@ -9,20 +9,21 @@
 import Foundation
 import UIKit
 
-class HoaLDTagName: NSObject {
-    /*
-//    let cursorPosition = tfSearchName.offset(from: tfSearchName.beginningOfDocument, to: selectedTextRange.start)
-    public static func stringFrom(string: String, cursorPosition: Int, insertString: String) -> String {
-        var editedString = string
-        editedString.insert(insertString, at: cursorPosition)
-        return editedString
+extension String {
+    mutating func insertString(string:String, atIndex:Int) {
+        self.insert(contentsOf: string, at:self.index(self.startIndex, offsetBy: index))
     }
-    
-    public static func stringFrom(string: String, cursorPosition: Int, removeString: String) -> String {
-        var editedString = string
-//        editedString.remove(at: String.Index)
-        return editedString
+}
+
+extension UITextField {
+    func insertString(insertString: String, atCurrentCursorPosition: Bool) {
+        if atCurrentCursorPosition {
+            var editedString = self.text ?? ""
+            if let selectedRange = self.selectedTextRange {
+                let cursorPosition = self.offset(from: self.beginningOfDocument, to: selectedRange.start)
+                editedString.insertString(string: insertString, index: cursorPosition)
+                self.text = editedString
+            }
+        }
     }
-    
-    */
 }

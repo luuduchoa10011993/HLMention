@@ -11,9 +11,6 @@ import UIKit
 class NameTableViewCell: UITableViewCell {
 
     @IBOutlet weak var lbNameUser: UILabel!
-    
-    var userModel: UserModel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,7 +23,6 @@ class NameTableViewCell: UITableViewCell {
     }
 
     func display(_ userModel: UserModel) {
-        self.userModel = userModel
         self.lbNameUser.text = userModel.getDisplayName()
     }
 }
