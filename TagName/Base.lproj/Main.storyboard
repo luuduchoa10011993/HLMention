@@ -31,16 +31,12 @@
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <action selector="tfEditingChange:" destination="BYZ-38-t0r" eventType="editingChanged" id="jEi-gc-TJJ"/>
-                                    <action selector="tfValueChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="gHX-kG-8wL"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="oqt-uE-TT1"/>
                                 </connections>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="69I-Bb-CAi">
-                                <rect key="frame" x="20" y="99" width="374" height="200"/>
+                                <rect key="frame" x="20" y="99" width="374" height="797"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="YwI-bG-Ol5"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NameTableViewCell" rowHeight="96" id="Utn-SZ-kaf" customClass="NameTableViewCell" customModule="TagName" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="374" height="96"/>
@@ -78,6 +74,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="69I-Bb-CAi" secondAttribute="bottom" id="14d-V6-ASn"/>
                             <constraint firstItem="xGB-Dh-41W" firstAttribute="bottom" secondItem="9Mn-wj-LYx" secondAttribute="bottom" id="DHe-mM-Owd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="69I-Bb-CAi" secondAttribute="trailing" constant="20" id="G35-10-7fu"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9Mn-wj-LYx" secondAttribute="trailing" constant="5" id="Hlh-BD-jip"/>
@@ -92,7 +89,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="tbvUserName" destination="69I-Bb-CAi" id="Rw8-79-qL8"/>
+                        <outlet property="tbListUserTag" destination="69I-Bb-CAi" id="MMC-4d-K0u"/>
                         <outlet property="tfSearchName" destination="9Mn-wj-LYx" id="T0h-ek-HBM"/>
                     </connections>
                 </viewController>

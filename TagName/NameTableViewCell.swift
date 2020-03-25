@@ -13,8 +13,6 @@ class NameTableViewCell: UITableViewCell {
     @IBOutlet weak var lbNameUser: UILabel!
     
     var userModel: UserModel!
-    var userName = ""
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,10 +28,5 @@ class NameTableViewCell: UITableViewCell {
     func display(_ userModel: UserModel) {
         self.userModel = userModel
         self.lbNameUser.text = userModel.getDisplayName()
-    }
-    
-    func displayUserName(userName: String) {
-        self.userName = userName
-        self.lbNameUser.text = userName
     }
 }

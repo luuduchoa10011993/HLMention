@@ -27,11 +27,12 @@ class ViewController: UIViewController {
     var textChange = ""
     
     @IBOutlet weak var tfSearchName: UITextField!
-    @IBOutlet weak var tbvUserName: UITableView!
+    @IBOutlet weak var tbListUserTag: UITableView!
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tbListUserTag.tableFooterView = UIView()
 
     }
     //attribute of String
@@ -147,7 +148,7 @@ class ViewController: UIViewController {
         print ("Array  Name: \(self.arrayName.count)")
         print("Array  Name    : \(self.arrayName)")
 
-        self.tbvUserName.reloadData()
+        self.tbListUserTag.reloadData()
 
         return arrayDetected
     }
@@ -188,24 +189,24 @@ class ViewController: UIViewController {
         @ if current input != @ hidden tableView
          */
         if checkCurrentInputIsSymbol(characterInput: string) == true {
-            tbvUserName.isHidden = false
+            tbListUserTag.isHidden = false
             /**
             @ if location of @ == 0 hidden tableView
             @ if location of @ != 0 show tableView
             */
             if checkLocationAt(locationOfCharacterInputAt: 0) == true {
-                tbvUserName.isHidden = false
+                tbListUserTag.isHidden = false
             } else {
                 /**
                  @ if the character before @ == @  -> hidden table View = true
                  @ if the character before @ != @ ->   hidden table View = false
                  */
                 if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: tfSearchName.text!, stringInput: string) == true {
-                    tbvUserName.isHidden = true
+                    tbListUserTag.isHidden = true
                 } else {
                     self.kUsersTableView = self.kUsers
                     print("currentchange: \(currentChange)")
-                    tbvUserName.reloadData()
+                    tbListUserTag.reloadData()
                     return
                 }
             }
@@ -252,8 +253,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = tbvUserName.indexPathForSelectedRow!
-        let currentCell = tbvUserName.cellForRow(at: indexPath)! as! NameTableViewCell
+        let indexPath = tbListUserTag.indexPathForSelectedRow!
+        let currentCell = tbListUserTag.cellForRow(at: indexPath)! as! NameTableViewCell
         guard let valueReplace: String = currentCell.lbNameUser.text else {return}
         if stringNeedReplace != nil {
             print (stringNeedReplace)
@@ -266,7 +267,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
             }
             tfSearchName.text =  replaceString(textInTextField: tfSearchName.text!, stringAfterSymbol: stringNeedReplace, nameReplace: valueReplace)
             
-            tbvUserName.isHidden = true
+            tbListUserTag.isHidden = true
         }
         // check text Field has valueReplace
         if  (tfSearchName.text?.contains(valueReplace))!{
@@ -295,7 +296,7 @@ extension ViewController: UITextFieldDelegate{
             // if text field == "" -> remove all name in arrayName + table View Name (tbvName) hidden + reload data
         } else {
             kUsersTableView.removeAll()
-            tbvUserName.reloadData()
+            tbListUserTag.reloadData()
         }
     }
 
@@ -312,11 +313,7 @@ extension ViewController: UITextFieldDelegate{
         }
         return true
     }
-    
-    
-    @IBAction func tfValueChange(_ sender: UITextField) {
 
-    }
 //    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 //        self.range = range
 //        self.replacementString = text
