@@ -14,59 +14,26 @@ import SZMentionsSwift
 
 class ViewController: UIViewController {
 
-    
-    let arrayData : [String] = ["Vuong Khac Duy","Vuong Gia Huy","Nguyen Van A","Pham Van B","Tran Van C", "Pham Hung D","Nguyen Manh E","Luong Nguyen Thi F","Nguyen Van G","Pham Van H", "Nguyen Van F", "Pham Hung J", "Tran Nguyen Hoang E", "Nguyen Ngoc Q", "Nguyen Thi W", "Truong Van R"]
+    let kUsers: [UserModel] = [UserModel("00", "Hoa"), UserModel("01", "Vuong Khac Duy"), UserModel("02", "Dương"),
+                               UserModel("03", "Nguyễn Đoàn Nguyên An"), UserModel("04", "Nguyễn Kiều Vy"), UserModel("05", "Nguyễn Duy Ngân")]
     var range: NSRange = _NSRange()
     var replacementString: String = ""
     var text  = ""
-    var arrayName: [String] = []
+    var kUsersTableView: [UserModel] = []
     var arrayNameDidChangeAttribute:[String] = []
     
     let disposeBag = DisposeBag()
     var stringNeedReplace = ""
     var textChange = ""
     
-
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Do any additional setup after loading the view.
-        if arrayName.count == 0 {
-            tbvUserName.isHidden = true
-        } else {
-          tbvUserName.isHidden = false
-        }
-
-        tbvUserName.dataSource = self
-        tbvUserName.delegate = self
-        tfSearchName.delegate = self
-
-    }
-    
-    
     @IBOutlet weak var tfSearchName: UITextField!
     @IBOutlet weak var tbvUserName: UITableView!
     
-    @IBAction func tfEditingChange(_ sender: Any) {
-        // if text Field  != "" -> run value Change
-        if !(tfSearchName.text == "") {
-            //  valueChanges(range: self.range, replacementString: self.replacementString)
-            handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
-            
-            // if text field == "" -> remove all name in arrayName + table View Name (tbvName) hidden + reload data
-        } else {
-            arrayName.removeAll()
-            tbvUserName.isHidden = true
-            tbvUserName.reloadData()
-            
-        }
-    }
-    
-    @IBAction func tfValueChange(_ sender: UITextField) {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
     }
-
     //attribute of String
     func attributeString(initialString: String , valueReplace: String) -> NSMutableAttributedString{
         let mutableAttributedString = NSMutableAttributedString(string: initialString)
@@ -137,7 +104,6 @@ class ViewController: UIViewController {
         }
 
     func valueChanges(range: NSRange, replacementString: String){
-//        handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
         handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
     }
     
@@ -168,6 +134,7 @@ class ViewController: UIViewController {
         return false
     }
     
+    /*
     // func filter name in list
     func filter(data:[String] ,string: String) -> [String] {
         var arrayDetected: [String] = []
@@ -184,6 +151,7 @@ class ViewController: UIViewController {
 
         return arrayDetected
     }
+ */
     
     // func get string without symbol
     func getStringWithoutSymbol(textInput:String , indexOfLastCharacter: Int,_ symbol: Character) -> String? {
@@ -232,13 +200,10 @@ class ViewController: UIViewController {
                  @ if the character before @ == @  -> hidden table View = true
                  @ if the character before @ != @ ->   hidden table View = false
                  */
-//                if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: tfSearchName.text!, stringInput: string) == true {
                 if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: tfSearchName.text!, stringInput: string) == true {
                     tbvUserName.isHidden = true
                 } else {
-                    print(arrayData)
-                    self.arrayName = arrayData
-                    print("arrayName \(arrayName)")
+                    self.kUsersTableView = self.kUsers
                     print("currentchange: \(currentChange)")
                     tbvUserName.reloadData()
                     return
@@ -254,44 +219,41 @@ class ViewController: UIViewController {
                 print("stringAfterSymbol: \(stringAfterSymbol)")
                     stringNeedReplace = stringAfterSymbol
                 if stringAfterSymbol.count == 0 {
-                    print(arrayData)
+//                    print(arrayData)
                 } else {
+                    /*
                     filter(data: arrayData, string: stringAfterSymbol)
+                     trả về mảng string
+                     */
                 }
             }
         }
     }
+    
+    
 }
 
-
+//  MARK: - UITableView Delegate - DataSource
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        tableView.isHidden = kUsersTableView.count == 0 ? true : false
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if arrayName.count == 0{
-            return arrayData.count
-        } else {
-            return arrayName.count
-        }
+        return kUsersTableView.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NameTableViewCell", for: indexPath) as! NameTableViewCell
-        if arrayName.count == 0{
-            cell.lbNameUser.text = arrayData[indexPath.item]
-            tbvUserName.isHidden = true
-            return cell
-        } else {
-            tbvUserName.isHidden = false
-            cell.lbNameUser.text = arrayName[indexPath.item]
-            return cell
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: NameTableViewCell.self), for: indexPath) as! NameTableViewCell
+        cell.display(kUsersTableView[indexPath.item])
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //get the cell based on the indexPath
         let indexPath = tbvUserName.indexPathForSelectedRow!
         let currentCell = tbvUserName.cellForRow(at: indexPath)! as! NameTableViewCell
-        //get the text from a textLabel
         guard let valueReplace: String = currentCell.lbNameUser.text else {return}
         if stringNeedReplace != nil {
             print (stringNeedReplace)
@@ -321,7 +283,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
+//  MARK: - UITextFieldDelegate
 extension ViewController: UITextFieldDelegate{
+    
+    @IBAction func tfEditingChange(_ sender: UITextField) {
+        // if text Field  != "" -> run value Change
+        if tfSearchName.text != "" {
+            //  valueChanges(range: self.range, replacementString: self.replacementString)
+            handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
+            
+            // if text field == "" -> remove all name in arrayName + table View Name (tbvName) hidden + reload data
+        } else {
+            kUsersTableView.removeAll()
+            tbvUserName.reloadData()
+        }
+    }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
@@ -337,6 +313,10 @@ extension ViewController: UITextFieldDelegate{
         return true
     }
     
+    
+    @IBAction func tfValueChange(_ sender: UITextField) {
+
+    }
 //    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
 //        self.range = range
 //        self.replacementString = text
