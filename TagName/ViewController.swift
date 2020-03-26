@@ -17,9 +17,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var mentionsTextField: HoaLDMentionsTextField!
     @IBOutlet weak var tbListUserTag: UITableView!
     
-    let kUsers: [UserInfo] = [UserInfo("00", "Hoa"), UserInfo("01", "Vuong Khac Duy"), UserInfo("02", "Dương"),
-                               UserInfo("03", "Nguyễn Đoàn Nguyên An"), UserInfo("04", "Nguyễn Kiều Vy"), UserInfo("05", "Nguyễn Duy Ngân"),
-                               UserInfo("06", "Donald Trump"), UserInfo("07", "Hoà cute phô mai que")]
+    let kUsers: [MentionInfo] = [MentionInfo("00", "Hoa"), MentionInfo("01", "Vuong Khac Duy"), MentionInfo("02", "Dương"),
+                               MentionInfo("03", "Nguyễn Đoàn Nguyên An"), MentionInfo("04", "Nguyễn Kiều Vy"), MentionInfo("05", "Nguyễn Duy Ngân"),
+                               MentionInfo("06", "Donald Trump"), MentionInfo("07", "Hoà cute phô mai que")]
     var range: NSRange = _NSRange()
     var replacementString: String = ""
     var arrayNameDidChangeAttribute:[String] = []
@@ -30,8 +30,8 @@ class ViewController: UIViewController {
     var text  = ""
     
     //tableview data
-    var kUsersTableView: [UserInfo] = []
-    
+    var kUsersTableView: [MentionInfo] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
@@ -108,7 +108,7 @@ class ViewController: UIViewController {
     }
     
     func valueChanges(range: NSRange, replacementString: String){
-        handleSymbol(initialString: mentionsTextField.text!, range: self.range, replacementString: self.replacementString)
+        handleSymbol(textFieldText: mentionsTextField.text!, range: self.range, replacementString: self.replacementString)
     }
     
     // @==---------------------------func check current input---------------------------------==@
@@ -158,8 +158,9 @@ class ViewController: UIViewController {
      */
     
     // func get string without symbol
-    func getStringWithoutSymbol(textInput:String , indexOfLastCharacter: Int,_ symbol: Character) -> String? {
-        if indexOfLastCharacter == 0, textInput == String(symbol) {
+    func getStringWithoutSymbol(textInput:String , range: NSRange,_ symbol: Character) -> String? {
+        let indexOfLastCharacter = range.location
+        if range.location == 0, range.length == 0, textInput == String(symbol) {
             return ""
         }
         for ranges in (0 ..< indexOfLastCharacter ).reversed(){
@@ -174,7 +175,7 @@ class ViewController: UIViewController {
                 //case "" -> has @ not character
                 if textInput == "" {
                     return ""
-                } else  {
+                } else {
                     var rangesofString = textInput[startIndex ... endIndex]
                     //             print("rangeOfString : \(rangesofString)")
                     return String(textInput[startIndex ... endIndex] )
@@ -185,45 +186,30 @@ class ViewController: UIViewController {
         return nil
     }
     
-    func handleSymbol (initialString: String, range: NSRange, replacementString string: String ){
+    func handleSymbol (textFieldText: String, range: NSRange, replacementString string: String){
+        // current change là @,
+        let symbol: Character = "@"
         let currentChange = string
-        /**
-         @ if current Input == @ show tableView
-         @ if current input != @ hidden tableView
-         */
-        if checkCurrentInputIsSymbol(characterInput: string) == true {
+        
+        if checkCurrentInputIsSymbol(characterInput: string) == true || checkLocationAt(locationOfCharacterInputAt: 0) == true {
             tbListUserTag.isHidden = false
-            /**
-             @ if location of @ == 0 hidden tableView
-             @ if location of @ != 0 show tableView
-             */
-            if checkLocationAt(locationOfCharacterInputAt: 0) == true {
-                tbListUserTag.isHidden = false
+        } else {
+            if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: textFieldText, stringInput: string) == true {
+                tbListUserTag.isHidden = true
             } else {
-                /**
-                 @ if the character before @ == @  -> hidden table View = true
-                 @ if the character before @ != @ ->   hidden table View = false
-                 */
-                if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: mentionsTextField.text!, stringInput: string) == true {
-                    tbListUserTag.isHidden = true
-                } else {
-                    self.kUsersTableView = self.kUsers
-                    print("currentchange: \(currentChange)")
-                    tbListUserTag.reloadData()
-                    return
-                }
+                kUsersTableView = kUsers
+                tbListUserTag.reloadData()
+                return
             }
         }
-        // if current input != @ if true ->
-        let symbol: Character = "@"
-        if currentChange != String(symbol), range.location >= 0{
-            
-            //            if let stringoutput = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
-            if let stringAfterSymbol = getStringWithoutSymbol(textInput: mentionsTextField.text!, indexOfLastCharacter: range.location, symbol){
+        
+        if currentChange == String(symbol), range.location >= 0{
+            if let stringAfterSymbol = getStringWithoutSymbol(textInput: textFieldText, range: range, symbol){
                 print("stringAfterSymbol: \(stringAfterSymbol)")
                 stringNeedReplace = stringAfterSymbol
                 if stringAfterSymbol.count == 0 {
-                    //                    print(arrayData)
+                    kUsersTableView = kUsers
+                    tbListUserTag.reloadData()
                 } else {
                     /*
                      filter(data: arrayData, string: stringAfterSymbol)
@@ -262,7 +248,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         let UserInfo = kUsersTableView[indexPath.row]
         mentionsTextField.kStringRaw.insertString(insertString: UserInfo.getTagID(), textField: mentionsTextField, atCurrentCursorPosition: true)
         mentionsTextField.refreshDisplay()
-        tbListUserTag.isHidden = true
+        kUsersTableView.removeAll()
+        tableView.reloadData()
     }
 }
 
@@ -271,9 +258,9 @@ extension ViewController: UITextFieldDelegate{
     
     @IBAction func tfEditingChange(_ sender: UITextField) {
         // if text Field  != "" -> run value Change
-        if sender.text != "" {
+        if let textFieldText = sender.text {
             //  valueChanges(range: self.range, replacementString: self.replacementString)
-            handleSymbol(initialString: sender.text!, range: self.range, replacementString: self.replacementString)
+            handleSymbol(textFieldText: textFieldText, range: self.range, replacementString: self.replacementString)
             
             // if text field == "" -> remove all name in arrayName + table View Name (tbvName) hidden + reload data
         } else {
@@ -287,9 +274,10 @@ extension ViewController: UITextFieldDelegate{
         self.replacementString = string
         
         let  char = string.cString(using: String.Encoding.utf8)!
-        let isBackSpace = strcmp(char, "\\b")
         
-        if (isBackSpace == -92) {
+        // is backspace
+        if (strcmp(char, "\\b") == -92) {
+            kUsersTableView.removeAll()
             let newRange = NSRange(location: range.location - 1, length: range.length)
             self.range = newRange
         }

@@ -9,11 +9,11 @@
 import UIKit
 
 class HoaLDMentionsTextField: UITextField {
-    var kUsers = [UserInfo]()
+    var kUsers = [MentionInfo]()
     var kStringRaw = ""
     
-    func insertUser(userInfo: UserInfo, atCurrentCursorPosition: Bool){
-        // cần remove cái @ ra trước khi insert vào nha 
+    
+    func insertUser(userInfo: MentionInfo, atCurrentCursorPosition: Bool){
         insertString(insertString: userInfo.getDisplayTagName(), atCurrentCursorPosition: atCurrentCursorPosition)
     }
     

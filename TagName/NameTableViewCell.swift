@@ -22,7 +22,7 @@ class NameTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    func display(_ userInfo: UserInfo) {
+    func display(_ userInfo: MentionInfo) {
         self.lbNameUser.text = userInfo.getDisplayTagName()
     }
 }

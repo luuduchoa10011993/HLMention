@@ -27,7 +27,7 @@ extension String {
     
     //replace TagUserString -> TagUserRawString
     // Ex: "I'm [:[userID]:] and i live in Toronto
-    mutating func stringRawToStringTagUser(_ userInfos: [UserInfo]) -> String {
+    mutating func stringRawToStringTagUser(_ userInfos: [MentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
             rawString = rawString.replacingOccurrences(of: userInfo.getDisplayTagName(), with: userInfo.getTagID())
@@ -36,7 +36,7 @@ extension String {
     }
     
     // Ex: "I'm @Lưu Đức Hoà and i live in Toronto
-    mutating func stringTagUserToStringRaw(_ userInfos: [UserInfo]) -> String {
+    mutating func stringTagUserToStringRaw(_ userInfos: [MentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
             rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.getDisplayTagName())
