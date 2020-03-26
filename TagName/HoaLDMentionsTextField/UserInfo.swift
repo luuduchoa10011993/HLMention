@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserModel: NSObject {
+class UserInfo: NSObject {
     var id = ""
     var name = ""
     
@@ -17,8 +17,8 @@ class UserModel: NSObject {
         self.name = name
     }
     
-    func getDisplayName() -> String {
-        return name
+    func getDisplayTagName() -> String {
+        return "\(name)"
     }
     
     func getTagID() -> String {

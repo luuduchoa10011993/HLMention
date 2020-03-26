@@ -14,12 +14,12 @@ import SZMentionsSwift
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var tfSearchName: UITextField!
+    @IBOutlet weak var mentionsTextField: HoaLDMentionsTextField!
     @IBOutlet weak var tbListUserTag: UITableView!
     
-    let kUsers: [UserModel] = [UserModel("00", "Hoa"), UserModel("01", "Vuong Khac Duy"), UserModel("02", "Dương"),
-                               UserModel("03", "Nguyễn Đoàn Nguyên An"), UserModel("04", "Nguyễn Kiều Vy"), UserModel("05", "Nguyễn Duy Ngân"),
-                               UserModel("06", "Donald Trump"), UserModel("07", "Hoà cute phô mai que")]
+    let kUsers: [UserInfo] = [UserInfo("00", "Hoa"), UserInfo("01", "Vuong Khac Duy"), UserInfo("02", "Dương"),
+                               UserInfo("03", "Nguyễn Đoàn Nguyên An"), UserInfo("04", "Nguyễn Kiều Vy"), UserInfo("05", "Nguyễn Duy Ngân"),
+                               UserInfo("06", "Donald Trump"), UserInfo("07", "Hoà cute phô mai que")]
     var range: NSRange = _NSRange()
     var replacementString: String = ""
     var arrayNameDidChangeAttribute:[String] = []
@@ -30,17 +30,18 @@ class ViewController: UIViewController {
     var text  = ""
     
     //tableview data
-    var kUsersTableView: [UserModel] = []
-
+    var kUsersTableView: [UserInfo] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
-
+        mentionsTextField.kUsers = kUsers
+        
     }
     //attribute of String
     func attributeString(initialString: String , valueReplace: String) -> NSMutableAttributedString{
         let mutableAttributedString = NSMutableAttributedString(string: initialString)
-
+        
         // check text has been replaced or not ?
         if checkStringChange(textSelected: valueReplace, textChange: textChange) == true{
             
@@ -49,12 +50,12 @@ class ViewController: UIViewController {
                 guard let range = mutableAttributedString.string.range(of: textChange) else { exit(0) }
                 let rangeOftextChange = NSRange(range,in: mutableAttributedString.string )
                 print (rangeOftextChange)
-
-            // Set new attributed string
-            let newAttributes = [NSAttributedString.Key.backgroundColor: UIColor.yellow ]
-
-            // Replace content in range with the new content
-            mutableAttributedString.addAttributes(newAttributes, range: rangeOftextChange)
+                
+                // Set new attributed string
+                let newAttributes = [NSAttributedString.Key.backgroundColor: UIColor.yellow ]
+                
+                // Replace content in range with the new content
+                mutableAttributedString.addAttributes(newAttributes, range: rangeOftextChange)
             }
         }
         return mutableAttributedString
@@ -70,44 +71,44 @@ class ViewController: UIViewController {
     
     // replace the string by the name which is selected
     /**
-    @ param
-    @ textField             :  textField where input the value
-    @ string                  :  string after @ which will be replaced by value selected
-    @ nameReplace     : the value which is selected
+     @ param
+     @ textField             :  textField where input the value
+     @ string                  :  string after @ which will be replaced by value selected
+     @ nameReplace     : the value which is selected
      */
-//    func replaceString (textFieldString: String, range: (range: NSRange, foundString: String), stringNeedReplace: String, nameReplace: String) -> String? {
-////        if let range = tfText.text!.range(of: string) {
-////        guard let textInTextField = tfSearchName.text as? String else  {return nil}
-////        textInTextField.range(of: stringNeedReplace)
-//        let substring = textFieldString[...range.range.lowerBound]
-//            print("Substring: \(substring)")
-//        self.stringNeedReplace = String(substring)
-//            textFieldString.replaceSubrange(range , with: nameReplace + " ")
-//            print(stringNeedReplace)
-//            return stringNeedReplace
-//        return nil
-//    }
+    //    func replaceString (textFieldString: String, range: (range: NSRange, foundString: String), stringNeedReplace: String, nameReplace: String) -> String? {
+    ////        if let range = tfText.text!.range(of: string) {
+    ////        guard let textInTextField = tfSearchName.text as? String else  {return nil}
+    ////        textInTextField.range(of: stringNeedReplace)
+    //        let substring = textFieldString[...range.range.lowerBound]
+    //            print("Substring: \(substring)")
+    //        self.stringNeedReplace = String(substring)
+    //            textFieldString.replaceSubrange(range , with: nameReplace + " ")
+    //            print(stringNeedReplace)
+    //            return stringNeedReplace
+    //        return nil
+    //    }
     
     
-        func replaceString (textInTextField: String, stringAfterSymbol: String, nameReplace: String) -> String? {
-    //        if let range = tfText.text!.range(of: string) {
-//            guard let textInTextField = textInTextField else  {return nil}
-            textInTextField.range(of: stringAfterSymbol)
-            print("stringAfterSymbol: \(stringAfterSymbol)")
-            if let range = textInTextField.range(of: stringAfterSymbol) {
-
-                let substring = tfSearchName.text![...range.lowerBound]
-                print("Substring: \(substring)")
-                stringNeedReplace = String(substring)
-                tfSearchName.text!.replaceSubrange(range , with: nameReplace + " ")
-                print(stringNeedReplace)
-                return stringNeedReplace
-            }
-            return nil
+    func replaceString (textInTextField: String, stringAfterSymbol: String, nameReplace: String) -> String? {
+        //        if let range = tfText.text!.range(of: string) {
+        //            guard let textInTextField = textInTextField else  {return nil}
+        textInTextField.range(of: stringAfterSymbol)
+        print("stringAfterSymbol: \(stringAfterSymbol)")
+        if let range = textInTextField.range(of: stringAfterSymbol) {
+            
+            let substring = mentionsTextField.text![...range.lowerBound]
+            print("Substring: \(substring)")
+            stringNeedReplace = String(substring)
+            mentionsTextField.text!.replaceSubrange(range , with: nameReplace + " ")
+            print(stringNeedReplace)
+            return stringNeedReplace
         }
-
+        return nil
+    }
+    
     func valueChanges(range: NSRange, replacementString: String){
-        handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
+        handleSymbol(initialString: mentionsTextField.text!, range: self.range, replacementString: self.replacementString)
     }
     
     // @==---------------------------func check current input---------------------------------==@
@@ -138,23 +139,23 @@ class ViewController: UIViewController {
     }
     
     /*
-    // func filter name in list
-    func filter(data:[String] ,string: String) -> [String] {
-        var arrayDetected: [String] = []
-        for name in data{
-            if name.contains(string){
-                arrayDetected.append(name)
-            }
-        }
-        self.arrayName = arrayDetected
-        print ("Array  Name: \(self.arrayName.count)")
-        print("Array  Name    : \(self.arrayName)")
-
-        self.tbListUserTag.reloadData()
-
-        return arrayDetected
-    }
- */
+     // func filter name in list
+     func filter(data:[String] ,string: String) -> [String] {
+     var arrayDetected: [String] = []
+     for name in data{
+     if name.contains(string){
+     arrayDetected.append(name)
+     }
+     }
+     self.arrayName = arrayDetected
+     print ("Array  Name: \(self.arrayName.count)")
+     print("Array  Name    : \(self.arrayName)")
+     
+     self.tbListUserTag.reloadData()
+     
+     return arrayDetected
+     }
+     */
     
     // func get string without symbol
     func getStringWithoutSymbol(textInput:String , indexOfLastCharacter: Int,_ symbol: Character) -> String? {
@@ -162,7 +163,7 @@ class ViewController: UIViewController {
             return ""
         }
         for ranges in (0 ..< indexOfLastCharacter ).reversed(){
-        
+            
             let index = textInput.index(textInput.startIndex, offsetBy: ranges)
             
             let character = textInput[index]
@@ -175,7 +176,7 @@ class ViewController: UIViewController {
                     return ""
                 } else  {
                     var rangesofString = textInput[startIndex ... endIndex]
-    //             print("rangeOfString : \(rangesofString)")
+                    //             print("rangeOfString : \(rangesofString)")
                     return String(textInput[startIndex ... endIndex] )
                 }
             }
@@ -187,15 +188,15 @@ class ViewController: UIViewController {
     func handleSymbol (initialString: String, range: NSRange, replacementString string: String ){
         let currentChange = string
         /**
-        @ if current Input == @ show tableView
-        @ if current input != @ hidden tableView
+         @ if current Input == @ show tableView
+         @ if current input != @ hidden tableView
          */
         if checkCurrentInputIsSymbol(characterInput: string) == true {
             tbListUserTag.isHidden = false
             /**
-            @ if location of @ == 0 hidden tableView
-            @ if location of @ != 0 show tableView
-            */
+             @ if location of @ == 0 hidden tableView
+             @ if location of @ != 0 show tableView
+             */
             if checkLocationAt(locationOfCharacterInputAt: 0) == true {
                 tbListUserTag.isHidden = false
             } else {
@@ -203,7 +204,7 @@ class ViewController: UIViewController {
                  @ if the character before @ == @  -> hidden table View = true
                  @ if the character before @ != @ ->   hidden table View = false
                  */
-                if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: tfSearchName.text!, stringInput: string) == true {
+                if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: mentionsTextField.text!, stringInput: string) == true {
                     tbListUserTag.isHidden = true
                 } else {
                     self.kUsersTableView = self.kUsers
@@ -216,16 +217,16 @@ class ViewController: UIViewController {
         // if current input != @ if true ->
         let symbol: Character = "@"
         if currentChange != String(symbol), range.location >= 0{
-
-//            if let stringoutput = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
-                if let stringAfterSymbol = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
+            
+            //            if let stringoutput = getStringWithoutSymbol(textInput: tfSearchName.text!, indexOfLastCharacter: range.location, symbol){
+            if let stringAfterSymbol = getStringWithoutSymbol(textInput: mentionsTextField.text!, indexOfLastCharacter: range.location, symbol){
                 print("stringAfterSymbol: \(stringAfterSymbol)")
-                    stringNeedReplace = stringAfterSymbol
+                stringNeedReplace = stringAfterSymbol
                 if stringAfterSymbol.count == 0 {
-//                    print(arrayData)
+                    //                    print(arrayData)
                 } else {
                     /*
-                    filter(data: arrayData, string: stringAfterSymbol)
+                     filter(data: arrayData, string: stringAfterSymbol)
                      trả về mảng string
                      */
                 }
@@ -258,29 +259,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let userModel = kUsersTableView[indexPath.row]
-//            guard let tfSearchNameText = tfSearchName.text else {return}
-//            if let range = tfSearchNameText.range(of: stringNeedReplace) {
-//                tfSearchName.text = replaceString(textFieldString: tfSearchNameText,
-//                                              range: range,
-//                                              stringNeedReplace: stringNeedReplace,
-//                                              nameReplace: valueReplace)
-//            }
-//            tfSearchName.text =  replaceString(textInTextField: tfSearchName.text!, stringAfterSymbol: stringNeedReplace, nameReplace: userModel.getDisplayName())
-    tfSearchName.insertString(insertString: userModel.getDisplayName(), atCurrentCursorPosition: true)
-            tbListUserTag.isHidden = true
-        // check text Field has valueReplace
-//        if  (tfSearchName.text?.contains(valueReplace))!{
-//            textChange = valueReplace
-//
-//            // check if array name did Change attribute has textChange or not . if not -> append into array
-//            if !arrayNameDidChangeAttribute.contains(textChange){
-//                arrayNameDidChangeAttribute.append(textChange)
-//            }
-//            print(arrayNameDidChangeAttribute)
-//
-//            tfSearchName.attributedText =  attributeString(initialString: tfSearchName.text!, valueReplace: valueReplace)
-//        }
+        let UserInfo = kUsersTableView[indexPath.row]
+        mentionsTextField.kStringRaw.insertString(insertString: UserInfo.getTagID(), textField: mentionsTextField, atCurrentCursorPosition: true)
+        mentionsTextField.refreshDisplay()
+        tbListUserTag.isHidden = true
     }
 }
 
@@ -289,9 +271,9 @@ extension ViewController: UITextFieldDelegate{
     
     @IBAction func tfEditingChange(_ sender: UITextField) {
         // if text Field  != "" -> run value Change
-        if tfSearchName.text != "" {
+        if sender.text != "" {
             //  valueChanges(range: self.range, replacementString: self.replacementString)
-            handleSymbol(initialString: tfSearchName.text!, range: self.range, replacementString: self.replacementString)
+            handleSymbol(initialString: sender.text!, range: self.range, replacementString: self.replacementString)
             
             // if text field == "" -> remove all name in arrayName + table View Name (tbvName) hidden + reload data
         } else {
@@ -299,34 +281,18 @@ extension ViewController: UITextFieldDelegate{
             tbListUserTag.reloadData()
         }
     }
-
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
-
+        
         let  char = string.cString(using: String.Encoding.utf8)!
         let isBackSpace = strcmp(char, "\\b")
-
+        
         if (isBackSpace == -92) {
             let newRange = NSRange(location: range.location - 1, length: range.length)
             self.range = newRange
         }
         return true
     }
-
-//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-//        self.range = range
-//        self.replacementString = text
-//
-//        let  char = text.cString(using: String.Encoding.utf8)!
-//        let isBackSpace = strcmp(char, "\\b")
-//
-//        if (isBackSpace == -92) {
-//            let newRange = NSRange(location: range.location - 1, length: range.length)
-//            self.range = newRange
-//        }
-//        return true
-//    }
-    
-    
 }

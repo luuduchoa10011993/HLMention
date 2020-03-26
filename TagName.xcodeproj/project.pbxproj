@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		055A518C242AF9710070A230 /* HoaLDTagName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A518B242AF9710070A230 /* HoaLDTagName.swift */; };
-		055A518F242B0EA30070A230 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A518E242B0EA30070A230 /* UserModel.swift */; };
+		055A518F242B0EA30070A230 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A518E242B0EA30070A230 /* UserInfo.swift */; };
+		056719E0242C4DD3003D53D6 /* HoaLDMentionsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056719DF242C4DD3003D53D6 /* HoaLDMentionsTextField.swift */; };
 		7618E1C892EB4D6C28990378 /* Pods_TagName.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C5F4BFE302F901786DF591 /* Pods_TagName.framework */; };
 		B075C52C24208B0400D8CEFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075C52B24208B0400D8CEFF /* AppDelegate.swift */; };
 		B075C52E24208B0400D8CEFF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075C52D24208B0400D8CEFF /* SceneDelegate.swift */; };
@@ -20,8 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		055A518B242AF9710070A230 /* HoaLDTagName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoaLDTagName.swift; sourceTree = SOURCE_ROOT; };
-		055A518E242B0EA30070A230 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		055A518B242AF9710070A230 /* HoaLDTagName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HoaLDTagName.swift; path = TagName/HoaLDMentionsTextField/HoaLDTagName.swift; sourceTree = SOURCE_ROOT; };
+		055A518E242B0EA30070A230 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		056719DF242C4DD3003D53D6 /* HoaLDMentionsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoaLDMentionsTextField.swift; sourceTree = "<group>"; };
 		178E2477059F145E4E42DE10 /* Pods-TagName.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagName.debug.xcconfig"; path = "Target Support Files/Pods-TagName/Pods-TagName.debug.xcconfig"; sourceTree = "<group>"; };
 		55C5F4BFE302F901786DF591 /* Pods_TagName.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TagName.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B075C52824208B0400D8CEFF /* TagName.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TagName.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -48,12 +50,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		055A518D242B0E890070A230 /* Model */ = {
+		056719DE242C4DA5003D53D6 /* HoaLDMentionsTextField */ = {
 			isa = PBXGroup;
 			children = (
-				055A518E242B0EA30070A230 /* UserModel.swift */,
+				055A518E242B0EA30070A230 /* UserInfo.swift */,
+				055A518B242AF9710070A230 /* HoaLDTagName.swift */,
+				056719DF242C4DD3003D53D6 /* HoaLDMentionsTextField.swift */,
 			);
-			path = Model;
+			path = HoaLDMentionsTextField;
 			sourceTree = "<group>";
 		};
 		19833DD29838E8EFCFAFC11D /* Frameworks */ = {
@@ -94,8 +98,7 @@
 		B075C52A24208B0400D8CEFF /* TagName */ = {
 			isa = PBXGroup;
 			children = (
-				055A518D242B0E890070A230 /* Model */,
-				055A518B242AF9710070A230 /* HoaLDTagName.swift */,
+				056719DE242C4DA5003D53D6 /* HoaLDMentionsTextField */,
 				B075C52F24208B0400D8CEFF /* ViewController.swift */,
 				B075C54024208C8A00D8CEFF /* NameTableViewCell.swift */,
 				B075C52B24208B0400D8CEFF /* AppDelegate.swift */,
@@ -223,11 +226,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				056719E0242C4DD3003D53D6 /* HoaLDMentionsTextField.swift in Sources */,
 				055A518C242AF9710070A230 /* HoaLDTagName.swift in Sources */,
 				B075C53024208B0400D8CEFF /* ViewController.swift in Sources */,
 				B075C52C24208B0400D8CEFF /* AppDelegate.swift in Sources */,
 				B075C54124208C8A00D8CEFF /* NameTableViewCell.swift in Sources */,
-				055A518F242B0EA30070A230 /* UserModel.swift in Sources */,
+				055A518F242B0EA30070A230 /* UserInfo.swift in Sources */,
 				B075C52E24208B0400D8CEFF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
