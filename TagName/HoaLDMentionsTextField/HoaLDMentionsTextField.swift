@@ -8,32 +8,48 @@
 
 import UIKit
 
+enum HoaLDMentionsTextFieldTextChangeType: Int {
+    case typeMentionSymbol = 0
+    case typeSpaceBar
+    case typeBackSpace
+    case typeBackSpaceAtMention
+    case typeNormal
+}
+
 class HoaLDMentionsTextField: UITextField {
     
     var kMentionInfos = [MentionInfo]()
-    var kMentionSymbol: Character = "@" // default value is @
+    var kMentionSymbol: Character = "@" // default value is @ [at]
     
-    // insert User to display Text
-    func insertUser(mentionInfo: MentionInfo) {
+    // insert MentionInfo to display Text
+    func insertMentionInfo(mentionInfo: MentionInfo) {
         self.deleteBackward()
         mentionInfo.range = NSRange(location: getCurrentCursorLocation(), length: mentionInfo.name.count)
         kMentionInfos.append(mentionInfo)
         self.insertText("\(mentionInfo.getDisplayName()) ")
     }
     
+    // remove MentionInfo
+    func typeDetectRemoveCharacter(currentCursorLocation: Int) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: MentionInfo?) {
+        for mentionInfo in kMentionInfos {
+            if mentionInfo.range.location < currentCursorLocation
+                && (mentionInfo.range.location + mentionInfo.range.length) > currentCursorLocation {
+                return (.typeBackSpaceAtMention, mentionInfo)
+            }
+        }
+        return (.typeBackSpace, nil)
+    }
+    
     func removeMentionInfo(mention: MentionInfo) {
         guard let mentionObject = MentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
-        
         let mentionInfo = mentionObject.mentionInfo
-        // remove mentionInfo from display
-        if var string = self.text {
+        if var string = text {
             kMentionInfos.remove(at: mentionObject.mentionIndex)
+            setCurremtCursorLocation(index: mentionInfo.range.location)
+            updateMentionInfosWhenRemoveMentionInfo(mentionInfo: mention)
             string.removeMentionInfo(mentionInfo: mentionInfo)
             text = string
-            setCurremtCursorLocation(index: mentionInfo.range.location)
         }
-        
-        updateMentionInfosWhenRemoveMentionInfo(mentionInfo: mention)
     }
     
     func updateMentionInfosWhenRemoveMentionInfo(mentionInfo: MentionInfo) {
@@ -44,13 +60,7 @@ class HoaLDMentionsTextField: UITextField {
         }
     }
     
-    //get CurrentCursorLocation, 0 mean selectedTextRange not found
-    func getCurrentCursorLocation() -> Int {
-        if let selectedRange = self.selectedTextRange {
-            return self.offset(from: self.beginningOfDocument, to: selectedRange.start)
-        }
-        return 0
-    }
+
     
     func setCurremtCursorLocation(index: Int) {
         let startPosition = self.position(from: self.beginningOfDocument, offset: index)
@@ -64,8 +74,27 @@ class HoaLDMentionsTextField: UITextField {
     func refreshDisplay() {
         
     }
+    
+    public static func mentionsTextFieldTypeFrom(replacementString: String, kMentionSymbol: Character) -> HoaLDMentionsTextFieldTextChangeType {
+        if replacementString == String(kMentionSymbol) {
+            return .typeMentionSymbol
+        }else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
+            return .typeBackSpace
+        } else {
+            return .typeNormal
+        }
+    }
 }
 
+extension UITextField {
+    //get CurrentCursorLocation, 0 mean selectedTextRange not found
+    func getCurrentCursorLocation() -> Int {
+        if let selectedRange = self.selectedTextRange {
+            return self.offset(from: self.beginningOfDocument, to: selectedRange.start)
+        }
+        return 0
+    }
+}
 
 extension String {
     mutating func insertString(string: String, atIndex: Int) {

@@ -283,7 +283,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let mentionInfo = kMentionInfosTableView[indexPath.row]
-        mentionsTextField.insertUser(mentionInfo: mentionInfo)
+        mentionsTextField.insertMentionInfo(mentionInfo: mentionInfo)
         refreshMentionList()
     }
 }
@@ -306,23 +306,45 @@ extension ViewController: UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
-        let  char = string.cString(using: String.Encoding.utf8)!
-
-
-        
-        // nếu user thêm string là @
-        if let textFieldText = textField.text, string == String(mentionsTextField.kMentionSymbol){
-            handleMentionUser(textFieldText: textFieldText, range: range, replacementString: string, validSymbol: mentionsTextField.kMentionSymbol)
+        let type = HoaLDMentionsTextField.mentionsTextFieldTypeFrom(replacementString: string,
+                                                                    kMentionSymbol: mentionsTextField.kMentionSymbol)
+        switch type {
+        case .typeMentionSymbol:
+            refreshMentionList(false)
+            return true
+            
+        case .typeSpaceBar:
+            refreshMentionList()
+            return true
+            
+        case .typeBackSpaceAtMention:
+            let typeDetectRemoveCharacter = mentionsTextField.typeDetectRemoveCharacter(currentCursorLocation: mentionsTextField.getCurrentCursorLocation())
+            if let mentionInfo = typeDetectRemoveCharacter.mentionInfo {
+                mentionsTextField.removeMentionInfo(mention: mentionInfo)
+            }
+            return false
+            
+        case .typeBackSpace:
+            // nếu từ đó trước đó có @ thì
+            
+            // nếu từ đó trước đó không có @
+            
+            // nếu từ đó nằm trong một mention khác
+            refreshMentionList(true)
+            
+            
+            let newRange = NSRange(location: range.location - 1, length: range.length)
+            self.range = newRange
+            return true
+            
+        default:
+            refreshMentionList()
+            // còn lại thì cho làm thoải mái.
             return true
         }
         
-        // nếu user [backspace] và từ trước con trỏ là @
-        if (strcmp(char, "\\b") == -92) {
-            kMentionInfosTableView.removeAll()
-            let newRange = NSRange(location: range.location - 1, length: range.length)
-            self.range = newRange
-        }
-        // còn lại thì cho làm thoải mái.
-        return true
+        // nếu user thêm string là @
+        //            handleMentionUser(textFieldText: textFieldText, range: range, replacementString: string, validSymbol: mentionsTextField.kMentionSymbol)
+        
     }
 }
