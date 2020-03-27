@@ -18,6 +18,8 @@ class MentionInfo: NSObject {
     var name = ""
     var act = "with"
     var type: MentionInfoType = .user
+    var range = NSRange(location: 0,length: 0)
+    
     
     
 //    var locationBeenMention = UITextRange
@@ -27,12 +29,23 @@ class MentionInfo: NSObject {
         self.name = name
     }
     
-    func getDisplayTagName() -> String {
+    func getDisplayName() -> String {
         return "\(name)"
     }
     
     func getTagID() -> String {
         return "::\(id)::"
+    }
+    
+    static public func mentionInfoFromArray(mentionInfos: [MentionInfo], mentionInfo: MentionInfo) -> (mentionInfo: MentionInfo,mentionIndex: Int)? {
+        var i = 0
+        for mention in mentionInfos {
+            if mention.id == mention.id {
+                return (mention,i)
+            }
+            i += 1
+        }
+        return nil
     }
     
     /*

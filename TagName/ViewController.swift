@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var mentionsTextField: HoaLDMentionsTextField!
     @IBOutlet weak var tbListUserTag: UITableView!
     
-    let kUsers: [MentionInfo] = [MentionInfo("00", "Hoa"), MentionInfo("01", "Vuong Khac Duy"), MentionInfo("02", "Dương"),
+    let kMentionInfos: [MentionInfo] = [MentionInfo("00", "Hoa"), MentionInfo("01", "Vuong Khac Duy"), MentionInfo("02", "Dương"),
                                MentionInfo("03", "Nguyễn Đoàn Nguyên An"), MentionInfo("04", "Nguyễn Kiều Vy"), MentionInfo("05", "Nguyễn Duy Ngân"),
                                MentionInfo("06", "Donald Trump"), MentionInfo("07", "Hoà cute phô mai que")]
     var range: NSRange = _NSRange()
@@ -30,12 +30,12 @@ class ViewController: UIViewController {
     var text  = ""
     
     //tableview data
-    var kUsersTableView: [MentionInfo] = []
+    var kMentionInfosTableView: [MentionInfo] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
-        mentionsTextField.kUsers = kUsers
+        mentionsTextField.kMentionInfos = kMentionInfos
         
     }
     //attribute of String
@@ -186,7 +186,7 @@ class ViewController: UIViewController {
         return nil
     }
     
-    func handleSymbol (textFieldText: String, range: NSRange, replacementString string: String){
+    func handleSymbol(textFieldText: String, range: NSRange, replacementString string: String){
         // current change là @,
         let symbol: Character = "@"
         let currentChange = string
@@ -197,8 +197,7 @@ class ViewController: UIViewController {
             if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: textFieldText, stringInput: string) == true {
                 tbListUserTag.isHidden = true
             } else {
-                kUsersTableView = kUsers
-                tbListUserTag.reloadData()
+                refreshMentionList(false)
                 return
             }
         }
@@ -208,8 +207,7 @@ class ViewController: UIViewController {
                 print("stringAfterSymbol: \(stringAfterSymbol)")
                 stringNeedReplace = stringAfterSymbol
                 if stringAfterSymbol.count == 0 {
-                    kUsersTableView = kUsers
-                    tbListUserTag.reloadData()
+                    refreshMentionList(false)
                 } else {
                     /*
                      filter(data: arrayData, string: stringAfterSymbol)
@@ -220,6 +218,45 @@ class ViewController: UIViewController {
         }
     }
     
+    func handleMentionUser(textFieldText: String, range: NSRange, replacementString: String, validSymbol symbol: Character){
+        
+        if checkCurrentInputIsSymbol(characterInput: replacementString) == true || checkLocationAt(locationOfCharacterInputAt: 0) == true {
+            tbListUserTag.isHidden = false
+        } else {
+            if checkCharacterBeforeCurrentInput(locationOfCharacterBefore: 1, textInTextField: textFieldText, stringInput: replacementString) == true {
+                tbListUserTag.isHidden = true
+            } else {
+                refreshMentionList(false)
+                return
+            }
+        }
+        
+        if replacementString == String(symbol), range.location == 0, range.length == 0 {
+            refreshMentionList(false)
+        }else if replacementString == String(symbol), range.location > 0{
+            if let stringAfterSymbol = getStringWithoutSymbol(textInput: textFieldText, range: range, symbol){
+                print("stringAfterSymbol: \(stringAfterSymbol)")
+                stringNeedReplace = stringAfterSymbol
+                if stringAfterSymbol.count == 0 {
+                    refreshMentionList(false)
+                } else {
+                    /*
+                     filter(data: arrayData, string: stringAfterSymbol)
+                     trả về mảng string
+                     */
+                }
+            }
+        }
+    }
+    
+    func refreshMentionList(_ removeAll: Bool = true) {
+        if removeAll {
+            kMentionInfosTableView.removeAll()
+        } else {
+            kMentionInfosTableView = kMentionInfos
+        }
+        tbListUserTag.reloadData()
+    }
     
 }
 
@@ -227,29 +264,27 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        tableView.isHidden = kUsersTableView.count == 0 ? true : false
+        tableView.isHidden = kMentionInfosTableView.count == 0 ? true : false
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if kUsersTableView.count > 5 {
+        if kMentionInfosTableView.count > 5 {
             return 5
         }
-        return kUsersTableView.count
+        return kMentionInfosTableView.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: NameTableViewCell.self), for: indexPath) as! NameTableViewCell
-        cell.display(kUsersTableView[indexPath.item])
+        cell.display(kMentionInfosTableView[indexPath.item])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let UserInfo = kUsersTableView[indexPath.row]
-        mentionsTextField.kStringRaw.insertString(insertString: UserInfo.getTagID(), textField: mentionsTextField, atCurrentCursorPosition: true)
-        mentionsTextField.refreshDisplay()
-        kUsersTableView.removeAll()
-        tableView.reloadData()
+        let mentionInfo = kMentionInfosTableView[indexPath.row]
+        mentionsTextField.insertUser(mentionInfo: mentionInfo)
+        refreshMentionList()
     }
 }
 
@@ -260,27 +295,34 @@ extension ViewController: UITextFieldDelegate{
         // if text Field  != "" -> run value Change
         if let textFieldText = sender.text {
             //  valueChanges(range: self.range, replacementString: self.replacementString)
-            handleSymbol(textFieldText: textFieldText, range: self.range, replacementString: self.replacementString)
+//            handleSymbol(textFieldText: textFieldText, range: self.range, replacementString: self.replacementString)
             
             // if text field == "" -> remove all name in arrayName + table View Name (tbvName) hidden + reload data
         } else {
-            kUsersTableView.removeAll()
-            tbListUserTag.reloadData()
+            refreshMentionList()
         }
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
-        
         let  char = string.cString(using: String.Encoding.utf8)!
+
+
         
-        // is backspace
+        // nếu user thêm string là @
+        if let textFieldText = textField.text, string == String(mentionsTextField.kMentionSymbol){
+            handleMentionUser(textFieldText: textFieldText, range: range, replacementString: string, validSymbol: mentionsTextField.kMentionSymbol)
+            return true
+        }
+        
+        // nếu user [backspace] và từ trước con trỏ là @
         if (strcmp(char, "\\b") == -92) {
-            kUsersTableView.removeAll()
+            kMentionInfosTableView.removeAll()
             let newRange = NSRange(location: range.location - 1, length: range.length)
             self.range = newRange
         }
+        // còn lại thì cho làm thoải mái.
         return true
     }
 }

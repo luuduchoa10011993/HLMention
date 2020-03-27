@@ -23,6 +23,6 @@ class NameTableViewCell: UITableViewCell {
     }
 
     func display(_ userInfo: MentionInfo) {
-        self.lbNameUser.text = userInfo.getDisplayTagName()
+        self.lbNameUser.text = userInfo.getDisplayName()
     }
 }
