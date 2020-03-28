@@ -307,7 +307,9 @@ extension ViewController: UITextFieldDelegate{
         self.range = range
         self.replacementString = string
         let mentionsTextFieldType = mentionsTextField.mentionsTextFieldTypeFrom(range: range, replacementString: string)
+        mentionsTextField.kMentionType = mentionsTextFieldType.type
         let type = mentionsTextFieldType.type
+        
         
         switch type {
         case .typeMentionSymbolAt:

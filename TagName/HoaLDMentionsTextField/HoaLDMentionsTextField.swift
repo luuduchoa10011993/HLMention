@@ -29,8 +29,6 @@ class HoaLDMentionsTextField: UITextField {
     var kMentionType: HoaLDMentionsTextFieldTextChangeType = .typeNormal
     var kMentionLocation: Int = 0
     
-    
-    
     // detect mention Type
     public func mentionsTextFieldTypeFrom(range: NSRange, replacementString: String) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: [MentionInfo]?) {
         if replacementString == String(kMentionSymbol) {
@@ -44,6 +42,12 @@ class HoaLDMentionsTextField: UITextField {
                 }
             }
             return (.typeBackSpace, nil)
+        } else if replacementString == " " {
+            return (.typeSpaceBar, nil)
+        } else if (kMentionLocation + replacementString.count) == (range.location + replacementString.count)
+            && (kMentionType == .typeMentionSymbolAt || kMentionType == .typeMentionSymbolAtSearching) {
+            kMentionLocation = range.location + replacementString.count
+            return (.typeMentionSymbolAtSearching, nil)
         } else {
             return (.typeNormal, nil)
         }
@@ -51,11 +55,12 @@ class HoaLDMentionsTextField: UITextField {
     
     // insert MentionInfo to display Text
     func insertMentionInfo(mentionInfo: MentionInfo, atLocation location: Int) {
-        mentionInfo.range = NSRange(location: location - 1, length: mentionInfo.name.count + 1)
         if var string = text {
-            string.insertString(string: ("\(mentionInfo.getDisplayName()) "), atIndex: location)
+            let insertString = "\(mentionInfo.getDisplayName()) "
+            mentionInfo.range = NSRange(location: location - 1, length: insertString.count)
+            string.insertString(string: insertString, atIndex: location)
             text = string
-            setCurremtCursorLocation(index: (mentionInfo.range.location + mentionInfo.range.length))
+            setCurremtCursorLocation(index: (location + insertString.count))
             updatekMentionInfosWithInsert(mentionInfo: mentionInfo)
         }
     }
