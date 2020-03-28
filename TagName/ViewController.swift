@@ -35,6 +35,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
+        mentionsTextField.kListMentionInfos = kMentionInfos
         
     }
     //attribute of String
@@ -282,7 +283,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let mentionInfo = kMentionInfosTableView[indexPath.row]
-        mentionsTextField.insertMentionInfo(mentionInfo: mentionInfo)
+        mentionsTextField.insertMentionInfo(mentionInfo: mentionInfo, atLocation: mentionsTextField.kMentionLocation)
         refreshMentionList()
     }
 }

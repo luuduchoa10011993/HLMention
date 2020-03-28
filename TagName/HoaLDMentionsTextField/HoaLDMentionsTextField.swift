@@ -20,16 +20,21 @@ enum HoaLDMentionsTextFieldTextChangeType: Int {
 class HoaLDMentionsTextField: UITextField {
     
     //full all data
-    let kAllMentionInfos = [MentionInfo]()
+    var kListMentionInfos = [MentionInfo]()
+    var kListSearchMentionInfos = [MentionInfo]()
     
     // data need controll
     var kMentionInfos = [MentionInfo]()
     var kMentionSymbol: Character = "@" // default value is @ [at]
     var kMentionType: HoaLDMentionsTextFieldTextChangeType = .typeNormal
+    var kMentionLocation: Int = 0
+    
+    
     
     // detect mention Type
     public func mentionsTextFieldTypeFrom(range: NSRange, replacementString: String) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: [MentionInfo]?) {
         if replacementString == String(kMentionSymbol) {
+            kMentionLocation = range.location + replacementString.count
             return (.typeMentionSymbolAt, nil)
         }else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
             for mentionInfo in kMentionInfos {
@@ -45,10 +50,14 @@ class HoaLDMentionsTextField: UITextField {
     }
     
     // insert MentionInfo to display Text
-    func insertMentionInfo(mentionInfo: MentionInfo) {
-        mentionInfo.range = NSRange(location: getCurrentCursorLocation() - 1, length: mentionInfo.name.count + 1)
-        kMentionInfos.append(mentionInfo)
-        self.insertText("\(mentionInfo.getDisplayName()) ")
+    func insertMentionInfo(mentionInfo: MentionInfo, atLocation location: Int) {
+        mentionInfo.range = NSRange(location: location - 1, length: mentionInfo.name.count + 1)
+        if var string = text {
+            string.insertString(string: ("\(mentionInfo.getDisplayName()) "), atIndex: location)
+            text = string
+            setCurremtCursorLocation(index: (mentionInfo.range.location + mentionInfo.range.length))
+            updatekMentionInfosWithInsert(mentionInfo: mentionInfo)
+        }
     }
     
     // remove MentionInfo
@@ -64,6 +73,10 @@ class HoaLDMentionsTextField: UITextField {
         }
     }
     
+    func updatekMentionInfosWithInsert(mentionInfo: MentionInfo) {
+        kMentionInfos.append(mentionInfo)
+    }
+    
     func updatekMentionInfosWithRemove(mentionInfo: MentionInfo) {
         for mention in kMentionInfos {
             if mention.range.location > mentionInfo.range.location {
@@ -71,9 +84,7 @@ class HoaLDMentionsTextField: UITextField {
             }
         }
     }
-    
 
-    
     func setCurremtCursorLocation(index: Int) {
         let startPosition = self.position(from: self.beginningOfDocument, offset: index)
         let endPosition = self.position(from: self.beginningOfDocument, offset: index)
