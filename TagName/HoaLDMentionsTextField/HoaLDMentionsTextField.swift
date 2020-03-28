@@ -18,41 +18,51 @@ enum HoaLDMentionsTextFieldTextChangeType: Int {
 
 class HoaLDMentionsTextField: UITextField {
     
+    //full all data
+    
+    
+    // data need controll
     var kMentionInfos = [MentionInfo]()
     var kMentionSymbol: Character = "@" // default value is @ [at]
     
+    // detect mention Type
+    public static func mentionsTextFieldTypeFrom(replacementString: String, kMentionSymbol: Character, kMentionInfos :[MentionInfo], currentCursorLocation: Int) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: MentionInfo?) {
+        if replacementString == String(kMentionSymbol) {
+            return (.typeMentionSymbol, nil)
+        }else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
+            for mentionInfo in kMentionInfos {
+                if mentionInfo.range.location < currentCursorLocation
+                    && (mentionInfo.range.location + mentionInfo.range.length) >= currentCursorLocation {
+                    return (.typeBackSpaceAtMention, mentionInfo)
+                }
+            }
+            return (.typeBackSpace, nil)
+        } else {
+            return (.typeNormal, nil)
+        }
+    }
+    
     // insert MentionInfo to display Text
     func insertMentionInfo(mentionInfo: MentionInfo) {
-        self.deleteBackward()
-        mentionInfo.range = NSRange(location: getCurrentCursorLocation(), length: mentionInfo.name.count)
+        mentionInfo.range = NSRange(location: getCurrentCursorLocation() - 1, length: mentionInfo.name.count + 1)
         kMentionInfos.append(mentionInfo)
         self.insertText("\(mentionInfo.getDisplayName()) ")
     }
     
     // remove MentionInfo
-    func typeDetectRemoveCharacter(currentCursorLocation: Int) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: MentionInfo?) {
-        for mentionInfo in kMentionInfos {
-            if mentionInfo.range.location < currentCursorLocation
-                && (mentionInfo.range.location + mentionInfo.range.length) > currentCursorLocation {
-                return (.typeBackSpaceAtMention, mentionInfo)
-            }
-        }
-        return (.typeBackSpace, nil)
-    }
-    
     func removeMentionInfo(mention: MentionInfo) {
         guard let mentionObject = MentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
         let mentionInfo = mentionObject.mentionInfo
         if var string = text {
-            kMentionInfos.remove(at: mentionObject.mentionIndex)
-            setCurremtCursorLocation(index: mentionInfo.range.location)
-            updateMentionInfosWhenRemoveMentionInfo(mentionInfo: mention)
             string.removeMentionInfo(mentionInfo: mentionInfo)
             text = string
+            kMentionInfos.remove(at: mentionObject.mentionIndex)
+            setCurremtCursorLocation(index: mentionInfo.range.location)
+            updatekMentionInfosWithRemove(mentionInfo: mention)
         }
     }
     
-    func updateMentionInfosWhenRemoveMentionInfo(mentionInfo: MentionInfo) {
+    func updatekMentionInfosWithRemove(mentionInfo: MentionInfo) {
         for mention in kMentionInfos {
             if mention.range.location > mentionInfo.range.location {
                 mention.range.location -= mentionInfo.range.length
@@ -73,16 +83,6 @@ class HoaLDMentionsTextField: UITextField {
     
     func refreshDisplay() {
         
-    }
-    
-    public static func mentionsTextFieldTypeFrom(replacementString: String, kMentionSymbol: Character) -> HoaLDMentionsTextFieldTextChangeType {
-        if replacementString == String(kMentionSymbol) {
-            return .typeMentionSymbol
-        }else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
-            return .typeBackSpace
-        } else {
-            return .typeNormal
-        }
     }
 }
 
@@ -108,15 +108,15 @@ extension String {
     
     func stringStartIndexToMentionInfo(memtionInfo: MentionInfo) -> String {
         let string = self
-        let end = self.index(self.endIndex, offsetBy: (0 - (memtionInfo.range.location + memtionInfo.range.length)))
-        let range = self.startIndex..<end
+        let end = string.index(string.startIndex, offsetBy: memtionInfo.range.location)
+        let range = string.startIndex..<end
         return String(string[range])
     }
     
     func stringMentionInfoToEndIndex(memtionInfo: MentionInfo) -> String {
         let string = self
-        let start = self.index(self.startIndex, offsetBy: memtionInfo.range.location)
-        let range = start..<self.endIndex
+        let start = string.index(string.startIndex, offsetBy: (memtionInfo.range.location + memtionInfo.range.length))
+        let range = start..<string.endIndex
         return String(string[range])
     }
     

@@ -35,7 +35,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
-        mentionsTextField.kMentionInfos = kMentionInfos
         
     }
     //attribute of String
@@ -306,8 +305,12 @@ extension ViewController: UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
-        let type = HoaLDMentionsTextField.mentionsTextFieldTypeFrom(replacementString: string,
-                                                                    kMentionSymbol: mentionsTextField.kMentionSymbol)
+        let mentionsTextFieldType = HoaLDMentionsTextField.mentionsTextFieldTypeFrom(replacementString: string,
+                                                                    kMentionSymbol: mentionsTextField.kMentionSymbol,
+                                                                    kMentionInfos: mentionsTextField.kMentionInfos,
+                                                                    currentCursorLocation: textField.getCurrentCursorLocation())
+        let type = mentionsTextFieldType.type
+        
         switch type {
         case .typeMentionSymbol:
             refreshMentionList(false)
@@ -318,8 +321,7 @@ extension ViewController: UITextFieldDelegate{
             return true
             
         case .typeBackSpaceAtMention:
-            let typeDetectRemoveCharacter = mentionsTextField.typeDetectRemoveCharacter(currentCursorLocation: mentionsTextField.getCurrentCursorLocation())
-            if let mentionInfo = typeDetectRemoveCharacter.mentionInfo {
+            if let mentionInfo = mentionsTextFieldType.mentionInfo {
                 mentionsTextField.removeMentionInfo(mention: mentionInfo)
             }
             return false
@@ -347,4 +349,8 @@ extension ViewController: UITextFieldDelegate{
         //            handleMentionUser(textFieldText: textFieldText, range: range, replacementString: string, validSymbol: mentionsTextField.kMentionSymbol)
         
     }
+}
+
+extension ViewController: UITextViewDelegate {
+    
 }
