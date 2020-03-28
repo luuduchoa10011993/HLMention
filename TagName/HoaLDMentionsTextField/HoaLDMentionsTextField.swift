@@ -20,7 +20,7 @@ enum HoaLDMentionsTextFieldTextChangeType: Int {
 class HoaLDMentionsTextField: UITextField {
     
     //full all data
-    
+    let kAllMentionInfos = [MentionInfo]()
     
     // data need controll
     var kMentionInfos = [MentionInfo]()
@@ -28,20 +28,17 @@ class HoaLDMentionsTextField: UITextField {
     var kMentionType: HoaLDMentionsTextFieldTextChangeType = .typeNormal
     
     // detect mention Type
-    public func mentionsTextFieldTypeFrom(replacementString: String) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: [MentionInfo]?) {
+    public func mentionsTextFieldTypeFrom(range: NSRange, replacementString: String) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: [MentionInfo]?) {
         if replacementString == String(kMentionSymbol) {
             return (.typeMentionSymbolAt, nil)
         }else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
-            let currentCursorLocation = getCurrentCursorLocation()
             for mentionInfo in kMentionInfos {
-                if mentionInfo.range.location < currentCursorLocation
-                    && (mentionInfo.range.location + mentionInfo.range.length) >= currentCursorLocation {
+                if range.location < (mentionInfo.range.location + mentionInfo.range.length)
+                    && range.location > mentionInfo.range.location {
                     return (.typeBackSpaceAtMention, [mentionInfo])
                 }
             }
             return (.typeBackSpace, nil)
-        } else if 1 {
-            
         } else {
             return (.typeNormal, nil)
         }
@@ -144,6 +141,5 @@ extension String {
         }
         return rawString
     }
-    
     
 }

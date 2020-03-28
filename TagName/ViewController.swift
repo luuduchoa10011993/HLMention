@@ -305,7 +305,7 @@ extension ViewController: UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
-        let mentionsTextFieldType = mentionsTextField.mentionsTextFieldTypeFrom(replacementString: string)
+        let mentionsTextFieldType = mentionsTextField.mentionsTextFieldTypeFrom(range: range, replacementString: string)
         let type = mentionsTextFieldType.type
         
         switch type {
