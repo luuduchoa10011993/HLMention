@@ -15,13 +15,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="xGB-Dh-41W">
-                                <rect key="frame" x="5" y="44" width="404" height="40"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Mn-wj-LYx" customClass="HoaLDMentionsTextField" customModule="TagName" customModuleProvider="target">
                                 <rect key="frame" x="5" y="44" width="404" height="40"/>
                                 <constraints>
@@ -30,7 +23,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
-                                    <action selector="tfEditingChange:" destination="BYZ-38-t0r" eventType="editingChanged" id="jEi-gc-TJJ"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="oqt-uE-TT1"/>
                                 </connections>
                             </textField>
@@ -75,13 +67,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="69I-Bb-CAi" secondAttribute="bottom" id="14d-V6-ASn"/>
-                            <constraint firstItem="xGB-Dh-41W" firstAttribute="bottom" secondItem="9Mn-wj-LYx" secondAttribute="bottom" id="DHe-mM-Owd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="69I-Bb-CAi" secondAttribute="trailing" constant="20" id="G35-10-7fu"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9Mn-wj-LYx" secondAttribute="trailing" constant="5" id="Hlh-BD-jip"/>
                             <constraint firstItem="9Mn-wj-LYx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="5" id="TvB-1y-AJQ"/>
-                            <constraint firstItem="xGB-Dh-41W" firstAttribute="top" secondItem="9Mn-wj-LYx" secondAttribute="top" id="a9o-JP-aDd"/>
-                            <constraint firstItem="xGB-Dh-41W" firstAttribute="trailing" secondItem="9Mn-wj-LYx" secondAttribute="trailing" id="eON-H9-9AY"/>
-                            <constraint firstItem="xGB-Dh-41W" firstAttribute="leading" secondItem="9Mn-wj-LYx" secondAttribute="leading" id="ed2-3e-8NF"/>
                             <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="9Mn-wj-LYx" secondAttribute="bottom" constant="15" id="hj7-Jt-BPK"/>
                             <constraint firstItem="69I-Bb-CAi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ijZ-3l-cxU"/>
                             <constraint firstItem="9Mn-wj-LYx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="qZp-gk-Uga"/>
@@ -95,7 +83,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="103.79464285714285"/>
+            <point key="canvasLocation" x="-293" y="90"/>
         </scene>
     </scenes>
 </document>

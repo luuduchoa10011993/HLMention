@@ -9,7 +9,8 @@
 import UIKit
 
 enum HoaLDMentionsTextFieldTextChangeType: Int {
-    case typeMentionSymbol = 0
+    case typeMentionSymbolAt = 0
+    case typeMentionSymbolAtSearching
     case typeSpaceBar
     case typeBackSpace
     case typeBackSpaceAtMention
@@ -24,19 +25,23 @@ class HoaLDMentionsTextField: UITextField {
     // data need controll
     var kMentionInfos = [MentionInfo]()
     var kMentionSymbol: Character = "@" // default value is @ [at]
+    var kMentionType: HoaLDMentionsTextFieldTextChangeType = .typeNormal
     
     // detect mention Type
-    public static func mentionsTextFieldTypeFrom(replacementString: String, kMentionSymbol: Character, kMentionInfos :[MentionInfo], currentCursorLocation: Int) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: MentionInfo?) {
+    public func mentionsTextFieldTypeFrom(replacementString: String) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: [MentionInfo]?) {
         if replacementString == String(kMentionSymbol) {
-            return (.typeMentionSymbol, nil)
+            return (.typeMentionSymbolAt, nil)
         }else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
+            let currentCursorLocation = getCurrentCursorLocation()
             for mentionInfo in kMentionInfos {
                 if mentionInfo.range.location < currentCursorLocation
                     && (mentionInfo.range.location + mentionInfo.range.length) >= currentCursorLocation {
-                    return (.typeBackSpaceAtMention, mentionInfo)
+                    return (.typeBackSpaceAtMention, [mentionInfo])
                 }
             }
             return (.typeBackSpace, nil)
+        } else if 1 {
+            
         } else {
             return (.typeNormal, nil)
         }

@@ -305,15 +305,15 @@ extension ViewController: UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
-        let mentionsTextFieldType = HoaLDMentionsTextField.mentionsTextFieldTypeFrom(replacementString: string,
-                                                                    kMentionSymbol: mentionsTextField.kMentionSymbol,
-                                                                    kMentionInfos: mentionsTextField.kMentionInfos,
-                                                                    currentCursorLocation: textField.getCurrentCursorLocation())
+        let mentionsTextFieldType = mentionsTextField.mentionsTextFieldTypeFrom(replacementString: string)
         let type = mentionsTextFieldType.type
         
         switch type {
-        case .typeMentionSymbol:
+        case .typeMentionSymbolAt:
             refreshMentionList(false)
+            return true
+        case .typeMentionSymbolAtSearching:
+            
             return true
             
         case .typeSpaceBar:
@@ -321,7 +321,7 @@ extension ViewController: UITextFieldDelegate{
             return true
             
         case .typeBackSpaceAtMention:
-            if let mentionInfo = mentionsTextFieldType.mentionInfo {
+            if let mentionInfo = mentionsTextFieldType.mentionInfo?.first {
                 mentionsTextField.removeMentionInfo(mention: mentionInfo)
             }
             return false
