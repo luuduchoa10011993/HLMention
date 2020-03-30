@@ -27,7 +27,6 @@ class HoaLDMentionsTextField: UITextField {
     var kMentionSymbol: Character = "@" // default value is @ [at]
     var kMentionType: HoaLDMentionsTextFieldTextChangeType = .typeNormal
     var kMentionLocation: Int = 0
-    var kMentionSearching: Bool = false
     var kMentionSearchingString = ""
     
     
@@ -51,7 +50,7 @@ class HoaLDMentionsTextField: UITextField {
         // a -> range (1,0), replacementString = a
 
         if replacementString == " " {
-            kMentionSearching = false
+            kMentionSearchingString.removeAll()
             return (true, nil)
         }
         
@@ -74,27 +73,27 @@ class HoaLDMentionsTextField: UITextField {
 //            return (true, mentionInfosSearchFrom(kMentionSearchingString))
 //        }
         
-        
         kMentionLocation = range.location + replacementString.count
-        kMentionSearching = false
-        kMentionSearchingString = ""
-        
+        kMentionSearchingString.removeAll()
         
         // remove when editing word
         if let mentionInfos = mentionInfoInRange(range: range) {
             for mentionInfo in mentionInfos {
                 removeMentionInfo(mention: mentionInfo)
             }
-            return (false, nil)
+            return (true, nil)
         }
         
         if replacementString == String(kMentionSymbol) {
-            kMentionSearching = true
             return (true, kListMentionInfos)
         }
 
         return (true, nil)
     }
+    
+//    func updatekMentionInfosWithRange(range: NSRange, replacementString: String) -> (shouldChangeCharacters: Bool) {
+//
+//    }
     
     func isValidCurrentWordMentionSearch(currentWord: String) -> Bool {
         guard let firstCharacter = currentWord.first else {
@@ -193,18 +192,17 @@ class HoaLDMentionsTextField: UITextField {
     // insert MentionInfo to display Text
     func insertMentionInfo(mentionInfo: MentionInfo, atLocation location: Int) {
         if var string = text {
-            if kMentionSearching {
-                let newLocation = location - kMentionSearchingString.count
-                string.removeString(string: kMentionSearchingString, atIndex: newLocation)
+            if kMentionSearchingString.count > 0 {
+                string.removeString(string: kMentionSearchingString, atIndex: location)
             }
             let insertString = "\(mentionInfo.getDisplayName()) "
             string.insertString(string: insertString, atIndex: location)
             text = string
             setCurremtCursorLocation(index: (location + insertString.count))
-            mentionInfo.kRange = NSRange(location: location - 1, length: mentionInfo.getDisplayName().count + 1)
+            mentionInfo.kRange = NSRange(location: location, length: mentionInfo.getDisplayName().count)
             updatekMentionInfosInsertRange(range: mentionInfo.kRange)
             kMentionInfos.append(mentionInfo)
-            kMentionSearching = false
+            kMentionSearchingString.removeAll()
         }
     }
     
