@@ -81,7 +81,11 @@ class HoaLDMentionsTextField: UITextField {
             for mentionInfo in mentionInfos {
                 removeMentionInfo(mention: mentionInfo)
             }
-            return (true, nil)
+            if replacementString.isValidCharacterBackSpace() {
+                return (false, nil)
+            } else {
+                return (true, nil)
+            }
         }
         
         if replacementString == String(kMentionSymbol) {
@@ -199,7 +203,7 @@ class HoaLDMentionsTextField: UITextField {
             string.insertString(string: insertString, atIndex: location)
             text = string
             setCurremtCursorLocation(index: (location + insertString.count))
-            mentionInfo.kRange = NSRange(location: location, length: mentionInfo.getDisplayName().count)
+            mentionInfo.kRange = NSRange(location: location - String(kMentionSymbol).count, length: mentionInfo.getDisplayName().count + String(kMentionSymbol).count)
             updatekMentionInfosInsertRange(range: mentionInfo.kRange)
             kMentionInfos.append(mentionInfo)
             kMentionSearchingString.removeAll()
