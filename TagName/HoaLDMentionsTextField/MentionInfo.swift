@@ -13,39 +13,53 @@ enum MentionInfoType: String {
     case group = "group"
 }
 
+enum MentionInfoActType: String {
+    case typeAt = "with";
+    case typeSearch = "search" // if want to be a search name must have at least 1 charater
+}
+
 class MentionInfo: NSObject {
-    var id = ""
-    var name = ""
-    var act = "with"
-    var type: MentionInfoType = .user
-    var range = NSRange(location: 0,length: 0)
+    var kId = ""
+    var kName = ""
+    var kAct: MentionInfoActType = .typeAt
+    var kType: MentionInfoType = .user
+    var kRange = NSRange(location: 0,length: 0)
     
     
     
 //    var locationBeenMention = UITextRange
     
     init(_ id: String,_ name: String) {
-        self.id = id
-        self.name = name
-    }
-    
-    func getDisplayName() -> String {
-        return "\(name)"
+        self.kId = id
+        self.kName = name
     }
     
     func getTagID() -> String {
-        return "::\(id)::"
+        return "::\(kId)::"
+    }
+    
+    func getDisplayName() -> String {
+        return "\(kName)"
     }
     
     static public func mentionInfoFromArray(mentionInfos: [MentionInfo], mentionInfo: MentionInfo) -> (mentionInfo: MentionInfo,mentionIndex: Int)? {
         var i = 0
         for mention in mentionInfos {
-            if mention.id == mention.id {
+            if mention.kId == mentionInfo.kId {
                 return (mention,i)
             }
             i += 1
         }
         return nil
+    }
+    
+    static public func isValidNameFromMentionInfo(mentionInfos: [MentionInfo], name: String) -> Bool {
+        for mention in mentionInfos {
+            if mention.kName.lowercased().contains(name) {
+                return true
+            }
+        }
+        return false
     }
     
     /*

@@ -306,43 +306,41 @@ extension ViewController: UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         self.range = range
         self.replacementString = string
+        
+        let mentionsTextFieldData = mentionsTextField.dataTextField(range: range, replacementString: string)
+        kMentionInfosTableView = mentionsTextFieldData.mentionInfos ?? [MentionInfo]()
+        tbListUserTag.reloadData()
+        return mentionsTextFieldData.shouldChangeCharacters
+        /*
         let mentionsTextFieldType = mentionsTextField.mentionsTextFieldTypeFrom(range: range, replacementString: string)
         mentionsTextField.kMentionType = mentionsTextFieldType.type
         let type = mentionsTextFieldType.type
-        
         
         switch type {
         case .typeMentionSymbolAt:
             refreshMentionList(false)
             return true
-        case .typeMentionSymbolAtSearching:
-            
-            return true
+                
+        case .typeMentionInfoSearch:
+            if let mentionInfo = mentionsTextFieldType.mentionInfo {
+                
+            }
+            return false
             
         case .typeSpaceBar:
             refreshMentionList()
             return true
             
-        case .typeBackSpaceAtMention:
-            if let mentionInfo = mentionsTextFieldType.mentionInfo?.first {
+        case .typeMentionInfoSearchBackSpace:
+            return true
+            
+        case .typeMentionInfoBackSpace:
+            if let mentionInfo = mentionsTextFieldType.mentionInfo {
                 mentionsTextField.removeMentionInfo(mention: mentionInfo)
             }
             return false
             
-        case .typeBackSpace:
-            // nếu từ đó trước đó có @ thì
-            
-            // nếu từ đó trước đó không có @
-            
-            // nếu từ đó nằm trong một mention khác
-            refreshMentionList(true)
-            
-            
-            let newRange = NSRange(location: range.location - 1, length: range.length)
-            self.range = newRange
-            return true
-            
-        default:
+        default: // .typeNormal
             refreshMentionList()
             // còn lại thì cho làm thoải mái.
             return true
@@ -350,7 +348,7 @@ extension ViewController: UITextFieldDelegate{
         
         // nếu user thêm string là @
         //            handleMentionUser(textFieldText: textFieldText, range: range, replacementString: string, validSymbol: mentionsTextField.kMentionSymbol)
-        
+        */
     }
 }
 
