@@ -76,8 +76,17 @@ class HoaLDMentionsTextField: UITextField {
         kMentionLocation = range.location + replacementString.count
         kMentionSearchingString.removeAll()
         
+        
+
+        
+        
+        //when insert character update location MentionInfo or bug run remove func
+//        updateMentionInfosRange(range: range, replacementString: replacementString)
+        
+        
+        
         // remove when editing word
-        if let mentionInfos = mentionInfoInRange(range: range) {
+        if let mentionInfos = mentionInfoInRange(range: range, replacementString: replacementString) {
             for mentionInfo in mentionInfos {
                 removeMentionInfo(mention: mentionInfo)
             }
@@ -86,6 +95,10 @@ class HoaLDMentionsTextField: UITextField {
             } else {
                 return (true, nil)
             }
+        }
+        // trong trường hợp insert character normal, nghĩa là mentionInfoInRange == nil
+        else {
+            updateMentionInfosRange(range: range, replacementString: replacementString)
         }
         
         if replacementString == String(kMentionSymbol) {
@@ -177,15 +190,30 @@ class HoaLDMentionsTextField: UITextField {
         }
     }
     
-    func mentionInfoInRange(range: NSRange) -> [MentionInfo]? {
+    func mentionInfoInRange(range: NSRange, replacementString: String) -> [MentionInfo]? {
         var mentionInfos = [MentionInfo]()
         // get mention info in mention infos saved
-        for mentionInfo in kMentionInfos {
-            if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
-                && range.location > mentionInfo.kRange.location {
-                mentionInfos.append(mentionInfo)
+        // remove
+        if range.length > 0 {
+            for mentionInfo in kMentionInfos {
+                if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
+                    && range.location + range.length > mentionInfo.kRange.location {
+                    mentionInfos.append(mentionInfo)
+                }
             }
         }
+        
+        /*
+        // insert character
+        if replacementString.count > 0 {
+            for mentionInfo in kMentionInfos {
+                if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
+                && range.location + range.length > mentionInfo.kRange.location {
+                    mentionInfos.append(mentionInfo)
+                }
+            }
+        }
+        */
         if mentionInfos.count > 0 {
             return mentionInfos
         } else {
@@ -203,7 +231,7 @@ class HoaLDMentionsTextField: UITextField {
             string.insertString(string: insertString, atIndex: location)
             text = string
             setCurremtCursorLocation(index: (location + insertString.count))
-            mentionInfo.kRange = NSRange(location: location - String(kMentionSymbol).count, length: mentionInfo.getDisplayName().count + String(kMentionSymbol).count)
+            mentionInfo.kRange = NSRange(location: location - String(kMentionSymbol).count, length: String(kMentionSymbol).count + mentionInfo.getDisplayName().count)
             updatekMentionInfosInsertRange(range: mentionInfo.kRange)
             kMentionInfos.append(mentionInfo)
             kMentionSearchingString.removeAll()
@@ -219,13 +247,25 @@ class HoaLDMentionsTextField: UITextField {
             text = string
             kMentionInfos.remove(at: mentionObject.mentionIndex)
             setCurremtCursorLocation(index: mentionInfo.kRange.location)
-            updatekMentionInfosRemoveRange(range: mentionInfo.kRange)
+//            updatekMentionInfosRemoveRange(range: mentionInfo.kRange)
+            updateMentionInfosRange(range: mentionInfo.kRange, replacementString: "")
+        }
+    }
+    
+    func updateMentionInfosRange(range: NSRange, replacementString: String) {
+        //remove character
+        if range.length > 0 {
+            updatekMentionInfosRemoveRange(range: range)
+        }
+        
+        if replacementString.count > 0 {
+            updatekMentionInfosInsertRange(range: NSRange(location: range.location, length: replacementString.count))
         }
     }
     
     func updatekMentionInfosInsertRange(range: NSRange) {
         for mention in kMentionInfos {
-            if mention.kRange.location > range.location {
+            if mention.kRange.location >= range.location {
                 mention.kRange.location += range.length
             }
         }
