@@ -89,12 +89,14 @@ class HoaLDMentionsTextField: UITextField {
         if replacementString == String(kMentionSymbol) {
             return (true, kListMentionInfos)
         }
-
-//        if range.length > 0 && replacementString.count > 0 {
-//            return (false, nil)
-//        }
         return (true, nil)
     }
+    
+//    func refreshDisplay() {
+//        myRange = NSRange(location: 3, length: 17)
+//        let anotherAttribute = [ NSAttributedString.Key.backgroundColor: UIColor.blue ]
+//        myString.addAttributes(anotherAttribute, range: myRange)
+//    }
     
     func clearAll() {
         text?.removeAll()
@@ -227,11 +229,7 @@ class HoaLDMentionsTextField: UITextField {
             self.selectedTextRange = self.textRange(from: startPosition!, to: endPosition!)
         }
     }
-    
-    func refreshDisplay() {
-        
-    }
-    
+
 }
 
 extension UITextField {
