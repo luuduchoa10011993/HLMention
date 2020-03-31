@@ -42,10 +42,18 @@ class MentionInfo: NSObject {
         return "\(kName)"
     }
     
+    func copyObject() -> MentionInfo {
+        let mentionInfo = MentionInfo(kId, kName)
+        mentionInfo.kAct = kAct
+        mentionInfo.kType = kType
+        mentionInfo.kRange = kRange
+        return mentionInfo
+    }
+    
     static public func mentionInfoFromArray(mentionInfos: [MentionInfo], mentionInfo: MentionInfo) -> (mentionInfo: MentionInfo,mentionIndex: Int)? {
         var i = 0
         for mention in mentionInfos {
-            if mention.kId == mentionInfo.kId {
+            if mention.kId == mentionInfo.kId && mention.kRange == mentionInfo.kRange {
                 return (mention,i)
             }
             i += 1

@@ -38,6 +38,11 @@ class ViewController: UIViewController {
         mentionsTextField.kListMentionInfos = kMentionInfos
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        mentionsTextField.becomeFirstResponder()
+    }
     //attribute of String
     func attributeString(initialString: String , valueReplace: String) -> NSMutableAttributedString{
         let mutableAttributedString = NSMutableAttributedString(string: initialString)
@@ -283,7 +288,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let mentionInfo = kMentionInfosTableView[indexPath.row]
-        mentionsTextField.insertMentionInfo(mentionInfo: mentionInfo, atLocation: mentionsTextField.kMentionLocation)
+        mentionsTextField.insertMentionInfo(mentionInfo: mentionInfo.copyObject(), atLocation: mentionsTextField.kMentionLocation)
         refreshMentionList()
     }
 }

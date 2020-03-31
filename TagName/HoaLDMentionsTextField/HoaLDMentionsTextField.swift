@@ -48,36 +48,22 @@ class HoaLDMentionsTextField: UITextField {
          
         // backspace data -> range (0,1), replacementString = ""
         // a -> range (1,0), replacementString = a
-
+        
         if replacementString == " " {
             kMentionSearchingString.removeAll()
+            updateMentionInfosRange(range: range, replacementString: replacementString)
             return (true, nil)
         }
-        
         //search
         let currentWord = String(self.currentWord().dropLast(range.length)) + replacementString
         if isValidCurrentWordMentionSearch(currentWord: currentWord) {
             kMentionSearchingString = String(currentWord.dropFirst(String(kMentionSymbol).count))
+            updateMentionInfosRange(range: range, replacementString: replacementString)
             return (true, mentionInfosSearchFrom(kMentionSearchingString))
         }
         
-//        if kMentionSearching == true && kMentionLocation == range.location {
-//            kMentionLocation = range.location + replacementString.count
-//            kMentionSearchingString.append(Character(replacementString))
-//            return (true, mentionInfosSearchFrom(kMentionSearchingString))
-//        }
-//
-//        if kMentionSearching == true && (replacementString.isValidCharacterBackSpace() && (kMentionLocation - 1 == range.location)) {
-//            kMentionLocation = range.location
-//            kMentionSearchingString = String(kMentionSearchingString.dropLast())
-//            return (true, mentionInfosSearchFrom(kMentionSearchingString))
-//        }
-        
         kMentionLocation = range.location + replacementString.count
         kMentionSearchingString.removeAll()
-        
-        
-
         
         
         //when insert character update location MentionInfo or bug run remove func
@@ -90,14 +76,13 @@ class HoaLDMentionsTextField: UITextField {
             for mentionInfo in mentionInfos {
                 removeMentionInfo(mention: mentionInfo)
             }
-            if replacementString.isValidCharacterBackSpace() {
+            if replacementString.isValidCharacterBackSpace() && range.length == 1 {
                 return (false, nil)
             } else {
                 return (true, nil)
             }
-        }
-        // trong trường hợp insert character normal, nghĩa là mentionInfoInRange == nil
-        else {
+        } else {
+            // trong trường hợp insert character normal, nghĩa là mentionInfoInRange == nil
             updateMentionInfosRange(range: range, replacementString: replacementString)
         }
         
@@ -105,12 +90,17 @@ class HoaLDMentionsTextField: UITextField {
             return (true, kListMentionInfos)
         }
 
+//        if range.length > 0 && replacementString.count > 0 {
+//            return (false, nil)
+//        }
         return (true, nil)
     }
     
-//    func updatekMentionInfosWithRange(range: NSRange, replacementString: String) -> (shouldChangeCharacters: Bool) {
-//
-//    }
+    func clearAll() {
+        text?.removeAll()
+        kMentionInfos.removeAll()
+        kMentionSearchingString.removeAll()
+    }
     
     func isValidCurrentWordMentionSearch(currentWord: String) -> Bool {
         guard let firstCharacter = currentWord.first else {
@@ -123,57 +113,6 @@ class HoaLDMentionsTextField: UITextField {
         }
         return false
     }
-    
-    /*
-    // detect mention Type
-    public func mentionsTextFieldTypeFrom(range: NSRange, replacementString: String) -> (type: HoaLDMentionsTextFieldTextChangeType, mentionInfo: MentionInfo?) {
-        
-        // type mention info
-        
-        // type search
-        
-        // type normal
-        
-        
-        if replacementString == String(kMentionSymbol) {
-            kMentionLocation = range.location + replacementString.count
-            return (.typeMentionSymbolAt, nil)
-        } else if (strcmp(replacementString.cString(using: String.Encoding.utf8)!, "\\b") == -92) {
-            if let mentionInfos = mentionInfoInRange(range: range) {
-//                if let mentionInfo = mentionInfos {
-//                    switch mention.type {
-//                    case .typeAt:
-//                        return (.typeMentionInfoBackSpace, mentionInfo)
-//                    case .typeSearch:
-//                        return (.typeMentionInfoSearchBackSpace, mentionInfo) // at search but backspace
-//                    }
-//                }
-            }
-            return (.typeNormal, nil)
-        } else if replacementString == " " {
-            return (.typeSpaceBar, nil)
-        } else if (kMentionLocation + replacementString.count) == (range.location + replacementString.count)
-            && (kMentionType == .typeMentionSymbolAt || kMentionType == .typeMentionInfoSearch) { // insert string
-            kMentionLocation = range.location + replacementString.count
-            // get MentionInfo
-
-            if let mention = mentionInfoInRange(range: range) {
-//                if let mentionInfo = mention.mentionInfo {
-//                    switch mention.type {
-//                        case .typeAt:
-//                            removeMentionInfo(mention: mention)
-//                    case .typeSeach:
-//
-//                    }
-                }
-            }
-
-            return (.typeMentionInfoSearch, nil)
-        } else {
-            return (.typeNormal, nil)
-        }
-    }
-     */
     
     func mentionInfosSearchFrom(_ string: String) -> [MentionInfo]? {
         var mentionInfos = [MentionInfo]()
@@ -203,8 +142,7 @@ class HoaLDMentionsTextField: UITextField {
             }
         }
         
-        /*
-        // insert character
+        // insert character in between mention
         if replacementString.count > 0 {
             for mentionInfo in kMentionInfos {
                 if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
@@ -213,7 +151,7 @@ class HoaLDMentionsTextField: UITextField {
                 }
             }
         }
-        */
+        
         if mentionInfos.count > 0 {
             return mentionInfos
         } else {
@@ -221,8 +159,10 @@ class HoaLDMentionsTextField: UITextField {
         }
     }
     
-    // insert MentionInfo to display Text
+    // insert MentionInfo from search to display Text
     func insertMentionInfo(mentionInfo: MentionInfo, atLocation location: Int) {
+        // "@Hoa dep trai @ho vkl @Nguyen Kieu Vy"
+        // "@Hoa dep trai @Hoa vkl @Nguyen Kieu Vy"
         if var string = text {
             if kMentionSearchingString.count > 0 {
                 string.removeString(string: kMentionSearchingString, atIndex: location)
@@ -230,9 +170,9 @@ class HoaLDMentionsTextField: UITextField {
             let insertString = "\(mentionInfo.getDisplayName()) "
             string.insertString(string: insertString, atIndex: location)
             text = string
-            setCurremtCursorLocation(index: (location + insertString.count))
             mentionInfo.kRange = NSRange(location: location - String(kMentionSymbol).count, length: String(kMentionSymbol).count + mentionInfo.getDisplayName().count)
-            updatekMentionInfosInsertRange(range: mentionInfo.kRange)
+            updateMentionInfosRange(range: NSRange(location: location, length: kMentionSearchingString.count), replacementString: insertString)
+            setCurremtCursorLocation(index: mentionInfo.kRange.location + String(kMentionSymbol).count + insertString.count)
             kMentionInfos.append(mentionInfo)
             kMentionSearchingString.removeAll()
         }
@@ -246,9 +186,9 @@ class HoaLDMentionsTextField: UITextField {
             string.removeMentionInfo(mentionInfo: mentionInfo)
             text = string
             kMentionInfos.remove(at: mentionObject.mentionIndex)
+            updatekMentionInfosRemoveRange(range: mentionInfo.kRange)
             setCurremtCursorLocation(index: mentionInfo.kRange.location)
-//            updatekMentionInfosRemoveRange(range: mentionInfo.kRange)
-            updateMentionInfosRange(range: mentionInfo.kRange, replacementString: "")
+//            updateMentionInfosRange(range: mentionInfo.kRange, replacementString: "")
         }
     }
     
