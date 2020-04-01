@@ -14,7 +14,7 @@ import SZMentionsSwift
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var mentionsTextField: HoaLDMentionsTextField!
+    @IBOutlet weak var mentionsTextField: HLMentionsTextField!
     @IBOutlet weak var tbListUserTag: UITableView!
     
     let kMentionInfos: [MentionInfo] = [MentionInfo("00", "Hoa"), MentionInfo("01", "Vuong Khac Duy"), MentionInfo("02", "Dương"),

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		055A518F242B0EA30070A230 /* MentionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055A518E242B0EA30070A230 /* MentionInfo.swift */; };
-		056719E0242C4DD3003D53D6 /* HoaLDMentionsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056719DF242C4DD3003D53D6 /* HoaLDMentionsTextField.swift */; };
+		056719E0242C4DD3003D53D6 /* HLMentionsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056719DF242C4DD3003D53D6 /* HLMentionsTextField.swift */; };
 		7618E1C892EB4D6C28990378 /* Pods_TagName.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55C5F4BFE302F901786DF591 /* Pods_TagName.framework */; };
 		B075C52C24208B0400D8CEFF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075C52B24208B0400D8CEFF /* AppDelegate.swift */; };
 		B075C52E24208B0400D8CEFF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B075C52D24208B0400D8CEFF /* SceneDelegate.swift */; };
@@ -21,7 +21,7 @@
 
 /* Begin PBXFileReference section */
 		055A518E242B0EA30070A230 /* MentionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionInfo.swift; sourceTree = "<group>"; };
-		056719DF242C4DD3003D53D6 /* HoaLDMentionsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoaLDMentionsTextField.swift; sourceTree = "<group>"; };
+		056719DF242C4DD3003D53D6 /* HLMentionsTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionsTextField.swift; sourceTree = "<group>"; };
 		178E2477059F145E4E42DE10 /* Pods-TagName.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagName.debug.xcconfig"; path = "Target Support Files/Pods-TagName/Pods-TagName.debug.xcconfig"; sourceTree = "<group>"; };
 		55C5F4BFE302F901786DF591 /* Pods_TagName.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TagName.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B075C52824208B0400D8CEFF /* TagName.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TagName.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,7 +52,7 @@
 			isa = PBXGroup;
 			children = (
 				055A518E242B0EA30070A230 /* MentionInfo.swift */,
-				056719DF242C4DD3003D53D6 /* HoaLDMentionsTextField.swift */,
+				056719DF242C4DD3003D53D6 /* HLMentionsTextField.swift */,
 			);
 			path = HoaLDMentionsTextField;
 			sourceTree = "<group>";
@@ -223,7 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				056719E0242C4DD3003D53D6 /* HoaLDMentionsTextField.swift in Sources */,
+				056719E0242C4DD3003D53D6 /* HLMentionsTextField.swift in Sources */,
 				B075C53024208B0400D8CEFF /* ViewController.swift in Sources */,
 				B075C52C24208B0400D8CEFF /* AppDelegate.swift in Sources */,
 				B075C54124208C8A00D8CEFF /* NameTableViewCell.swift in Sources */,

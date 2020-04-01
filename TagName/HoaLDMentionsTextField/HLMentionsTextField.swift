@@ -1,5 +1,5 @@
 //
-//  HoaLDMentionsTextField.swift
+//  HLMentionsTextField.swift
 //  TagName
 //
 //  Created by HoaLD on 3/26/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HoaLDMentionsTextField: UITextField {
+class HLMentionsTextField: UITextField {
     
     //full all data or data need to setup
     var kListMentionInfos = [MentionInfo]()
@@ -119,9 +119,9 @@ class HoaLDMentionsTextField: UITextField {
             return false
         }
         if firstCharacter == kMentionSymbol {
-            let word = String(currentWord.dropFirst(String(kMentionSymbol).count))
+            var word = String(currentWord.dropFirst(String(kMentionSymbol).count))
             if word.isEmpty { return true }
-            return MentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word)
+            return MentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word.HDlowercase())
         }
         return false
     }
@@ -130,7 +130,7 @@ class HoaLDMentionsTextField: UITextField {
         if string.isEmpty { return kListMentionInfos }
         var mentionInfos = [MentionInfo]()
         for mentionInfo in kListMentionInfos {
-            if mentionInfo.kName.lowercased().contains(string.lowercased()) {
+            if mentionInfo.kName.HDlowercase().contains(string.HDlowercase()) {
                 mentionInfos.append(mentionInfo)
             }
         }
@@ -303,6 +303,11 @@ extension UITextField {
 }
 
 extension String {
+    
+    func HDlowercase() -> String {
+        return lowercased()
+    }
+    
     mutating func insertString(string: String, atIndex: Int) {
         self.insert(contentsOf: string, at:self.index(self.startIndex, offsetBy: atIndex))
     }
