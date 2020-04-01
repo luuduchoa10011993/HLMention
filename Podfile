@@ -6,8 +6,4 @@ target 'TagName' do
   use_frameworks!
 
   # Pods for TagName
-    pod 'RxSwift', '~> 5'
-    pod 'RxCocoa', '~> 5'
-    pod	'SZMentionsSwift'
-    pod 'Tagging'
 end

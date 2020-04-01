@@ -20,15 +20,7 @@ class ViewController: UIViewController {
     let kMentionInfos: [MentionInfo] = [MentionInfo("00", "Hoa"), MentionInfo("01", "Vuong Khac Duy"), MentionInfo("02", "Dương"),
                                MentionInfo("03", "Nguyễn Đoàn Nguyên An"), MentionInfo("04", "Nguyễn Kiều Vy"), MentionInfo("05", "Nguyễn Duy Ngân"),
                                MentionInfo("06", "Donald Trump"), MentionInfo("07", "Hoà cute phô mai que")]
-    var range: NSRange = _NSRange()
-    var replacementString: String = ""
-    var arrayNameDidChangeAttribute:[String] = []
-    
-    let disposeBag = DisposeBag()
-    var stringNeedReplace = ""
-    var textChange = ""
-    var text  = ""
-    
+
     //tableview data
     var kMentionInfosTableView: [MentionInfo] = []
 
@@ -87,9 +79,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
 extension ViewController: UITextFieldDelegate{
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        self.range = range
-        self.replacementString = string
-        
         let mentionsTextFieldData = mentionsTextField.dataTextField(range: range, replacementString: string)
         kMentionInfosTableView = mentionsTextFieldData.mentionInfos ?? [MentionInfo]()
         tbListUserTag.reloadData()

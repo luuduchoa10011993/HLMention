@@ -222,7 +222,6 @@ class HoaLDMentionsTextField: UITextField {
         if kMentionInfos.isEmpty {
             return
         }
-        //remove character
         if range.length > 0 {
             HLupdatekMentionInfosRemoveRange(range: range)
         }
@@ -251,7 +250,6 @@ class HoaLDMentionsTextField: UITextField {
 }
 
 extension UITextField {
-    //get CurrentCursorLocation, 0 mean selectedTextRange not found
     func getCurrentCursorLocation() -> Int {
         if let selectedRange = self.selectedTextRange {
             return self.offset(from: self.beginningOfDocument, to: selectedRange.start)
