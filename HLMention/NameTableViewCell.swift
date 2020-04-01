@@ -1,9 +1,9 @@
 //
 //  NameTableViewCell.swift
-//  TagName
+//  HLMention
 //
-//  Created by Mojave on 3/17/20.
-//  Copyright © 2020 Mojave. All rights reserved.
+//  Created by Lưu Đức Hoà on 4/2/20.
+//  Copyright © 2020 Luu Duc Hoa. All rights reserved.
 //
 
 import UIKit
@@ -22,7 +22,7 @@ class NameTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    func display(_ userInfo: MentionInfo) {
+    func display(_ userInfo: HLMentionInfo) {
         self.lbNameUser.text = userInfo.getDisplayName()
     }
 }

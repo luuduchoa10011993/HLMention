@@ -1,9 +1,9 @@
 //
 //  ViewController.swift
-//  TagName
+//  HLMention
 //
-//  Created by Mojave on 3/17/20.
-//  Copyright © 2020 Mojave. All rights reserved.
+//  Created by Lưu Đức Hoà on 4/2/20.
+//  Copyright © 2020 Luu Duc Hoa. All rights reserved.
 //
 
 import UIKit
@@ -13,13 +13,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var mentionsTextField: HLMentionsTextField!
     @IBOutlet weak var tbListUserTag: UITableView!
     
-    let kMentionInfos: [MentionInfo] = [MentionInfo("00", "Hoa"), MentionInfo("01", "Vuong Khac Duy"), MentionInfo("02", "Dương"),
-                               MentionInfo("03", "Nguyễn Đoàn Nguyên An"), MentionInfo("04", "Nguyễn Kiều Vy"), MentionInfo("05", "Nguyễn Duy Ngân"),
-                               MentionInfo("06", "Donald Trump"), MentionInfo("07", "Hoà cute phô mai que")]
-
+    let kMentionInfos: [HLMentionInfo] = [HLMentionInfo("00", "Hoa"), HLMentionInfo("01", "Vuong Khac Duy"), HLMentionInfo("02", "Dương"),
+                                        HLMentionInfo("03", "Nguyễn Đoàn Nguyên An"), HLMentionInfo("04", "Nguyễn Kiều Vy"), HLMentionInfo("05", "Nguyễn Duy Ngân"),
+                                        HLMentionInfo("06", "Donald Trump"), HLMentionInfo("07", "Hoà cute phô mai que")]
+    
     //tableview data
-    var kMentionInfosTableView: [MentionInfo] = []
-
+    var kMentionInfosTableView: [HLMentionInfo] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
@@ -76,7 +76,7 @@ extension ViewController: UITextFieldDelegate{
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let mentionsTextFieldData = mentionsTextField.dataTextField(range: range, replacementString: string)
-        kMentionInfosTableView = mentionsTextFieldData.mentionInfos ?? [MentionInfo]()
+        kMentionInfosTableView = mentionsTextFieldData.mentionInfos ?? [HLMentionInfo]()
         tbListUserTag.reloadData()
         return mentionsTextFieldData.shouldChangeCharacters
     }

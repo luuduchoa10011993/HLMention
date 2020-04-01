@@ -1,9 +1,9 @@
 //
-//  UserModel.swift
-//  TagName
+//  HLMentionInfo.swift
+//  HLMention
 //
-//  Created by HoaLD on 3/25/20.
-//  Copyright © 2020 Mojave. All rights reserved.
+//  Created by Lưu Đức Hoà on 4/2/20.
+//  Copyright © 2020 Luu Duc Hoa. All rights reserved.
 //
 
 import UIKit
@@ -18,7 +18,7 @@ enum MentionInfoActType: String {
     case typeSearch = "search" // if want to be a search name must have at least 1 charater
 }
 
-class MentionInfo: NSObject {
+class HLMentionInfo: NSObject {
     var kId = ""
     var kName = ""
     var kAct: MentionInfoActType = .typeAt
@@ -42,15 +42,15 @@ class MentionInfo: NSObject {
         return "\(kName)"
     }
     
-    func copyObject() -> MentionInfo {
-        let mentionInfo = MentionInfo(kId, kName)
+    func copyObject() -> HLMentionInfo {
+        let mentionInfo = HLMentionInfo(kId, kName)
         mentionInfo.kAct = kAct
         mentionInfo.kType = kType
         mentionInfo.kRange = kRange
         return mentionInfo
     }
     
-    static public func mentionInfoFromArray(mentionInfos: [MentionInfo], mentionInfo: MentionInfo) -> (mentionInfo: MentionInfo,mentionIndex: Int)? {
+    static public func mentionInfoFromArray(mentionInfos: [HLMentionInfo], mentionInfo: HLMentionInfo) -> (mentionInfo: HLMentionInfo,mentionIndex: Int)? {
         var i = 0
         for mention in mentionInfos {
             if mention.kId == mentionInfo.kId && mention.kRange == mentionInfo.kRange {
@@ -61,7 +61,7 @@ class MentionInfo: NSObject {
         return nil
     }
     
-    static public func isValidNameFromMentionInfo(mentionInfos: [MentionInfo], name: String) -> Bool {
+    static public func isValidNameFromMentionInfo(mentionInfos: [HLMentionInfo], name: String) -> Bool {
         for mention in mentionInfos {
             if mention.kName.lowercased().contains(name) {
                 return true

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		AC54014624350458007189AB /* NameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014224350458007189AB /* NameTableViewCell.swift */; };
 		AC54014724350458007189AB /* HLMentionsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014424350458007189AB /* HLMentionsTextField.swift */; };
-		AC54014824350458007189AB /* MentionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014524350458007189AB /* MentionInfo.swift */; };
+		AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */; };
 		ACF3C346243503720085AE41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF3C345243503720085AE41 /* AppDelegate.swift */; };
 		ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF3C347243503720085AE41 /* SceneDelegate.swift */; };
 		ACF3C34A243503720085AE41 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF3C349243503720085AE41 /* ViewController.swift */; };
@@ -40,7 +40,7 @@
 /* Begin PBXFileReference section */
 		AC54014224350458007189AB /* NameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameTableViewCell.swift; sourceTree = "<group>"; };
 		AC54014424350458007189AB /* HLMentionsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionsTextField.swift; sourceTree = "<group>"; };
-		AC54014524350458007189AB /* MentionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MentionInfo.swift; sourceTree = "<group>"; };
+		AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionInfo.swift; sourceTree = "<group>"; };
 		ACF3C342243503720085AE41 /* HLMention.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HLMention.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF3C345243503720085AE41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACF3C347243503720085AE41 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				AC54014424350458007189AB /* HLMentionsTextField.swift */,
-				AC54014524350458007189AB /* MentionInfo.swift */,
+				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
 			);
 			path = HoaLDMentionsTextField;
 			sourceTree = "<group>";
@@ -278,9 +278,9 @@
 			files = (
 				ACF3C34A243503720085AE41 /* ViewController.swift in Sources */,
 				ACF3C346243503720085AE41 /* AppDelegate.swift in Sources */,
-				AC54014824350458007189AB /* MentionInfo.swift in Sources */,
 				AC54014624350458007189AB /* NameTableViewCell.swift in Sources */,
 				ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */,
+				AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */,
 				AC54014724350458007189AB /* HLMentionsTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

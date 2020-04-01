@@ -1,9 +1,9 @@
 //
 //  HLMentionsTextField.swift
-//  TagName
+//  HLMention
 //
-//  Created by HoaLD on 3/26/20.
-//  Copyright © 2020 Mojave. All rights reserved.
+//  Created by Lưu Đức Hoà on 4/2/20.
+//  Copyright © 2020 Luu Duc Hoa. All rights reserved.
 //
 
 import UIKit
@@ -11,11 +11,11 @@ import UIKit
 class HLMentionsTextField: UITextField {
     
     //full all data or data need to setup
-    var kListMentionInfos = [MentionInfo]()
+    var kListMentionInfos = [HLMentionInfo]()
     var kMentionSymbol: Character = "@" // default value is @ [at]
     
     // data need control
-    private var kMentionInfos = [MentionInfo]()
+    private var kMentionInfos = [HLMentionInfo]()
     private var kMentionSearchingString = ""
     private var kMentionSearchingStringLocation = 0 // use for insert select mention in tableview
     private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
@@ -26,8 +26,8 @@ class HLMentionsTextField: UITextField {
         kMentionSearchingStringLocation = 0
     }
     
-    func getAtMentionInfos() -> [MentionInfo]? {
-        var mentionInfos = [MentionInfo]()
+    func getAtMentionInfos() -> [HLMentionInfo]? {
+        var mentionInfos = [HLMentionInfo]()
         for mentionInfo in kMentionInfos {
             if mentionInfo.kAct == .typeAt {
                 mentionInfos.append(mentionInfo)
@@ -49,7 +49,7 @@ class HLMentionsTextField: UITextField {
         HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
     }
     
-    public func dataTextField(range: NSRange, replacementString: String) -> (shouldChangeCharacters: Bool, mentionInfos: [MentionInfo]?) {
+    public func dataTextField(range: NSRange, replacementString: String) -> (shouldChangeCharacters: Bool, mentionInfos: [HLMentionInfo]?) {
 
         kMentionCurrentCursorLocation = getCurrentCursorLocation() - range.length + replacementString.count
         // backspace data -> range (0,1), replacementString = ""
@@ -105,7 +105,7 @@ class HLMentionsTextField: UITextField {
         }
     }
     
-    func attributeStringrefeshMentionInfoWithColor(string: String, mentionInfos: [MentionInfo]) -> NSAttributedString {
+    func attributeStringrefeshMentionInfoWithColor(string: String, mentionInfos: [HLMentionInfo]) -> NSAttributedString {
         let attributeString = NSMutableAttributedString(string: string,attributes: [ NSAttributedString.Key.foregroundColor: UIColor.darkText ])
         let attribute = [ NSAttributedString.Key.foregroundColor: UIColor.blue ]
         for mentionInfo in mentionInfos {
@@ -121,14 +121,14 @@ class HLMentionsTextField: UITextField {
         if firstCharacter == kMentionSymbol {
             let word = String(currentWord.dropFirst(String(kMentionSymbol).count))
             if word.isEmpty { return true }
-            return MentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word.HDlowercase())
+            return HLMentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word.HDlowercase())
         }
         return false
     }
     
-    func mentionInfosSearchFrom(_ string: String) -> [MentionInfo]? {
+    func mentionInfosSearchFrom(_ string: String) -> [HLMentionInfo]? {
         if string.isEmpty { return kListMentionInfos }
-        var mentionInfos = [MentionInfo]()
+        var mentionInfos = [HLMentionInfo]()
         for mentionInfo in kListMentionInfos {
             if mentionInfo.kName.HDlowercase().contains(string.HDlowercase()) {
                 mentionInfos.append(mentionInfo)
@@ -142,8 +142,8 @@ class HLMentionsTextField: UITextField {
         }
     }
     
-    func mentionInfoInRange(range: NSRange, replacementString: String) -> [MentionInfo]? {
-        var mentionInfos = [MentionInfo]()
+    func mentionInfoInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
+        var mentionInfos = [HLMentionInfo]()
         if range.length > 0 {
             for mentionInfo in kMentionInfos {
                 if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
@@ -170,7 +170,7 @@ class HLMentionsTextField: UITextField {
         }
     }
     
-    func insertMentionInfoWhenSearching(mentionInfo: MentionInfo) {
+    func insertMentionInfoWhenSearching(mentionInfo: HLMentionInfo) {
         // "@Hoa dep trai @ho vkl @Nguyen Kieu Vy"
         // "@Hoa dep trai @Hoa vkl @Nguyen Kieu Vy"
         guard var string = text else { return }
@@ -193,8 +193,8 @@ class HLMentionsTextField: UITextField {
     }
     
     // remove MentionInfo
-    func removeMentionInfo(mention: MentionInfo) {
-        guard let mentionObject = MentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
+    func removeMentionInfo(mention: HLMentionInfo) {
+        guard let mentionObject = HLMentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
         let mentionInfo = mentionObject.mentionInfo
         if var string = text {
             string.removeStringWithRange(range: mentionInfo.kRange)
@@ -206,8 +206,8 @@ class HLMentionsTextField: UITextField {
         }
     }
     
-    func HLremoveMentionInfo(mention: MentionInfo) {
-        guard let mentionObject = MentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
+    func HLremoveMentionInfo(mention: HLMentionInfo) {
+        guard let mentionObject = HLMentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
         kMentionInfos.remove(at: mentionObject.mentionIndex)
     }
     
@@ -342,7 +342,7 @@ extension String {
     
     //replace TagUserString -> TagUserRawString
     // Ex: "I'm [:[userID]:] and i live in Toronto
-    mutating func stringRawToStringTagUser(_ userInfos: [MentionInfo]) -> String {
+    mutating func stringRawToStringTagUser(_ userInfos: [HLMentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
             rawString = rawString.replacingOccurrences(of: userInfo.getDisplayName(), with: userInfo.getTagID())
@@ -351,7 +351,7 @@ extension String {
     }
     
     // Ex: "I'm @Lưu Đức Hoà and i live in Toronto
-    mutating func stringTagUserToStringRaw(_ userInfos: [MentionInfo]) -> String {
+    mutating func stringTagUserToStringRaw(_ userInfos: [HLMentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
             rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.getDisplayName())
