@@ -10,16 +10,21 @@ import UIKit
 
 class HoaLDMentionsTextField: UITextField {
     
-    //full all data
+    //full all data or data need to setup
     var kListMentionInfos = [MentionInfo]()
+    var kMentionSymbol: Character = "@" // default value is @ [at]
     
     // data need control
     private var kMentionInfos = [MentionInfo]()
-    var kMentionSymbol: Character = "@" // default value is @ [at]
-    var kMentionLocation: Int = 0
-    var kMentionSearchingString = ""
-    var kMentionCurrentEditLocation: Int = 0
-    var kMentionLastEditLocation: Int = 0
+    private var kMentionSearchingString = ""
+    private var kMentionSearchingStringLocation = 0 // use for insert select mention in tableview
+    private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
+//    var kMentionLastEditLocation: Int = 0
+    
+    func HLclearSearch() {
+        kMentionSearchingString.removeAll()
+        kMentionSearchingStringLocation = 0
+    }
     
     func getAtMentionInfos() -> [MentionInfo]? {
         var mentionInfos = [MentionInfo]()
@@ -40,38 +45,44 @@ class HoaLDMentionsTextField: UITextField {
     }
     
     @objc func textFieldDidChange() {
-        refreshDisplay()
-        setCurremtCursorLocation(index: kMentionLastEditLocation)
+        HLrefreshDisplay()
+        HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
     }
     
     public func dataTextField(range: NSRange, replacementString: String) -> (shouldChangeCharacters: Bool, mentionInfos: [MentionInfo]?) {
 
-        kMentionLastEditLocation = getCurrentCursorLocation() - range.length + replacementString.count
+        kMentionCurrentCursorLocation = getCurrentCursorLocation() - range.length + replacementString.count
         // backspace data -> range (0,1), replacementString = ""
         // a -> range (1,0), replacementString = a
         
         if replacementString == " " {
-            kMentionSearchingString.removeAll()
+            HLclearSearch()
             HLupdateMentionInfosRange(range: range, replacementString: replacementString)
             return (true, nil)
         }
-        //search
+        // search
         let currentWord = String(self.currentWord().dropLast(range.length)) + replacementString
         if isValidCurrentWordMentionSearch(currentWord: currentWord) {
+            kMentionSearchingStringLocation = getCurrentCursorLocation() - range.length + replacementString.count
             kMentionSearchingString = String(currentWord.dropFirst(String(kMentionSymbol).count))
             HLupdateMentionInfosRange(range: range, replacementString: replacementString)
             return (true, mentionInfosSearchFrom(kMentionSearchingString))
         }
         
-        kMentionLocation = range.location + replacementString.count
-        kMentionSearchingString.removeAll()
+        kMentionCurrentCursorLocation = range.location + replacementString.count
+        HLclearSearch()
         
         // remove when editing word
         if let mentionInfos = mentionInfoInRange(range: range, replacementString: replacementString) {
+            
+            // remove big string with location content mention
+            // insert code here
+            
             for mentionInfo in mentionInfos {
                 removeMentionInfo(mention: mentionInfo)
-                kMentionLastEditLocation -= mentionInfo.kRange.length
+                kMentionCurrentCursorLocation -= mentionInfo.kRange.length
             }
+            HLrefreshDisplay()
             if replacementString.isValidCharacterBackSpace() && range.length == 1 {
                 return (false, nil)
             } else {
@@ -88,10 +99,9 @@ class HoaLDMentionsTextField: UITextField {
         return (true, nil)
     }
     
-    func refreshDisplay() {
-        return
+    func HLrefreshDisplay() {
         if let string = text {
-            self.attributedText = attributeStringrefeshMentionInfoWithColor(string: string, mentionInfos: kMentionInfos)
+            attributedText = attributeStringrefeshMentionInfoWithColor(string: string, mentionInfos: kMentionInfos)
         }
     }
     
@@ -104,25 +114,20 @@ class HoaLDMentionsTextField: UITextField {
         return NSAttributedString.init(attributedString: attributeString)
     }
     
-    func clearAll() {
-        text?.removeAll()
-        kMentionInfos.removeAll()
-        kMentionSearchingString.removeAll()
-    }
-    
     func isValidCurrentWordMentionSearch(currentWord: String) -> Bool {
         guard let firstCharacter = currentWord.first else {
             return false
         }
         if firstCharacter == kMentionSymbol {
             let word = String(currentWord.dropFirst(String(kMentionSymbol).count))
-            let isValidNameFromMentionInfo = MentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word)
-            return isValidNameFromMentionInfo
+            if word.isEmpty { return true }
+            return MentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word)
         }
         return false
     }
     
     func mentionInfosSearchFrom(_ string: String) -> [MentionInfo]? {
+        if string.isEmpty { return kListMentionInfos }
         var mentionInfos = [MentionInfo]()
         for mentionInfo in kListMentionInfos {
             if mentionInfo.kName.lowercased().contains(string.lowercased()) {
@@ -139,8 +144,6 @@ class HoaLDMentionsTextField: UITextField {
     
     func mentionInfoInRange(range: NSRange, replacementString: String) -> [MentionInfo]? {
         var mentionInfos = [MentionInfo]()
-        // get mention info in mention infos saved
-        // remove
         if range.length > 0 {
             for mentionInfo in kMentionInfos {
                 if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
@@ -167,27 +170,26 @@ class HoaLDMentionsTextField: UITextField {
         }
     }
     
-    // insert MentionInfo from search to display Text
-    func insertMentionInfo(mentionInfo: MentionInfo, atLocation location: Int) {
+    func insertMentionInfoWhenSearching(mentionInfo: MentionInfo) {
         // "@Hoa dep trai @ho vkl @Nguyen Kieu Vy"
         // "@Hoa dep trai @Hoa vkl @Nguyen Kieu Vy"
-        if var string = text {
-            if kMentionSearchingString.count > 0 {
-                string.removeString(string: kMentionSearchingString, atIndex: location)
-                kMentionLastEditLocation -= kMentionSearchingString.count
-            }
-            let insertString = "\(mentionInfo.getDisplayName()) "
-            string.insertString(string: insertString, atIndex: location)
-            text = string
-            mentionInfo.kRange = NSRange(location: location - String(kMentionSymbol).count, length: String(kMentionSymbol).count + mentionInfo.getDisplayName().count)
-            HLupdateMentionInfosRange(range: NSRange(location: location, length: kMentionSearchingString.count), replacementString: insertString)
-            setCurremtCursorLocation(index: mentionInfo.kRange.location + String(kMentionSymbol).count + insertString.count)
-            kMentionInfos.append(mentionInfo)
-            kMentionSearchingString.removeAll()
-            kMentionLastEditLocation -= insertString.count
-            
-            refreshDisplay()
+        guard var string = text else { return }
+        var mentionCurrentCursorLocation = kMentionSearchingStringLocation
+        if kMentionSearchingString.count > 0 {
+            mentionCurrentCursorLocation -= kMentionSearchingString.count
+            string.removeStringWithRange(range: NSRange(location: mentionCurrentCursorLocation, length: kMentionSearchingString.count))
         }
+        let insertString = "\(mentionInfo.getDisplayName()) "
+        string.insertString(string: insertString, atIndex: mentionCurrentCursorLocation)
+        text = string
+        mentionInfo.kRange = NSRange(location: mentionCurrentCursorLocation - String(kMentionSymbol).count, length: String(kMentionSymbol).count + mentionInfo.getDisplayName().count)
+        kMentionInfos.append(mentionInfo)
+        HLupdateMentionInfosRange(range: NSRange(location: mentionCurrentCursorLocation, length: kMentionSearchingString.count), replacementString: insertString)
+
+        kMentionCurrentCursorLocation = mentionCurrentCursorLocation + insertString.count
+        HLclearSearch()
+        HLrefreshDisplay()
+        HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
     }
     
     // remove MentionInfo
@@ -195,11 +197,11 @@ class HoaLDMentionsTextField: UITextField {
         guard let mentionObject = MentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
         let mentionInfo = mentionObject.mentionInfo
         if var string = text {
-            string.removeMentionInfo(mentionInfo: mentionInfo)
+            string.removeStringWithRange(range: mentionInfo.kRange)
             text = string
             kMentionInfos.remove(at: mentionObject.mentionIndex)
-            updatekMentionInfosRemoveRange(range: mentionInfo.kRange)
-            setCurremtCursorLocation(index: mentionInfo.kRange.location)
+            HLupdatekMentionInfosRemoveRange(range: mentionInfo.kRange)
+            HLsetCurrentCursorLocation(index: mentionInfo.kRange.location)
 //            updateMentionInfosRange(range: mentionInfo.kRange, replacementString: "")
         }
     }
@@ -217,17 +219,20 @@ class HoaLDMentionsTextField: UITextField {
     }
     
     func HLupdateMentionInfosRange(range: NSRange, replacementString: String) {
+        if kMentionInfos.isEmpty {
+            return
+        }
         //remove character
         if range.length > 0 {
-            updatekMentionInfosRemoveRange(range: range)
+            HLupdatekMentionInfosRemoveRange(range: range)
         }
         
-        if replacementString.count > 0 {
-            updatekMentionInfosInsertRange(range: NSRange(location: range.location, length: replacementString.count))
+        if !replacementString.isEmpty {
+            HLupdatekMentionInfosInsertRange(range: NSRange(location: range.location, length: replacementString.count))
         }
     }
     
-    func updatekMentionInfosInsertRange(range: NSRange) {
+    func HLupdatekMentionInfosInsertRange(range: NSRange) {
         for mention in kMentionInfos {
             if mention.kRange.location >= range.location {
                 mention.kRange.location += range.length
@@ -235,23 +240,14 @@ class HoaLDMentionsTextField: UITextField {
         }
     }
     
-    func updatekMentionInfosRemoveRange(range: NSRange) {
+    func HLupdatekMentionInfosRemoveRange(range: NSRange) {
         for mention in kMentionInfos {
             if mention.kRange.location > range.location {
                 mention.kRange.location -= range.length
             }
         }
     }
-
-    func setCurremtCursorLocation(index: Int) {
-        let startPosition = self.position(from: self.beginningOfDocument, offset: index)
-        let endPosition = self.position(from: self.beginningOfDocument, offset: index)
-        
-        if startPosition != nil && endPosition != nil {
-            self.selectedTextRange = self.textRange(from: startPosition!, to: endPosition!)
-        }
-    }
-
+    
 }
 
 extension UITextField {
@@ -262,10 +258,13 @@ extension UITextField {
         }
         return 0
     }
-    
-    func setCursorLocation(location :Int) {
-        if let newPosition = position(from: beginningOfDocument, offset: location) {
-            selectedTextRange = textRange(from: newPosition, to: newPosition)
+
+    func HLsetCurrentCursorLocation(index: Int) {
+        let startPosition = self.position(from: self.beginningOfDocument, offset: index)
+        let endPosition = self.position(from: self.beginningOfDocument, offset: index)
+
+        if startPosition != nil && endPosition != nil {
+            self.selectedTextRange = self.textRange(from: startPosition!, to: endPosition!)
         }
     }
     
@@ -337,27 +336,6 @@ extension String {
     func isValidCharacterBackSpace() -> Bool {
         return (strcmp(self.cString(using: String.Encoding.utf8)!, "\\b") == -92)
     }
-    
-    // Mention Info
-    mutating func removeMentionInfo(mentionInfo: MentionInfo) {
-        let string = stringStartIndexToMentionInfo(memtionInfo: mentionInfo) + stringMentionInfoToEndIndex(memtionInfo: mentionInfo)
-        self = string
-    }
-    
-    func stringStartIndexToMentionInfo(memtionInfo: MentionInfo) -> String {
-        let string = self
-        let end = string.index(string.startIndex, offsetBy: memtionInfo.kRange.location)
-        let range = string.startIndex..<end
-        return String(string[range])
-    }
-    
-    func stringMentionInfoToEndIndex(memtionInfo: MentionInfo) -> String {
-        let string = self
-        let start = string.index(string.startIndex, offsetBy: (memtionInfo.kRange.location + memtionInfo.kRange.length))
-        let range = start..<string.endIndex
-        return String(string[range])
-    }
-    
     
     //replace TagUserString -> TagUserRawString
     // Ex: "I'm [:[userID]:] and i live in Toronto

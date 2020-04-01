@@ -78,7 +78,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let mentionInfo = kMentionInfosTableView[indexPath.row]
-        mentionsTextField.insertMentionInfo(mentionInfo: mentionInfo.copyObject(), atLocation: mentionsTextField.kMentionLocation)
+        mentionsTextField.insertMentionInfoWhenSearching(mentionInfo: mentionInfo.copyObject())
         refreshMentionList()
     }
 }
@@ -95,8 +95,4 @@ extension ViewController: UITextFieldDelegate{
         tbListUserTag.reloadData()
         return mentionsTextFieldData.shouldChangeCharacters
     }
-}
-
-extension ViewController: UITextViewDelegate {
-    
 }
