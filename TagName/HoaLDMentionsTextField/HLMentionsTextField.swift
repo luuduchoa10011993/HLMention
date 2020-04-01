@@ -119,7 +119,7 @@ class HLMentionsTextField: UITextField {
             return false
         }
         if firstCharacter == kMentionSymbol {
-            var word = String(currentWord.dropFirst(String(kMentionSymbol).count))
+            let word = String(currentWord.dropFirst(String(kMentionSymbol).count))
             if word.isEmpty { return true }
             return MentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word.HDlowercase())
         }
