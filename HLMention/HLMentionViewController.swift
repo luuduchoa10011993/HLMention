@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HLMentionViewController: UIViewController {
     
     @IBOutlet weak var mentionsTextField: HLMentionsTextField!
     @IBOutlet weak var tbListUserTag: UITableView!
@@ -44,7 +44,7 @@ class ViewController: UIViewController {
 }
 
 //  MARK: - UITableView Delegate - DataSource
-extension ViewController: UITableViewDelegate, UITableViewDataSource{
+extension HLMentionViewController: UITableViewDelegate, UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
         tableView.isHidden = kMentionInfosTableView.count == 0 ? true : false
@@ -72,7 +72,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
 }
 
 //  MARK: - UITextFieldDelegate
-extension ViewController: UITextFieldDelegate{
+extension HLMentionViewController: UITextFieldDelegate{
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let mentionsTextFieldData = mentionsTextField.dataTextField(range: range, replacementString: string)

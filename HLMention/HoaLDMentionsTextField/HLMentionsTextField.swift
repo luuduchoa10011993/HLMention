@@ -20,11 +20,7 @@ class HLMentionsTextField: UITextField {
     private var kMentionSearchingStringLocation = 0 // use for insert select mention in tableview
     private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
 //    var kMentionLastEditLocation: Int = 0
-    
-    func HLclearSearch() {
-        kMentionSearchingString.removeAll()
-        kMentionSearchingStringLocation = 0
-    }
+
     
     func getAtMentionInfos() -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
@@ -49,15 +45,46 @@ class HLMentionsTextField: UITextField {
         HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
     }
     
+    // backspace data -> range (0,1), replacementString = ""
+    // a -> range (1,0), replacementString = a
     public func dataTextField(range: NSRange, replacementString: String) -> (shouldChangeCharacters: Bool, mentionInfos: [HLMentionInfo]?) {
 
-        kMentionCurrentCursorLocation = getCurrentCursorLocation() - range.length + replacementString.count
-        // backspace data -> range (0,1), replacementString = ""
-        // a -> range (1,0), replacementString = a
+        // remove when editing word
+        if let mentionInfos = mentionInfoInRange(range: range, replacementString: replacementString) {
+            if let mentionInfo = mentionInfos.first,
+                (replacementString.isEmpty || replacementString.count == 1) && mentionInfos.count == 1 {
+                removeMentionInfoAndUpdateLocation(mention: mentionInfo)
+                kMentionCurrentCursorLocation = mentionInfo.kRange.location + replacementString.count
+                if replacementString.isValidCharacterBackSpace() {
+                    kMentionCurrentCursorLocation -= range.length
+                }
+                return (true, nil)
+            }
+            
+            // mention info have more than one and replacementString count > 1
+            for mentionInfo in mentionInfos {
+                HLremoveMentionInfo(mention: mentionInfo)
+
+                /*
+                let sumLocationAndLength = range.location + range.length
+                let sumLocationAndLengthMentionInfo = mentionInfo.kRange.location + mentionInfo.kRange.length
+
+                if range.location >= mentionInfo.kRange.location && sumLocationAndLength <= sumLocationAndLengthMentionInfo {
+                    HLremoveMentionInfo(mention: mentionInfo)
+                }
+                 */
+            }
+            kMentionCurrentCursorLocation = range.location - range.length
+            return (true, nil)
+        }
         
+        kMentionCurrentCursorLocation = range.location - range.length + replacementString.count
+        if replacementString.isValidCharacterBackSpace() {
+            kMentionCurrentCursorLocation += 1
+        }
         if replacementString == " " {
-            HLclearSearch()
             HLupdateMentionInfosRange(range: range, replacementString: replacementString)
+            HLclearSearch()
             return (true, nil)
         }
         // search
@@ -69,34 +96,23 @@ class HLMentionsTextField: UITextField {
             return (true, mentionInfosSearchFrom(kMentionSearchingString))
         }
         
-        kMentionCurrentCursorLocation = range.location + replacementString.count
+        HLupdateMentionInfosRange(range: range, replacementString: replacementString)
         HLclearSearch()
         
-        // remove when editing word
-        if let mentionInfos = mentionInfoInRange(range: range, replacementString: replacementString) {
-            
-            // remove big string with location content mention
-            // insert code here
-            
-            for mentionInfo in mentionInfos {
-                removeMentionInfo(mention: mentionInfo)
-                kMentionCurrentCursorLocation -= mentionInfo.kRange.length
-            }
-            HLrefreshDisplay()
-            if replacementString.isValidCharacterBackSpace() && range.length == 1 {
-                return (false, nil)
-            } else {
-                return (true, nil)
-            }
-        } else {
-            // trong trường hợp insert character normal, nghĩa là mentionInfoInRange == nil
-            HLupdateMentionInfosRange(range: range, replacementString: replacementString)
-        }
-        
         if replacementString == String(kMentionSymbol) {
+            kMentionSearchingStringLocation = range.location - range.length + replacementString.count
             return (true, kListMentionInfos)
         }
         return (true, nil)
+    }
+    
+//    func HLreloadData() {
+//        HLclearSearch()
+//    }
+    
+    func HLclearSearch() {
+        kMentionSearchingString.removeAll()
+        kMentionSearchingStringLocation = 0
     }
     
     func HLrefreshDisplay() {
@@ -107,7 +123,7 @@ class HLMentionsTextField: UITextField {
     
     func attributeStringrefeshMentionInfoWithColor(string: String, mentionInfos: [HLMentionInfo]) -> NSAttributedString {
         let attributeString = NSMutableAttributedString(string: string,attributes: [ NSAttributedString.Key.foregroundColor: UIColor.darkText ])
-        let attribute = [ NSAttributedString.Key.foregroundColor: UIColor.blue ]
+        let attribute = [ NSAttributedString.Key.foregroundColor: UIColor.red ]
         for mentionInfo in mentionInfos {
             attributeString.addAttributes(attribute, range: mentionInfo.kRange)
         }
@@ -126,11 +142,25 @@ class HLMentionsTextField: UITextField {
         return false
     }
     
-    func mentionInfosSearchFrom(_ string: String) -> [HLMentionInfo]? {
-        if string.isEmpty { return kListMentionInfos }
+    func mentionInfoInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
-        for mentionInfo in kListMentionInfos {
-            if mentionInfo.kName.HDlowercase().contains(string.HDlowercase()) {
+        let newRange: NSRange = {
+            if replacementString.isValidCharacterBackSpace() {
+                return NSRange(location: range.location + 1, length: range.length - 1)
+            } else {
+                return range
+            }
+        }()
+        let sumRange = newRange.location + newRange.length
+        for mentionInfo in kMentionInfos {
+            let sumRangeMentionInfo = mentionInfo.kRange.location + mentionInfo.kRange.length
+            /*
+             @Hoa dep tr[ai @Nguyen Kieu Vy]
+             @Hoa dep trai @Nguyen Ki[e]u Vy
+             */
+            if (newRange.location < mentionInfo.kRange.location && mentionInfo.kRange.location <= sumRange)
+            || (newRange.location <= sumRangeMentionInfo && sumRangeMentionInfo < sumRange)
+            || (mentionInfo.kRange.location < sumRange && sumRange <= sumRangeMentionInfo){
                 mentionInfos.append(mentionInfo)
             }
         }
@@ -142,24 +172,12 @@ class HLMentionsTextField: UITextField {
         }
     }
     
-    func mentionInfoInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
+    func mentionInfosSearchFrom(_ string: String) -> [HLMentionInfo]? {
+        if string.isEmpty { return kListMentionInfos }
         var mentionInfos = [HLMentionInfo]()
-        if range.length > 0 {
-            for mentionInfo in kMentionInfos {
-                if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
-                    && range.location + range.length > mentionInfo.kRange.location {
-                    mentionInfos.append(mentionInfo)
-                }
-            }
-        }
-        
-        // insert character in between mention
-        if replacementString.count > 0 {
-            for mentionInfo in kMentionInfos {
-                if range.location < (mentionInfo.kRange.location + mentionInfo.kRange.length)
-                && range.location + range.length > mentionInfo.kRange.location {
-                    mentionInfos.append(mentionInfo)
-                }
+        for mentionInfo in kListMentionInfos {
+            if mentionInfo.kName.HDlowercase().contains(string.HDlowercase()) {
+                mentionInfos.append(mentionInfo)
             }
         }
         
@@ -193,7 +211,7 @@ class HLMentionsTextField: UITextField {
     }
     
     // remove MentionInfo
-    func removeMentionInfo(mention: HLMentionInfo) {
+    func removeMentionInfoAndUpdateLocation(mention: HLMentionInfo) {
         guard let mentionObject = HLMentionInfo.mentionInfoFromArray(mentionInfos: kMentionInfos, mentionInfo: mention) else { return }
         let mentionInfo = mentionObject.mentionInfo
         if var string = text {
@@ -202,7 +220,6 @@ class HLMentionsTextField: UITextField {
             kMentionInfos.remove(at: mentionObject.mentionIndex)
             HLupdatekMentionInfosRemoveRange(range: mentionInfo.kRange)
             HLsetCurrentCursorLocation(index: mentionInfo.kRange.location)
-//            updateMentionInfosRange(range: mentionInfo.kRange, replacementString: "")
         }
     }
     
