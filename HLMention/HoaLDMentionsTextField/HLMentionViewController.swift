@@ -10,7 +10,7 @@ import UIKit
 
 class HLMentionViewController: UIViewController {
     
-    @IBOutlet weak var mentionsTextField: HLMentionsTextField!
+    @IBOutlet weak var mentionTextView: HLMentionsTextView!
     @IBOutlet weak var tbListUserTag: UITableView!
     
     let kMentionInfos: [HLMentionInfo] = [HLMentionInfo("00", "Hoa"), HLMentionInfo("01", "Vuong Khac Duy"), HLMentionInfo("02", "Dương"),
@@ -23,13 +23,14 @@ class HLMentionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
-        mentionsTextField.kListMentionInfos = kMentionInfos
         
+        mentionTextView.HLdelegate = self
+        mentionTextView.kListMentionInfos = kMentionInfos
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        mentionsTextField.becomeFirstResponder()
+        mentionTextView.becomeFirstResponder()
     }
     
     func refreshMentionList(_ removeAll: Bool = true) {
@@ -59,25 +60,27 @@ extension HLMentionViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: NameTableViewCell.self), for: indexPath) as! NameTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HLMentionTableViewCell.self), for: indexPath) as! HLMentionTableViewCell
         cell.display(kMentionInfosTableView[indexPath.item])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let mentionInfo = kMentionInfosTableView[indexPath.row]
-        mentionsTextField.insertMentionInfoWhenSearching(mentionInfo: mentionInfo.copyObject())
+        guard let cell:HLMentionTableViewCell = tableView.cellForRow(at: indexPath) as? HLMentionTableViewCell else { return }
+        let mentionInfo = cell.getMentionInfo()
+        mentionTextView.insertMentionInfoWhenSearching(mentionInfo: mentionInfo.copyObject())
         refreshMentionList()
     }
 }
 
-//  MARK: - UITextFieldDelegate
-extension HLMentionViewController: UITextFieldDelegate{
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let mentionsTextFieldData = mentionsTextField.dataTextField(range: range, replacementString: string)
-        kMentionInfosTableView = mentionsTextFieldData.mentionInfos ?? [HLMentionInfo]()
-        tbListUserTag.reloadData()
-        return mentionsTextFieldData.shouldChangeCharacters
+//  MARK: - HLMentionsTextViewDelegate
+
+extension HLMentionViewController: HLMentionsTextViewDelegate {
+    func HLMentionsTextViewMentionInfos(_ textField: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
+        if let mentionInfos = mentionInfos {
+            kMentionInfosTableView = mentionInfos
+            tbListUserTag.reloadData()
+        }
     }
+    
 }

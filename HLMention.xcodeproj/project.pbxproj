@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AC54014624350458007189AB /* NameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014224350458007189AB /* NameTableViewCell.swift */; };
-		AC54014724350458007189AB /* HLMentionsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014424350458007189AB /* HLMentionsTextField.swift */; };
+		AC54014624350458007189AB /* HLMentionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014224350458007189AB /* HLMentionTableViewCell.swift */; };
+		AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014424350458007189AB /* HLMentionsTextView.swift */; };
 		AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */; };
 		ACF3C346243503720085AE41 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF3C345243503720085AE41 /* AppDelegate.swift */; };
 		ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACF3C347243503720085AE41 /* SceneDelegate.swift */; };
@@ -38,8 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AC54014224350458007189AB /* NameTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameTableViewCell.swift; sourceTree = "<group>"; };
-		AC54014424350458007189AB /* HLMentionsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionsTextField.swift; sourceTree = "<group>"; };
+		AC54014224350458007189AB /* HLMentionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionTableViewCell.swift; sourceTree = "<group>"; };
+		AC54014424350458007189AB /* HLMentionsTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionsTextView.swift; sourceTree = "<group>"; };
 		AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionInfo.swift; sourceTree = "<group>"; };
 		ACF3C342243503720085AE41 /* HLMention.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HLMention.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF3C345243503720085AE41 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,8 +85,10 @@
 		AC54014324350458007189AB /* HoaLDMentionsTextField */ = {
 			isa = PBXGroup;
 			children = (
-				AC54014424350458007189AB /* HLMentionsTextField.swift */,
 				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
+				AC54014424350458007189AB /* HLMentionsTextView.swift */,
+				AC54014224350458007189AB /* HLMentionTableViewCell.swift */,
+				ACF3C349243503720085AE41 /* HLMentionViewController.swift */,
 			);
 			path = HoaLDMentionsTextField;
 			sourceTree = "<group>";
@@ -115,8 +117,6 @@
 			isa = PBXGroup;
 			children = (
 				AC54014324350458007189AB /* HoaLDMentionsTextField */,
-				AC54014224350458007189AB /* NameTableViewCell.swift */,
-				ACF3C349243503720085AE41 /* HLMentionViewController.swift */,
 				ACF3C345243503720085AE41 /* AppDelegate.swift */,
 				ACF3C347243503720085AE41 /* SceneDelegate.swift */,
 				ACF3C34B243503720085AE41 /* Main.storyboard */,
@@ -278,10 +278,10 @@
 			files = (
 				ACF3C34A243503720085AE41 /* HLMentionViewController.swift in Sources */,
 				ACF3C346243503720085AE41 /* AppDelegate.swift in Sources */,
-				AC54014624350458007189AB /* NameTableViewCell.swift in Sources */,
+				AC54014624350458007189AB /* HLMentionTableViewCell.swift in Sources */,
 				ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */,
 				AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */,
-				AC54014724350458007189AB /* HLMentionsTextField.swift in Sources */,
+				AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

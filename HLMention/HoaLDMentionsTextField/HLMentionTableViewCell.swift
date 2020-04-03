@@ -1,5 +1,5 @@
 //
-//  NameTableViewCell.swift
+//  HLMentionTableViewCell.swift
 //  HLMention
 //
 //  Created by Lưu Đức Hoà on 4/2/20.
@@ -8,9 +8,11 @@
 
 import UIKit
 
-class NameTableViewCell: UITableViewCell {
+class HLMentionTableViewCell: UITableViewCell {
 
     @IBOutlet weak var lbNameUser: UILabel!
+    private var mentionInfo: HLMentionInfo!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -22,7 +24,12 @@ class NameTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    func display(_ userInfo: HLMentionInfo) {
-        self.lbNameUser.text = userInfo.getDisplayName()
+    func display(_ mentionInfo: HLMentionInfo) {
+        self.mentionInfo = mentionInfo
+        self.lbNameUser.text = mentionInfo.getDisplayName()
+    }
+    
+    func getMentionInfo() -> HLMentionInfo {
+        return mentionInfo
     }
 }

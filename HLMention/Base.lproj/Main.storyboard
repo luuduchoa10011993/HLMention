@@ -15,22 +15,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Mn-wj-LYx" customClass="HLMentionsTextField" customModule="HLMention" customModuleProvider="target">
-                                <rect key="frame" x="5" y="44" width="404" height="40"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="m3o-Tm-xeQ" customClass="HLMentionsTextView" customModule="HLMention" customModuleProvider="target">
+                                <rect key="frame" x="8" y="44" width="398" height="128"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="mQw-sF-OcJ"/>
+                                    <constraint firstAttribute="height" constant="128" id="flU-pA-ODt"/>
                                 </constraints>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="oqt-uE-TT1"/>
-                                </connections>
-                            </textField>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
+                            </textView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="69I-Bb-CAi">
-                                <rect key="frame" x="20" y="99" width="374" height="797"/>
+                                <rect key="frame" x="20" y="222" width="374" height="300"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="22I-Lf-0to"/>
+                                </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NameTableViewCell" rowHeight="96" id="Utn-SZ-kaf" customClass="NameTableViewCell" customModule="HLMention" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HLMentionTableViewCell" rowHeight="96" id="Utn-SZ-kaf" userLabel="HLMentionTableViewCell" customClass="HLMentionTableViewCell" customModule="HLMention" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="374" height="96"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Utn-SZ-kaf" id="xGO-fP-696">
@@ -66,24 +68,23 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="69I-Bb-CAi" secondAttribute="bottom" id="14d-V6-ASn"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="m3o-Tm-xeQ" secondAttribute="trailing" constant="8" id="9BK-f4-hhW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="69I-Bb-CAi" secondAttribute="trailing" constant="20" id="G35-10-7fu"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9Mn-wj-LYx" secondAttribute="trailing" constant="5" id="Hlh-BD-jip"/>
-                            <constraint firstItem="9Mn-wj-LYx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="5" id="TvB-1y-AJQ"/>
-                            <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="9Mn-wj-LYx" secondAttribute="bottom" constant="15" id="hj7-Jt-BPK"/>
+                            <constraint firstItem="m3o-Tm-xeQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="ciD-7q-bPA"/>
+                            <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="m3o-Tm-xeQ" secondAttribute="bottom" constant="50" id="eIL-59-4Af"/>
                             <constraint firstItem="69I-Bb-CAi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ijZ-3l-cxU"/>
-                            <constraint firstItem="9Mn-wj-LYx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="qZp-gk-Uga"/>
+                            <constraint firstItem="m3o-Tm-xeQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="sXC-vu-j0N"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="mentionsTextField" destination="9Mn-wj-LYx" id="G5s-GI-URV"/>
+                        <outlet property="mentionTextView" destination="m3o-Tm-xeQ" id="WTb-xu-k1x"/>
                         <outlet property="tbListUserTag" destination="69I-Bb-CAi" id="MMC-4d-K0u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-293" y="90"/>
+            <point key="canvasLocation" x="125" y="96"/>
         </scene>
     </scenes>
 </document>
