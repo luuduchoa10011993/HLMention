@@ -19,8 +19,12 @@ class HLMentionsTextView: UITextView {
     weak var HLdelegate: HLMentionsTextViewDelegate?
     //full all data or data need to setup
     var kListMentionInfos = [HLMentionInfo]()
-    var kMentionSymbol: Character = "@" // default value is @ [at]
-    var HLfont: UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+    var kMentionSymbol : Character = "@" // default value is @ [at]
+    
+    var HLfont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+    var HLtextColor : UIColor = UIColor.darkText
+    var HLhighlightColor : UIColor = UIColor.red
+    
     
     // data need control
     private var kMentionInfos = [HLMentionInfo]()
@@ -28,7 +32,8 @@ class HLMentionsTextView: UITextView {
     private var kMentionSearchingStringLocation = 0 // use for insert select mention in tableview
     private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
     private var kMentionInfoRemoved: Bool = false
-    
+    private var kMentionInfoInsertInfrontRange: NSRange?
+
 //    var kMentionLastEditLocation: Int = 0
 
     func getAtMentionInfos() -> [HLMentionInfo]? {
@@ -57,15 +62,30 @@ class HLMentionsTextView: UITextView {
     }
     
     func HLrefreshDisplay() {
+        HLclearSearch()
         HLresetTypingAttributes()
-        if let attributedText = self.attributedText, !kMentionInfos.isEmpty {
-            self.attributedText = attributeStringrefeshMentionInfoWithColor(attributedText: attributedText, mentionInfos: kMentionInfos)
+        guard var attributedText = self.attributedText else { return }
+        if !kMentionInfos.isEmpty {
+            attributedText = attributeStringRefeshMentionInfoWithColor(attributedText: attributedText, mentionInfos: kMentionInfos, highLightColor: HLhighlightColor)
         }
+        
+        if let insertInfrontRange = kMentionInfoInsertInfrontRange {
+            attributedText = attributeString(attributedText: attributedText, range: insertInfrontRange, color: HLtextColor)
+        }
+        self.attributedText = attributedText
     }
     
-    func attributeStringrefeshMentionInfoWithColor(attributedText: NSAttributedString, mentionInfos: [HLMentionInfo]) -> NSAttributedString {
+    
+    func attributeString(attributedText: NSAttributedString, range: NSRange, color: UIColor) -> NSAttributedString {
         let attributeString = NSMutableAttributedString(attributedString: attributedText)
-        let attribute = [ NSAttributedString.Key.foregroundColor: UIColor.red ]
+        let attribute = [ NSAttributedString.Key.foregroundColor: color ]
+        attributeString.addAttributes(attribute, range: range)
+        return NSAttributedString.init(attributedString: attributeString)
+    }
+    
+    func attributeStringRefeshMentionInfoWithColor(attributedText: NSAttributedString, mentionInfos: [HLMentionInfo], highLightColor: UIColor) -> NSAttributedString {
+        let attributeString = NSMutableAttributedString(attributedString: attributedText)
+        let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor ]
         for mentionInfo in mentionInfos {
             attributeString.addAttributes(attribute, range: mentionInfo.kRange)
         }
@@ -75,6 +95,7 @@ class HLMentionsTextView: UITextView {
     func HLresetTypingAttributes() {
         let paraStyle: NSParagraphStyle = NSParagraphStyle()
         self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : HLfont]
+        
     }
     
     // backspace data -> range (0,1), replacementString = ""
@@ -99,7 +120,7 @@ class HLMentionsTextView: UITextView {
         }
         
         // remove when editing word
-        if let mentionInfos = mentionInfoInRange(range: range, replacementString: replacementString) {
+        if let mentionInfos = mentionInfoIsValidInRange(range: range, replacementString: replacementString) {
             kMentionInfoRemoved = true
             if let mentionInfo = mentionInfos.first,
                 (replacementString.isEmpty || replacementString.count == 1) && mentionInfos.count == 1 {
@@ -130,6 +151,9 @@ class HLMentionsTextView: UITextView {
             return nil
         }
 
+        if let range = rangeTextInsertInfrontMention(range: range, replacementString: replacementString) {
+            kMentionInfoInsertInfrontRange = range
+        }
         HLupdateMentionInfosRange(range: range, replacementString: replacementString)
         return nil
     }
@@ -146,7 +170,7 @@ class HLMentionsTextView: UITextView {
         return false
     }
     
-    func mentionInfoInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
+    func mentionInfoIsValidInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
         let newRange: NSRange = {
             if replacementString.isValidCharacterBackSpace() {
@@ -178,6 +202,15 @@ class HLMentionsTextView: UITextView {
         } else {
             return nil
         }
+    }
+    
+    func rangeTextInsertInfrontMention(range: NSRange, replacementString: String) -> NSRange? {
+        for mentionInfo in kMentionInfos {
+            if range.location == mentionInfo.kRange.location {
+                return NSRange(location: range.location, length: replacementString.count)
+            }
+        }
+        return nil
     }
     
     func mentionInfosSearchFrom(_ string: String) -> [HLMentionInfo]? {
@@ -214,7 +247,6 @@ class HLMentionsTextView: UITextView {
         HLupdateMentionInfosRange(range: NSRange(location: mentionCurrentCursorLocation, length: kMentionSearchingString.count), replacementString: insertString)
 
         kMentionCurrentCursorLocation = mentionCurrentCursorLocation + insertString.count
-        HLclearSearch()
         HLrefreshDisplay()
         HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
     }
@@ -278,7 +310,8 @@ class HLMentionsTextView: UITextView {
 extension HLMentionsTextView: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if let delegate = HLdelegate {
-            delegate.HLMentionsTextViewMentionInfos(self, mentionInfos: dataTextView(range: range, replacementString: text))
+            let mentionInfos = dataTextView(range: range, replacementString: text)
+            delegate.HLMentionsTextViewMentionInfos(self, mentionInfos: mentionInfos)
         }
         
         return true
@@ -289,119 +322,13 @@ extension HLMentionsTextView: UITextViewDelegate {
             HLrefreshDisplay()
             kMentionInfoRemoved = false
         }
+        //if insert first letter before mention
+        if kMentionInfoInsertInfrontRange != nil {
+            HLrefreshDisplay()
+            kMentionInfoInsertInfrontRange = nil
+        }
         let currentCursorLocation = getCurrentCursorLocation()
         HLsetCurrentCursorLocation(index: currentCursorLocation)
     }
 }
 
-extension UITextView {
-    func getCurrentCursorLocation() -> Int {
-        if let selectedRange = self.selectedTextRange {
-            return self.offset(from: self.beginningOfDocument, to: selectedRange.start)
-        }
-        return 0
-    }
-
-    func HLsetCurrentCursorLocation(index: Int) {
-        let startPosition = self.position(from: self.beginningOfDocument, offset: index)
-        let endPosition = self.position(from: self.beginningOfDocument, offset: index)
-
-        if startPosition != nil && endPosition != nil {
-            self.selectedTextRange = self.textRange(from: startPosition!, to: endPosition!)
-        }
-    }
-    
-    func currentWord() -> String {
-        guard let cursorRange = self.selectedTextRange else { return "" }
-        func getRange(from position: UITextPosition, offset: Int) -> UITextRange? {
-            guard let newPosition = self.position(from: position, offset: offset) else { return nil }
-            return self.textRange(from: newPosition, to: position)
-        }
-
-        var wordStartPosition: UITextPosition = self.beginningOfDocument
-        var wordEndPosition: UITextPosition = self.endOfDocument
-
-        var position = cursorRange.start
-
-        while let range = getRange(from: position, offset: -1), let text = self.text(in: range) {
-            if text == " " || text == "\n" {
-                wordStartPosition = range.end
-                break
-            }
-            position = range.start
-        }
-
-        position = cursorRange.start
-
-        while let range = getRange(from: position, offset: 1), let text = self.text(in: range) {
-            if text == " " || text == "\n" {
-                wordEndPosition = range.start
-                break
-            }
-            position = range.end
-        }
-
-        guard let wordRange = self.textRange(from: wordStartPosition, to: wordEndPosition) else { return "" }
-
-        return self.text(in: wordRange) ?? ""
-    }
-}
-
-extension String {
-    
-    func HDlowercase() -> String {
-        return lowercased()
-    }
-    
-    mutating func insertString(string: String, atIndex: Int) {
-        self.insert(contentsOf: string, at:self.index(self.startIndex, offsetBy: atIndex))
-    }
-    
-    mutating func removeString(string: String, atIndex: Int) {
-        let string = stringStartIndexTo(index: atIndex) + stringFromIndexToEndIndex(index: atIndex + string.count)
-        self = string
-    }
-
-    mutating func removeStringWithRange(range: NSRange) {
-        let string = stringStartIndexTo(index: range.location) + stringFromIndexToEndIndex(index: range.location + range.length)
-        self = string
-    }
-    
-    mutating func stringStartIndexTo(index: Int) -> String {
-        let string = self
-        let end = string.index(string.startIndex, offsetBy: index)
-        let range = string.startIndex..<end
-        return String(string[range])
-    }
-    
-    mutating func stringFromIndexToEndIndex(index: Int) -> String {
-        let string = self
-        let start = string.index(string.startIndex, offsetBy: index)
-        let range = start..<string.endIndex
-        return String(string[range])
-    }
-    
-    func isValidCharacterBackSpace() -> Bool {
-        return (strcmp(self.cString(using: String.Encoding.utf8)!, "\\b") == -92)
-    }
-    
-    //replace TagUserString -> TagUserRawString
-    // Ex: "I'm [:[userID]:] and i live in Toronto
-    mutating func stringRawToStringTagUser(_ userInfos: [HLMentionInfo]) -> String {
-        var rawString = self
-        for userInfo in userInfos {
-            rawString = rawString.replacingOccurrences(of: userInfo.getDisplayName(), with: userInfo.getTagID())
-        }
-        return rawString
-    }
-    
-    // Ex: "I'm @Lưu Đức Hoà and i live in Toronto
-    mutating func stringTagUserToStringRaw(_ userInfos: [HLMentionInfo]) -> String {
-        var rawString = self
-        for userInfo in userInfos {
-            rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.getDisplayName())
-        }
-        return rawString
-    }
-    
-}
