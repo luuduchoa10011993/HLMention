@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0571E356243849F600CDA62E /* HLMention+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E355243849F600CDA62E /* HLMention+String.swift */; };
 		0571E35824384A3400CDA62E /* HLMention+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E35724384A3400CDA62E /* HLMention+UITextView.swift */; };
+		AC4267EF243A0A8E00049450 /* HLMention+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4267EE243A0A8E00049450 /* HLMention+Delegate.swift */; };
 		AC54014624350458007189AB /* HLMentionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014224350458007189AB /* HLMentionTableViewCell.swift */; };
 		AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014424350458007189AB /* HLMentionsTextView.swift */; };
 		AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		0571E355243849F600CDA62E /* HLMention+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+String.swift"; sourceTree = "<group>"; };
 		0571E35724384A3400CDA62E /* HLMention+UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITextView.swift"; sourceTree = "<group>"; };
+		AC4267EE243A0A8E00049450 /* HLMention+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+Delegate.swift"; sourceTree = "<group>"; };
 		AC54014224350458007189AB /* HLMentionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionTableViewCell.swift; sourceTree = "<group>"; };
 		AC54014424350458007189AB /* HLMentionsTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionsTextView.swift; sourceTree = "<group>"; };
 		AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionInfo.swift; sourceTree = "<group>"; };
@@ -86,21 +88,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0571E354243849CB00CDA62E /* HLMention+Extention */ = {
+		0571E354243849CB00CDA62E /* HLMention */ = {
 			isa = PBXGroup;
 			children = (
-				0571E355243849F600CDA62E /* HLMention+String.swift */,
+				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
+				AC54014424350458007189AB /* HLMentionsTextView.swift */,
+				AC4267EE243A0A8E00049450 /* HLMention+Delegate.swift */,
 				0571E35724384A3400CDA62E /* HLMention+UITextView.swift */,
+				0571E355243849F600CDA62E /* HLMention+String.swift */,
 			);
-			path = "HLMention+Extention";
+			path = HLMention;
 			sourceTree = "<group>";
 		};
 		AC54014324350458007189AB /* HoaLDMentionsTextField */ = {
 			isa = PBXGroup;
 			children = (
-				0571E354243849CB00CDA62E /* HLMention+Extention */,
-				AC54014424350458007189AB /* HLMentionsTextView.swift */,
-				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
+				0571E354243849CB00CDA62E /* HLMention */,
 				AC54014224350458007189AB /* HLMentionTableViewCell.swift */,
 				ACF3C349243503720085AE41 /* HLMentionViewController.swift */,
 			);
@@ -298,6 +301,7 @@
 				ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */,
 				AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */,
 				AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */,
+				AC4267EF243A0A8E00049450 /* HLMention+Delegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

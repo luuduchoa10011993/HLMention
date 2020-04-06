@@ -26,7 +26,7 @@ class HLMentionTableViewCell: UITableViewCell {
 
     func display(_ mentionInfo: HLMentionInfo) {
         self.mentionInfo = mentionInfo
-        self.lbNameUser.text = mentionInfo.getDisplayName()
+        self.lbNameUser.text = mentionInfo.kName
     }
     
     func getMentionInfo() -> HLMentionInfo {

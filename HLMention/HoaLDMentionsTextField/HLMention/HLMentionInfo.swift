@@ -26,7 +26,13 @@ class HLMentionInfo: NSObject {
     var kRange = NSRange(location: 0,length: 0)
     
     
-    
+    override func copy() -> Any {
+        let mentionInfo = HLMentionInfo(kId, kName)
+        mentionInfo.kAct = kAct
+        mentionInfo.kType = kType
+        mentionInfo.kRange = kRange
+        return mentionInfo
+    }
 //    var locationBeenMention = UITextRange
     
     init(_ id: String,_ name: String) {
@@ -36,10 +42,6 @@ class HLMentionInfo: NSObject {
     
     func getTagID() -> String {
         return "::\(kId)::"
-    }
-    
-    func getDisplayName() -> String {
-        return "\(kName)"
     }
     
     func copyObject() -> HLMentionInfo {

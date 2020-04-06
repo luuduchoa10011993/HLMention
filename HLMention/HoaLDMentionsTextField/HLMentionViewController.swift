@@ -13,6 +13,7 @@ class HLMentionViewController: UIViewController {
     @IBOutlet weak var mentionTextView: HLMentionsTextView!
     @IBOutlet weak var tbListUserTag: UITableView!
     
+    let text = "::00:: đẹp trai ::04:: đẹp gái"
     let kMentionInfos: [HLMentionInfo] = [HLMentionInfo("00", "Hoa"), HLMentionInfo("01", "Vuong Khac Duy"), HLMentionInfo("02", "Dương"),
                                         HLMentionInfo("03", "Nguyễn Đoàn Nguyên An"), HLMentionInfo("04", "Nguyễn Kiều Vy"), HLMentionInfo("05", "Nguyễn Duy Ngân"),
                                         HLMentionInfo("06", "Donald Trump"), HLMentionInfo("07", "Hoà cute phô mai que")]
@@ -26,6 +27,19 @@ class HLMentionViewController: UIViewController {
         
         mentionTextView.HLdelegate = self
         mentionTextView.kListMentionInfos = kMentionInfos
+        mentionTextView.HLtext = text
+        mentionTextView.kMentionInfos = getDemoData()
+        mentionTextView.hlResetData()
+    }
+    
+    func getDemoData() -> [HLMentionInfo] {
+        let HoaLD = HLMentionInfo("00", "Hoa")
+        HoaLD.kRange = NSRange(location: 0, length: 4)
+        
+        let VyNK = HLMentionInfo("04", "Nguyễn Kiều Vy")
+        VyNK.kRange = NSRange(location: 14, length: 15)
+        
+        return [HoaLD, VyNK]
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -76,11 +90,15 @@ extension HLMentionViewController: UITableViewDelegate, UITableViewDataSource{
 //  MARK: - HLMentionsTextViewDelegate
 
 extension HLMentionViewController: HLMentionsTextViewDelegate {
-    func HLMentionsTextViewMentionInfos(_ textField: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
+    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
         if let mentionInfos = mentionInfos {
             kMentionInfosTableView = mentionInfos
             tbListUserTag.reloadData()
         }
     }
     
+    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfoText: String, mentionInfos: [HLMentionInfo]?) {
+        
+    }
+
 }

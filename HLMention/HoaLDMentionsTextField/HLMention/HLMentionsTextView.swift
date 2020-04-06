@@ -9,7 +9,8 @@
 import UIKit
 
 protocol HLMentionsTextViewDelegate: class {
-    func HLMentionsTextViewMentionInfos(_ TextView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
+    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
+    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfoText: String, mentionInfos: [HLMentionInfo]?)
     
     /* if you want anythings just add from UITextView delegate*/
 }
@@ -18,6 +19,7 @@ class HLMentionsTextView: UITextView {
     
     weak var HLdelegate: HLMentionsTextViewDelegate?
     //full all data or data need to setup
+    var HLtext: String = ""
     var kListMentionInfos = [HLMentionInfo]()
     var kMentionSymbol : Character = "@" // default value is @ [at]
     
@@ -27,7 +29,7 @@ class HLMentionsTextView: UITextView {
     
     
     // data need control
-    private var kMentionInfos = [HLMentionInfo]()
+    var kMentionInfos = [HLMentionInfo]()
     private var kMentionSearchingString = ""
     private var kMentionSearchingStringLocation = 0 // use for insert select mention in tableview
     private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
@@ -35,7 +37,7 @@ class HLMentionsTextView: UITextView {
     private var kMentionInfoInsertInfrontRange: NSRange?
 
 //    var kMentionLastEditLocation: Int = 0
-
+    
     func getAtMentionInfos() -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
         for mentionInfo in kMentionInfos {
@@ -52,18 +54,42 @@ class HLMentionsTextView: UITextView {
     
     override func awakeFromNib() {
         self.delegate = self
-        HLclearSearch()
-        HLrefreshDisplay()
+        hlResetData()
+        hlSetAttributeStringForMentionInfo()
     }
     
-    func HLclearSearch() {
+    func hlResetData() {
+        hlSetDisplayText()
+        hlSetAttributeStringForMentionInfo()
+        hlSetTypingAttributes()
+        hlClearSearch()
+    }
+    
+    func hlClearSearch() {
         kMentionSearchingString.removeAll()
         kMentionSearchingStringLocation = 0
     }
     
-    func HLrefreshDisplay() {
-        HLclearSearch()
-        HLresetTypingAttributes()
+    func hlSetDisplayText() {
+        var mentionText = HLtext
+        for mentionInfo in kMentionInfos {
+            mentionText = mentionText.replacingOccurrences(of: mentionInfo.getTagID(), with: "\(kMentionSymbol)\(mentionInfo.kName)")
+        }
+        text = mentionText
+    }
+    
+    func hlGetMentionInfoText() -> String{
+        guard var mentionText = text else {
+            return ""
+        }
+        for mentionInfo in kMentionInfos {
+            mentionText = mentionText.replacingOccurrences(of: "\(kMentionSymbol)\(mentionInfo.kName)", with: mentionInfo.getTagID())
+        }
+        return mentionText
+    }
+    
+    func hlSetAttributeStringForMentionInfo() {
+        hlSetTypingAttributes()
         guard var attributedText = self.attributedText else { return }
         if !kMentionInfos.isEmpty {
             attributedText = attributeStringRefeshMentionInfoWithColor(attributedText: attributedText, mentionInfos: kMentionInfos, highLightColor: HLhighlightColor)
@@ -92,7 +118,7 @@ class HLMentionsTextView: UITextView {
         return NSAttributedString.init(attributedString: attributeString)
     }
     
-    func HLresetTypingAttributes() {
+    func hlSetTypingAttributes() {
         let paraStyle: NSParagraphStyle = NSParagraphStyle()
         self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : HLfont]
         
@@ -115,7 +141,7 @@ class HLMentionsTextView: UITextView {
         
         if replacementString == " " {
             HLupdateMentionInfosRange(range: range, replacementString: replacementString)
-            HLclearSearch()
+            hlClearSearch()
             return nil
         }
         
@@ -129,7 +155,7 @@ class HLMentionsTextView: UITextView {
                 if replacementString.isValidCharacterBackSpace() {
                     kMentionCurrentCursorLocation -= range.length
                 }
-                HLrefreshDisplay()
+                hlSetAttributeStringForMentionInfo()
                 return nil
             }
             
@@ -147,7 +173,7 @@ class HLMentionsTextView: UITextView {
                  */
             }
             kMentionCurrentCursorLocation = range.location - range.length
-            HLrefreshDisplay()
+            hlSetAttributeStringForMentionInfo()
             return nil
         }
 
@@ -229,7 +255,42 @@ class HLMentionsTextView: UITextView {
         }
     }
     
+    func HLinsertMentionInfo(atLocation location: Int, mentionInfo: HLMentionInfo) {
+        guard let textRange = textRangeFromLocation(location: location) else { return }
+        
+        var mentionCurrentCursorLocation = kMentionSearchingStringLocation
+        if kMentionSearchingString.count > 0 {
+            mentionCurrentCursorLocation -= kMentionSearchingString.count
+        }
+        
+        let mention = mentionInfo.copy() as! HLMentionInfo
+        mention.kRange = NSRange(location: location - String(kMentionSymbol).count, length: mention.kName.count + String(kMentionSymbol).count)
+        self.kMentionInfos.append(mention)
+        
+        
+        let insertString = "\(mentionInfo.kName) "
+        self.replace(textRange, withText: insertString)
+        
+        
+        HLupdateMentionInfosRange(range: NSRange(location: mentionCurrentCursorLocation, length: kMentionSearchingString.count), replacementString: insertString)
+        hlSetAttributeStringForMentionInfo()
+        HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
+    }
+    
+    func textRangeFromLocation(location: Int) -> UITextRange? {
+        let startPosition = self.position(from: self.beginningOfDocument, offset: location)
+        let endPosition = self.position(from: self.beginningOfDocument, offset: location)
+        if startPosition == nil && endPosition == nil {
+            return nil
+        }
+        return textRange(from: startPosition!, to: endPosition!)
+    }
+    
     func insertMentionInfoWhenSearching(mentionInfo: HLMentionInfo) {
+        HLinsertMentionInfo(atLocation: kMentionSearchingStringLocation, mentionInfo: mentionInfo)
+        
+        /* old logic*/
+        /*
         // "@Hoa dep trai @ho vkl @Nguyen Kieu Vy"
         // "@Hoa dep trai @Hoa vkl @Nguyen Kieu Vy"
         guard var string = text else { return }
@@ -249,6 +310,7 @@ class HLMentionsTextView: UITextView {
         kMentionCurrentCursorLocation = mentionCurrentCursorLocation + insertString.count
         HLrefreshDisplay()
         HLsetCurrentCursorLocation(index: kMentionCurrentCursorLocation)
+        */
     }
     
     // remove MentionInfo
@@ -319,12 +381,12 @@ extension HLMentionsTextView: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         if kMentionInfoRemoved {
-            HLrefreshDisplay()
+            hlSetAttributeStringForMentionInfo()
             kMentionInfoRemoved = false
         }
         //if insert first letter before mention
         if kMentionInfoInsertInfrontRange != nil {
-            HLrefreshDisplay()
+            hlSetAttributeStringForMentionInfo()
             kMentionInfoInsertInfrontRange = nil
         }
         let currentCursorLocation = getCurrentCursorLocation()

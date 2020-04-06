@@ -51,7 +51,7 @@ extension String {
     mutating func stringRawToStringTagUser(_ userInfos: [HLMentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
-            rawString = rawString.replacingOccurrences(of: userInfo.getDisplayName(), with: userInfo.getTagID())
+            rawString = rawString.replacingOccurrences(of: userInfo.kName, with: userInfo.getTagID())
         }
         return rawString
     }
@@ -60,7 +60,7 @@ extension String {
     mutating func stringTagUserToStringRaw(_ userInfos: [HLMentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
-            rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.getDisplayName())
+            rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.kName)
         }
         return rawString
     }
