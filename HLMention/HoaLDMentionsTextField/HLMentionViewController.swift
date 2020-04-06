@@ -27,8 +27,8 @@ class HLMentionViewController: UIViewController {
         
         mentionTextView.HLdelegate = self
         mentionTextView.kListMentionInfos = kMentionInfos
-        mentionTextView.HLtext = text
-        mentionTextView.kMentionInfos = getDemoData()
+//        mentionTextView.HLtext = text
+//        mentionTextView.kMentionInfos = getDemoData()
         mentionTextView.hlResetData()
     }
     
@@ -54,6 +54,9 @@ class HLMentionViewController: UIViewController {
             kMentionInfosTableView = kMentionInfos
         }
         tbListUserTag.reloadData()
+    }
+    @IBAction func postTouched(_ sender: UIButton) {
+        print(mentionTextView.getTextAndMentionInfos())
     }
     
 }
@@ -82,7 +85,7 @@ extension HLMentionViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell:HLMentionTableViewCell = tableView.cellForRow(at: indexPath) as? HLMentionTableViewCell else { return }
         let mentionInfo = cell.getMentionInfo()
-        mentionTextView.insertMentionInfoWhenSearching(mentionInfo: mentionInfo.copyObject())
+        mentionTextView.hlInsertMentionInfoWhenSearch(mentionInfo: mentionInfo.copyObject())
         refreshMentionList()
     }
 }

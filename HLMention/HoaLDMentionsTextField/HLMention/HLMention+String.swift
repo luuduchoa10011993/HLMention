@@ -42,6 +42,13 @@ extension String {
         return String(string[range])
     }
     
+    mutating func stringFrom(start: Int, end: Int) -> String {
+        let string = self
+        let startString = string.index(string.startIndex, offsetBy: start)
+        let endString = string.index(string.startIndex, offsetBy: end)
+        return String(string[startString..<endString])
+    }
+    
     func isValidCharacterBackSpace() -> Bool {
         return (strcmp(self.cString(using: String.Encoding.utf8)!, "\\b") == -92)
     }

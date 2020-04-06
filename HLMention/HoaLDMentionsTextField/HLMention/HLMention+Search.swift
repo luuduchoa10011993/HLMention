@@ -1,5 +1,5 @@
 //
-//  HLMentions+Delegate.swift
+//  HLMentions+Insert.swift
 //  HLMention
 //
 //  Created by Lưu Đức Hoà on 4/5/20.

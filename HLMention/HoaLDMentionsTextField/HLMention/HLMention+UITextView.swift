@@ -9,14 +9,20 @@
 import UIKit
 
 extension UITextView {
+    
+    func getRange(from position: UITextPosition, offset: Int) -> UITextRange? {
+        guard let newPosition = self.position(from: position, offset: offset) else { return nil }
+        return self.textRange(from: newPosition, to: position)
+    }
+    
     func getCurrentCursorLocation() -> Int {
         if let selectedRange = self.selectedTextRange {
             return self.offset(from: self.beginningOfDocument, to: selectedRange.start)
         }
         return 0
     }
-
-    func HLsetCurrentCursorLocation(index: Int) {
+    
+    func hlSetCurrentCursorLocation(index: Int) {
         let startPosition = self.position(from: self.beginningOfDocument, offset: index)
         let endPosition = self.position(from: self.beginningOfDocument, offset: index)
 
@@ -25,12 +31,26 @@ extension UITextView {
         }
     }
     
+    func getCurrentWordLocation() -> Int {
+        guard let cursorRange = self.selectedTextRange else { return 0 }
+
+        var wordStartPosition: UITextPosition = self.beginningOfDocument
+
+        var position = cursorRange.start
+
+        while let range = getRange(from: position, offset: -1), let text = self.text(in: range) {
+            if text == " " || text == "\n" {
+                wordStartPosition = range.end
+                break
+            }
+            position = range.start
+        }
+        
+        return self.offset(from: self.beginningOfDocument, to: wordStartPosition)
+    }
+    
     func currentWord() -> String {
         guard let cursorRange = self.selectedTextRange else { return "" }
-        func getRange(from position: UITextPosition, offset: Int) -> UITextRange? {
-            guard let newPosition = self.position(from: position, offset: offset) else { return nil }
-            return self.textRange(from: newPosition, to: position)
-        }
 
         var wordStartPosition: UITextPosition = self.beginningOfDocument
         var wordEndPosition: UITextPosition = self.endOfDocument

@@ -65,15 +65,27 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="cUt-Yw-Zdq"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6LD-V8-Vbk">
+                                <rect key="frame" x="157" y="180" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="jZ7-zh-Okl"/>
+                                </constraints>
+                                <state key="normal" title="Post"/>
+                                <connections>
+                                    <action selector="postTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3QJ-3J-78U"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="6LD-V8-Vbk" secondAttribute="bottom" constant="12" id="7x0-B1-GKK"/>
+                            <constraint firstItem="6LD-V8-Vbk" firstAttribute="centerX" secondItem="m3o-Tm-xeQ" secondAttribute="centerX" id="8yE-wL-ym6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="m3o-Tm-xeQ" secondAttribute="trailing" constant="8" id="9BK-f4-hhW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="69I-Bb-CAi" secondAttribute="trailing" constant="20" id="G35-10-7fu"/>
                             <constraint firstItem="m3o-Tm-xeQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="ciD-7q-bPA"/>
-                            <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="m3o-Tm-xeQ" secondAttribute="bottom" constant="50" id="eIL-59-4Af"/>
                             <constraint firstItem="69I-Bb-CAi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ijZ-3l-cxU"/>
                             <constraint firstItem="m3o-Tm-xeQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="sXC-vu-j0N"/>
+                            <constraint firstItem="6LD-V8-Vbk" firstAttribute="top" secondItem="m3o-Tm-xeQ" secondAttribute="bottom" constant="8" id="zbM-vA-vHw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
