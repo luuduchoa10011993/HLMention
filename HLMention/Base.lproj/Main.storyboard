@@ -25,6 +25,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6LD-V8-Vbk">
+                                <rect key="frame" x="8" y="180" width="398" height="30"/>
+                                <state key="normal" title="Post"/>
+                                <connections>
+                                    <action selector="postTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3QJ-3J-78U"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="69I-Bb-CAi">
                                 <rect key="frame" x="20" y="222" width="374" height="300"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -65,16 +72,6 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="cUt-Yw-Zdq"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6LD-V8-Vbk">
-                                <rect key="frame" x="157" y="180" width="100" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="jZ7-zh-Okl"/>
-                                </constraints>
-                                <state key="normal" title="Post"/>
-                                <connections>
-                                    <action selector="postTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3QJ-3J-78U"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -82,6 +79,8 @@
                             <constraint firstItem="6LD-V8-Vbk" firstAttribute="centerX" secondItem="m3o-Tm-xeQ" secondAttribute="centerX" id="8yE-wL-ym6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="m3o-Tm-xeQ" secondAttribute="trailing" constant="8" id="9BK-f4-hhW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="69I-Bb-CAi" secondAttribute="trailing" constant="20" id="G35-10-7fu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6LD-V8-Vbk" secondAttribute="trailing" constant="8" id="Lxi-MH-21d"/>
+                            <constraint firstItem="6LD-V8-Vbk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="TE5-kx-kTP"/>
                             <constraint firstItem="m3o-Tm-xeQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="ciD-7q-bPA"/>
                             <constraint firstItem="69I-Bb-CAi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ijZ-3l-cxU"/>
                             <constraint firstItem="m3o-Tm-xeQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="sXC-vu-j0N"/>
@@ -91,6 +90,7 @@
                     </view>
                     <connections>
                         <outlet property="mentionTextView" destination="m3o-Tm-xeQ" id="WTb-xu-k1x"/>
+                        <outlet property="postBtn" destination="6LD-V8-Vbk" id="jN3-AG-vnb"/>
                         <outlet property="tbListUserTag" destination="69I-Bb-CAi" id="MMC-4d-K0u"/>
                     </connections>
                 </viewController>

@@ -13,6 +13,7 @@ class HLMentionViewController: UIViewController {
     @IBOutlet weak var mentionTextView: HLMentionsTextView!
     @IBOutlet weak var tbListUserTag: UITableView!
     
+    @IBOutlet weak var postBtn: UIButton!
     let text = "::00:: đẹp trai ::04:: đẹp gái"
     let kMentionInfos: [HLMentionInfo] = [HLMentionInfo("00", "Hoa"), HLMentionInfo("01", "Vuong Khac Duy"), HLMentionInfo("02", "Dương"),
                                         HLMentionInfo("03", "Nguyễn Đoàn Nguyên An"), HLMentionInfo("04", "Nguyễn Kiều Vy"), HLMentionInfo("05", "Nguyễn Duy Ngân"),
@@ -56,7 +57,8 @@ class HLMentionViewController: UIViewController {
         tbListUserTag.reloadData()
     }
     @IBAction func postTouched(_ sender: UIButton) {
-        print(mentionTextView.getTextAndMentionInfos())
+       let object = mentionTextView.getTextAndMentionInfos()
+        postBtn.setTitle(object?.text, for: UIControl.State.normal)
     }
     
 }

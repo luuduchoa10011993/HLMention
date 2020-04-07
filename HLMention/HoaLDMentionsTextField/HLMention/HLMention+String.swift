@@ -10,7 +10,7 @@ import UIKit
 
 extension String {
     
-    func HDlowercase() -> String {
+    func hlLowercase() -> String {
         return lowercased()
     }
     

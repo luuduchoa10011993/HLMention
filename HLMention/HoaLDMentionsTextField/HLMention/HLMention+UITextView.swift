@@ -10,6 +10,15 @@ import UIKit
 
 extension UITextView {
     
+    func textRangeFromLocation(start: Int, end: Int) -> UITextRange? {
+        let startPosition = self.position(from: self.beginningOfDocument, offset: start)
+        let endPosition = self.position(from: self.beginningOfDocument, offset: end)
+        if startPosition == nil && endPosition == nil {
+            return nil
+        }
+        return textRange(from: startPosition!, to: endPosition!)
+    }
+    
     func getRange(from position: UITextPosition, offset: Int) -> UITextRange? {
         guard let newPosition = self.position(from: position, offset: offset) else { return nil }
         return self.textRange(from: newPosition, to: position)

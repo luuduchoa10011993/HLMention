@@ -8,39 +8,52 @@
 
 import UIKit
 
+
 extension HLMentionsTextView {
+    
+    func hlAttributeRangesFrom(mentionInfos: [HLMentionInfo]) -> [NSRange] {
+        var ranges = [NSRange]()
+        for mentionInfo in mentionInfos {
+            ranges.append(mentionInfo.kRange)
+        }
+        return ranges
+    }
     
     func hlSetTypingAttributes() {
         let paraStyle: NSParagraphStyle = NSParagraphStyle()
         self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : HLfont]
     }
     
-    func attributeString(attributedText: NSAttributedString, range: NSRange, color: UIColor) -> NSAttributedString {
-        let attributeString = NSMutableAttributedString(attributedString: attributedText)
-        let attribute = [ NSAttributedString.Key.foregroundColor: color ]
-        attributeString.addAttributes(attribute, range: range)
-        return NSAttributedString.init(attributedString: attributeString)
-    }
+//    func attributeString(attributedText: NSAttributedString, range: NSRange, color: UIColor) -> NSAttributedString {
+//        let attributeString = NSMutableAttributedString(attributedString: attributedText)
+//        let attribute = [ NSAttributedString.Key.foregroundColor: color ]
+//        attributeString.addAttributes(attribute, range: range)
+//        return NSAttributedString.init(attributedString: attributeString)
+//    }
     
-    func attributeStringRefeshMentionInfoWithColor(attributedText: NSAttributedString, mentionInfos: [HLMentionInfo], highLightColor: UIColor) -> NSAttributedString {
-        let attributeString = NSMutableAttributedString(attributedString: attributedText)
-        let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor ]
-        for mentionInfo in mentionInfos {
-            attributeString.addAttributes(attribute, range: mentionInfo.kRange)
+//    func attributeStringRefeshMentionInfoWithColor(text: String, mentionInfos: [HLMentionInfo], highLightColor: UIColor) -> NSAttributedString {
+//        let attributeString = NSMutableAttributedString.init(string: text)
+//        let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor ]
+//        for mentionInfo in mentionInfos {
+//            attributeString.addAttributes(attribute, range: mentionInfo.kRange)
+//        }
+//        return NSAttributedString.init(attributedString: attributeString)
+//    }
+    
+    
+    func isValidCurrentWordMentionSearch(currentWord: String) -> Bool {
+        guard let firstCharacter = currentWord.first else {
+            return false
         }
-        return NSAttributedString.init(attributedString: attributeString)
+        if firstCharacter == kMentionSymbol {
+            let word = String(currentWord.dropFirst(String(kMentionSymbol).count))
+            if word.isEmpty { return true }
+            return HLMentionInfo.isValidNameFromMentionInfo(mentionInfos: kListMentionInfos, name: word.hlLowercase())
+        }
+        return false
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-        /*
+
     func mentionInfoIsValidInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
         let newRange: NSRange = {
@@ -61,6 +74,10 @@ extension HLMentionsTextView {
             if mentionInfo.kRange.location < range.location && range.location < sumRangeMentionInfo {
                 mentionInfos.append(mentionInfo)
             }
+            
+            if (range.location < mentionInfo.kRange.location) && (sumRangeMentionInfo < sumRange) {
+                mentionInfos.append(mentionInfo)
+            }
             //            if (newRange.location < mentionInfo.kRange.location && mentionInfo.kRange.location <= sumRange)
             //            || (newRange.location < sumRangeMentionInfo && sumRangeMentionInfo < sumRange)
             //            || (mentionInfo.kRange.location < sumRange && sumRange < sumRangeMentionInfo) {
@@ -74,7 +91,7 @@ extension HLMentionsTextView {
             return nil
         }
     }
-    
+            /*
     public func dataTextView(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         kMentionCurrentCursorLocation = range.location
         // new rule
