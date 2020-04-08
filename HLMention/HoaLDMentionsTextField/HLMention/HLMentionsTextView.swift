@@ -9,7 +9,8 @@
 import UIKit
 
 protocol HLMentionsTextViewDelegate: class {
-    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
+    func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
+    func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String)
     
     /* if you want anythings just add from UITextView delegate*/
 }
@@ -19,7 +20,7 @@ class HLMentionsTextView: UITextView {
     weak var HLdelegate: HLMentionsTextViewDelegate?
     //full all data or data need to setup
     var HLtext: String = ""
-    var kListMentionInfos = [HLMentionInfo]()
+    var kListMentionInfos: [HLMentionInfo]?
     var kMentionSymbol : Character = "@" // default value is @ [at]
     
     var HLfont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
@@ -105,7 +106,7 @@ class HLMentionsTextView: UITextView {
         self.attributedText = attributedText
     }
     
-    func hlHandleSearch() -> [HLMentionInfo]? {
+    func hlHandleSearch(from kMentionInfos: [HLMentionInfo]) -> [HLMentionInfo]? {
         var currentWord = self.currentWord()
         if currentWord.count > 0 {
             if currentWord.stringFrom(start: 0, end: 1) == String(kMentionSymbol) {
@@ -119,12 +120,23 @@ class HLMentionsTextView: UITextView {
                     }
                 }
                 
-                return self.mentionInfosSearchFrom(hlMentionSearchInfo.kText)
+                return self.mentionInfosSearchFrom(hlMentionSearchInfo.kText,from: kMentionInfos)
             }
         }
         return nil
     }
 
+    func hlHandleSearchString() -> String? {
+        var currentWord = self.currentWord()
+        if currentWord.count > 0 {
+            if currentWord.stringFrom(start: 0, end: 1) == String(kMentionSymbol) {
+                hlMentionSearchInfo.kRange = NSRange(location: getCurrentWordLocation(), length: currentWord.count)
+                hlMentionSearchInfo.kText = String(currentWord.dropFirst())
+                return hlMentionSearchInfo.kText
+            }
+        }
+        return nil
+    }
     
     func rangeTextInsertInfrontMention(range: NSRange, replacementString: String) -> NSRange? {
         for mentionInfo in kMentionInfos {
@@ -135,7 +147,7 @@ class HLMentionsTextView: UITextView {
         return nil
     }
     
-    func mentionInfosSearchFrom(_ string: String) -> [HLMentionInfo]? {
+    func mentionInfosSearchFrom(_ string: String,from kListMentionInfos: [HLMentionInfo]) -> [HLMentionInfo]? {
         if string.isEmpty { return kListMentionInfos }
         var mentionInfos = [HLMentionInfo]()
         for mentionInfo in kListMentionInfos {
@@ -290,14 +302,23 @@ extension HLMentionsTextView: UITextViewDelegate {
         }
         
         let currentCursorLocation = getCurrentCursorLocation()
-        if kUndoText.count != text.count && !kMentionInfos.isEmpty && !hlMentionSearchInfo.kIsSearch {
+        if kUndoText.count != text.count && !kMentionInfos.isEmpty {
             hlUpdateMentionLocation()
         } else if self.kReplacementText == " " && self.kRange.length == 0 {
             hlUpdateMentionLocation()
-        } else if let mentionInfos = hlHandleSearch() {
-            if let delegate = HLdelegate {
-                delegate.HLMentionsTextViewMentionInfos(self, mentionInfos: mentionInfos)
-                return
+        } else if let kListMentionInfos = kListMentionInfos {
+            if let mentionInfos = hlHandleSearch(from: kListMentionInfos) {
+                if let delegate = HLdelegate {
+                    delegate.hlMentionsTextViewMentionInfos(self, mentionInfos: mentionInfos)
+                    return
+                }
+            }
+        } else {
+            if let searchText = hlHandleSearchString() {
+                if let delegate = HLdelegate {
+                    delegate.hlMentionsTextViewCallBackFromSearch(self, searchText: searchText)
+                    return
+                }
             }
         }
         

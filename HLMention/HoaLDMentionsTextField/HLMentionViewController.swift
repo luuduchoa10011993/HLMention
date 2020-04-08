@@ -27,9 +27,9 @@ class HLMentionViewController: UIViewController {
         tbListUserTag.tableFooterView = UIView()
         
         mentionTextView.HLdelegate = self
-        mentionTextView.kListMentionInfos = kMentionInfos
-        mentionTextView.HLtext = text
-        mentionTextView.kMentionInfos = getDemoData()
+//        mentionTextView.kListMentionInfos = kMentionInfos
+//        mentionTextView.HLtext = text
+//        mentionTextView.kMentionInfos = getDemoData()
         mentionTextView.hlResetData()
     }
     
@@ -96,15 +96,15 @@ extension HLMentionViewController: UITableViewDelegate, UITableViewDataSource{
 //  MARK: - HLMentionsTextViewDelegate
 
 extension HLMentionViewController: HLMentionsTextViewDelegate {
-    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
+    func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
         if let mentionInfos = mentionInfos {
             kMentionInfosTableView = mentionInfos
             tbListUserTag.reloadData()
         }
     }
     
-    func HLMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfoText: String, mentionInfos: [HLMentionInfo]?) {
-        
+    func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String) {
+        postBtn.setTitle(searchText, for: UIControl.State.normal)
     }
 
 }
