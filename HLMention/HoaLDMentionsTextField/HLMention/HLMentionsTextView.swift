@@ -178,26 +178,13 @@ class HLMentionsTextView: UITextView {
     
     // remove MentionInfo
     func removeMentionInfoAndUpdateLocation(mentionInfo: HLMentionInfo) {
-        
-        
         if var string = text {
             string.removeStringWithRange(range: mentionInfo.kRange)
             text = string
-            
-            //
-            
-            
             hlRemoveMentionInfo(mention: mentionInfo)
             hlUpdatekMentionInfosRemoveRange(range: mentionInfo.kRange)
             hlSetCurrentCursorLocation(index: mentionInfo.kRange.location)
         }
-    }
-    
-    func hlRemoveText(range: NSRange) {
-        guard let textRange = textRangeFromLocation(start: range.location, end: range.location + range.length) else { return }
-//        self.replace(textRange, withText: insertString)
-        
-        
     }
     
     func hlRemoveMentionInfo(mention: HLMentionInfo) {
@@ -250,9 +237,10 @@ extension HLMentionsTextView: UITextViewDelegate {
         
         if text == String(kMentionSymbol) {
             hlMentionSearchInfo.kRange = NSRange(location: range.location, length:text.count)
+        } else if self.kReplacementText == " " && self.kRange.length == 0 {
+            return true
         }
-        
-//        hlRemoveText(range: range)
+
         // remove when editing word
         if let mentionInfos = mentionInfoIsValidInRange(range: range, replacementString: text) {
             kMentionInfoRemoved = true
@@ -304,20 +292,14 @@ extension HLMentionsTextView: UITextViewDelegate {
         let currentCursorLocation = getCurrentCursorLocation()
         if kUndoText.count != text.count && !kMentionInfos.isEmpty && !hlMentionSearchInfo.kIsSearch {
             hlUpdateMentionLocation()
-        }
-        
-        if let mentionInfos = hlHandleSearch() {
+        } else if self.kReplacementText == " " && self.kRange.length == 0 {
+            hlUpdateMentionLocation()
+        } else if let mentionInfos = hlHandleSearch() {
             if let delegate = HLdelegate {
                 delegate.HLMentionsTextViewMentionInfos(self, mentionInfos: mentionInfos)
                 return
             }
         }
-        
-//        if kMentionInfoRemoved {
-//            hlAttributeStringMentionInfo()
-//            kMentionInfoRemoved = false
-//        }
-        
         
         kLastCursorLocation = currentCursorLocation
         hlAttributeStringMentionInfo()
