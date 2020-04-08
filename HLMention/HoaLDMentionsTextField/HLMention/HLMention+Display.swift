@@ -21,33 +21,14 @@ extension HLMentionsTextView {
     
     func hlSetTypingAttributes() {
         let paraStyle: NSParagraphStyle = NSParagraphStyle()
-        self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : HLfont]
+        self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : hlFont]
     }
-    
-//    func attributeString(attributedText: NSAttributedString, range: NSRange, color: UIColor) -> NSAttributedString {
-//        let attributeString = NSMutableAttributedString(attributedString: attributedText)
-//        let attribute = [ NSAttributedString.Key.foregroundColor: color ]
-//        attributeString.addAttributes(attribute, range: range)
-//        return NSAttributedString.init(attributedString: attributeString)
-//    }
-    
-//    func attributeStringRefeshMentionInfoWithColor(text: String, mentionInfos: [HLMentionInfo], highLightColor: UIColor) -> NSAttributedString {
-//        let attributeString = NSMutableAttributedString.init(string: text)
-//        let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor ]
-//        for mentionInfo in mentionInfos {
-//            attributeString.addAttributes(attribute, range: mentionInfo.kRange)
-//        }
-//        return NSAttributedString.init(attributedString: attributeString)
-//    }
-    
-
 
     func mentionInfoIsValidInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
         let newRange: NSRange = {
             if replacementString.isValidCharacterBackSpace() {
                 return range
-                //                return NSRange(location: range.location + 1, length: range.length - 1)
             } else {
                 return range
             }

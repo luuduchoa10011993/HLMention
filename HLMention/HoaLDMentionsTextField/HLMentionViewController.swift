@@ -26,7 +26,7 @@ class HLMentionViewController: UIViewController {
         super.viewDidLoad()
         tbListUserTag.tableFooterView = UIView()
         
-        mentionTextView.HLdelegate = self
+        mentionTextView.hlDelegate = self
 //        mentionTextView.kListMentionInfos = kMentionInfos
 //        mentionTextView.HLtext = text
 //        mentionTextView.kMentionInfos = getDemoData()

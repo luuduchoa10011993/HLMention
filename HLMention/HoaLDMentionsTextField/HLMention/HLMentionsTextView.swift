@@ -17,13 +17,16 @@ protocol HLMentionsTextViewDelegate: class {
 
 class HLMentionsTextView: UITextView {
     
-    weak var HLdelegate: HLMentionsTextViewDelegate?
+    @IBOutlet weak var hlTableViewDataSource: UITableViewDataSource?
+    @IBOutlet weak var hlTableViewDelegate: UITableViewDelegate?
+    weak var hlDelegate: HLMentionsTextViewDelegate?
+    
     //full all data or data need to setup
     var HLtext: String = ""
     var kListMentionInfos: [HLMentionInfo]?
     var kMentionSymbol : Character = "@" // default value is @ [at]
     
-    var HLfont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
+    var hlFont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
     var hlTextColor : UIColor = UIColor.darkText
     var hlHighlightColor : UIColor = UIColor.red
     
@@ -308,14 +311,14 @@ extension HLMentionsTextView: UITextViewDelegate {
             hlUpdateMentionLocation()
         } else if let kListMentionInfos = kListMentionInfos {
             if let mentionInfos = hlHandleSearch(from: kListMentionInfos) {
-                if let delegate = HLdelegate {
+                if let delegate = hlDelegate {
                     delegate.hlMentionsTextViewMentionInfos(self, mentionInfos: mentionInfos)
                     return
                 }
             }
         } else {
             if let searchText = hlHandleSearchString() {
-                if let delegate = HLdelegate {
+                if let delegate = hlDelegate {
                     delegate.hlMentionsTextViewCallBackFromSearch(self, searchText: searchText)
                     return
                 }
@@ -330,4 +333,3 @@ extension HLMentionsTextView: UITextViewDelegate {
         
     }
 }
-
