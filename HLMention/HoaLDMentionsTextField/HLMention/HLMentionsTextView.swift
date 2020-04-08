@@ -261,8 +261,10 @@ extension HLMentionsTextView: UITextViewDelegate {
                 
                 if (range.location >= mentionInfo.kRange.location) && (range.location < mentionInfo.kRange.location + mentionInfo.kRange.length) {
                     guard let textRange = textRangeFromLocation(start: mentionInfo.kRange.location, end: mentionInfo.kRange.location + mentionInfo.kRange.length) else { return false}
-                    self.replace(textRange, withText: text)
                     hlRemoveMentionInfo(mention: mentionInfo)
+                    kRange = mentionInfo.kRange
+                    kReplacementText = ""
+                    self.replace(textRange, withText: text)
                     return false
                 }
                 

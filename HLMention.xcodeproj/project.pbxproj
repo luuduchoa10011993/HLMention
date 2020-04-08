@@ -11,6 +11,7 @@
 		0571E35824384A3400CDA62E /* HLMention+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E35724384A3400CDA62E /* HLMention+UITextView.swift */; };
 		05B25D5C243AD81200E0051A /* HLMentionSearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */; };
 		05B25D5E243C574100E0051A /* HLMention+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */; };
+		05B25D60243D8D2100E0051A /* HLMention+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5F243D8D2100E0051A /* HLMention+Int.swift */; };
 		AC4267EF243A0A8E00049450 /* HLMention+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4267EE243A0A8E00049450 /* HLMention+Display.swift */; };
 		AC54014624350458007189AB /* HLMentionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014224350458007189AB /* HLMentionTableViewCell.swift */; };
 		AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014424350458007189AB /* HLMentionsTextView.swift */; };
@@ -47,6 +48,7 @@
 		0571E35724384A3400CDA62E /* HLMention+UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITextView.swift"; sourceTree = "<group>"; };
 		05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionSearchInfo.swift; sourceTree = "<group>"; };
 		05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+NSMutableAttributedString.swift"; sourceTree = "<group>"; };
+		05B25D5F243D8D2100E0051A /* HLMention+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+Int.swift"; sourceTree = "<group>"; };
 		AC4267EE243A0A8E00049450 /* HLMention+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+Display.swift"; sourceTree = "<group>"; };
 		AC54014224350458007189AB /* HLMentionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionTableViewCell.swift; sourceTree = "<group>"; };
 		AC54014424350458007189AB /* HLMentionsTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionsTextView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				0571E35724384A3400CDA62E /* HLMention+UITextView.swift */,
 				0571E355243849F600CDA62E /* HLMention+String.swift */,
 				05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */,
+				05B25D5F243D8D2100E0051A /* HLMention+Int.swift */,
 			);
 			path = HLMention;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */,
 				AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */,
 				AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */,
+				05B25D60243D8D2100E0051A /* HLMention+Int.swift in Sources */,
 				AC4267EF243A0A8E00049450 /* HLMention+Display.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

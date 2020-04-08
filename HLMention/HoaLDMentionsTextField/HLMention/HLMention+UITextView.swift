@@ -10,6 +10,23 @@ import UIKit
 
 extension UITextView {
     
+    func hlSelectedTextRangeContentMentionRange(range: NSRange) -> Bool {
+        guard let selectedRange = self.selectedTextRange else { return false }
+        let startLocation = self.offset(from: self.beginningOfDocument, to: selectedRange.start)
+        let endLocation = self.offset(from: self.beginningOfDocument, to: selectedRange.end)
+        
+        let rangeLength = range.location + range.length
+        if startLocation <= range.location && rangeLength <= endLocation {
+            return true
+        } else if range.location > startLocation && range.location < endLocation && endLocation < rangeLength {
+            return true
+        } else if startLocation < range.location && range.location < endLocation {
+            return true
+        } else if startLocation < rangeLength && rangeLength < endLocation {
+            return true
+        }
+        return false
+    }
     func textRangeFromLocation(start: Int, end: Int) -> UITextRange? {
         let startPosition = self.position(from: self.beginningOfDocument, offset: start)
         let endPosition = self.position(from: self.beginningOfDocument, offset: end)

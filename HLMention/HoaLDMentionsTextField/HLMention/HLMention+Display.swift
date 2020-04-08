@@ -64,25 +64,29 @@ extension HLMentionsTextView {
                 return range
             }
         }()
+        
         let sumRange = newRange.location + newRange.length
         for mentionInfo in kMentionInfos {
-            let sumRangeMentionInfo = mentionInfo.kRange.location + mentionInfo.kRange.length
-            /*
-             @Hoa dep tr[ai @Nguyen Kieu Vy]
-             @Hoa dep trai @Nguyen Ki[e]u Vy
-             */
-            if mentionInfo.kRange.location < range.location && range.location < sumRangeMentionInfo {
+            if hlSelectedTextRangeContentMentionRange(range: mentionInfo.kRange) {
                 mentionInfos.append(mentionInfo)
+            } else {
+                let sumRangeMentionInfo = mentionInfo.kRange.location + mentionInfo.kRange.length
+                /*
+                 @Hoa dep tr[ai @Nguyen Kieu Vy]
+                 @Hoa dep trai @Nguyen Ki[e]u Vy
+                 */
+                if mentionInfo.kRange.location < range.location && range.location < sumRangeMentionInfo {
+                    mentionInfos.append(mentionInfo)
+                } else if (range.location < mentionInfo.kRange.location) && (sumRangeMentionInfo < sumRange) {
+                    mentionInfos.append(mentionInfo)
+                }
+                
+                //            if (newRange.location < mentionInfo.kRange.location && mentionInfo.kRange.location <= sumRange)
+                //            || (newRange.location < sumRangeMentionInfo && sumRangeMentionInfo < sumRange)
+                //            || (mentionInfo.kRange.location < sumRange && sumRange < sumRangeMentionInfo) {
+                //                mentionInfos.append(mentionInfo)
+                //            }
             }
-            
-            if (range.location < mentionInfo.kRange.location) && (sumRangeMentionInfo < sumRange) {
-                mentionInfos.append(mentionInfo)
-            }
-            //            if (newRange.location < mentionInfo.kRange.location && mentionInfo.kRange.location <= sumRange)
-            //            || (newRange.location < sumRangeMentionInfo && sumRangeMentionInfo < sumRange)
-            //            || (mentionInfo.kRange.location < sumRange && sumRange < sumRangeMentionInfo) {
-            //                mentionInfos.append(mentionInfo)
-            //            }
         }
         
         if mentionInfos.count > 0 {
@@ -91,6 +95,8 @@ extension HLMentionsTextView {
             return nil
         }
     }
+
+
             /*
     public func dataTextView(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         kMentionCurrentCursorLocation = range.location

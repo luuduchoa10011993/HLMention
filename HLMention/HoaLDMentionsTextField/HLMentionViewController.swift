@@ -28,8 +28,8 @@ class HLMentionViewController: UIViewController {
         
         mentionTextView.HLdelegate = self
         mentionTextView.kListMentionInfos = kMentionInfos
-//        mentionTextView.HLtext = text
-//        mentionTextView.kMentionInfos = getDemoData()
+        mentionTextView.HLtext = text
+        mentionTextView.kMentionInfos = getDemoData()
         mentionTextView.hlResetData()
     }
     
@@ -58,7 +58,8 @@ class HLMentionViewController: UIViewController {
     }
     @IBAction func postTouched(_ sender: UIButton) {
        let object = mentionTextView.getTextAndMentionInfos()
-        postBtn.setTitle(object?.text, for: UIControl.State.normal)
+        let string = "\(object?.text) (\(object?.mentionInfos.count)"
+        postBtn.setTitle(string, for: UIControl.State.normal)
     }
     
 }
