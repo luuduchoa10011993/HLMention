@@ -21,6 +21,8 @@ enum MentionInfoActType: String {
 class HLMentionInfo: NSObject {
     var kId = ""
     var kName = ""
+    var kImage: UIImage?
+    var kImageName = ""
     var kAct: MentionInfoActType = .typeAt
     var kType: MentionInfoType = .user
     var kRange = NSRange(location: 0,length: 0)
@@ -70,6 +72,14 @@ class HLMentionInfo: NSObject {
             }
         }
         return false
+    }
+    
+    static public func mentionInfoFrom(user: [AnyObject]) -> [HLMentionInfo]? {
+        return nil
+    }
+    
+    static public func praserMentionInfo() -> [AnyObject]? {
+        return nil
     }
     
     /*

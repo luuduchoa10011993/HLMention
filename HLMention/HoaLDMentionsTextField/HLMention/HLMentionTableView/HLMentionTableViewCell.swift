@@ -9,8 +9,9 @@
 import UIKit
 
 class HLMentionTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var lbNameUser: UILabel!
+    
+    @IBOutlet weak var hlImageView: UIImageView!
+    @IBOutlet weak var hlLblName: UILabel!
     private var mentionInfo: HLMentionInfo!
     
     override func awakeFromNib() {
@@ -26,7 +27,7 @@ class HLMentionTableViewCell: UITableViewCell {
 
     func display(_ mentionInfo: HLMentionInfo) {
         self.mentionInfo = mentionInfo
-        self.lbNameUser.text = mentionInfo.kName
+        self.hlLblName.text = mentionInfo.kName
     }
     
     func getMentionInfo() -> HLMentionInfo {

@@ -11,7 +11,9 @@
 		0571E35824384A3400CDA62E /* HLMention+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E35724384A3400CDA62E /* HLMention+UITextView.swift */; };
 		05B25D5C243AD81200E0051A /* HLMentionSearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */; };
 		05B25D5E243C574100E0051A /* HLMention+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */; };
-		05B25D60243D8D2100E0051A /* HLMention+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5F243D8D2100E0051A /* HLMention+Int.swift */; };
+		05B25D60243D8D2100E0051A /* HLMention+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */; };
+		05B25D78243EC79400E0051A /* HLMentionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05B25D76243EC79400E0051A /* HLMentionTableViewCell.xib */; };
+		05B25D90243EE0FD00E0051A /* HLInstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D8F243EE0FD00E0051A /* HLInstant.swift */; };
 		AC4267EF243A0A8E00049450 /* HLMention+Display.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4267EE243A0A8E00049450 /* HLMention+Display.swift */; };
 		AC54014624350458007189AB /* HLMentionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014224350458007189AB /* HLMentionTableViewCell.swift */; };
 		AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC54014424350458007189AB /* HLMentionsTextView.swift */; };
@@ -48,7 +50,9 @@
 		0571E35724384A3400CDA62E /* HLMention+UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITextView.swift"; sourceTree = "<group>"; };
 		05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionSearchInfo.swift; sourceTree = "<group>"; };
 		05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+NSMutableAttributedString.swift"; sourceTree = "<group>"; };
-		05B25D5F243D8D2100E0051A /* HLMention+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+Int.swift"; sourceTree = "<group>"; };
+		05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITableView.swift"; sourceTree = "<group>"; };
+		05B25D76243EC79400E0051A /* HLMentionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HLMentionTableViewCell.xib; sourceTree = "<group>"; };
+		05B25D8F243EE0FD00E0051A /* HLInstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLInstant.swift; sourceTree = "<group>"; };
 		AC4267EE243A0A8E00049450 /* HLMention+Display.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+Display.swift"; sourceTree = "<group>"; };
 		AC54014224350458007189AB /* HLMentionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionTableViewCell.swift; sourceTree = "<group>"; };
 		AC54014424350458007189AB /* HLMentionsTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HLMentionsTextView.swift; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 		0571E354243849CB00CDA62E /* HLMention */ = {
 			isa = PBXGroup;
 			children = (
+				05B25D74243EC74300E0051A /* HLMentionTableView */,
+				05B25D8F243EE0FD00E0051A /* HLInstant.swift */,
 				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
 				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
 				AC54014424350458007189AB /* HLMentionsTextView.swift */,
@@ -104,16 +110,24 @@
 				0571E35724384A3400CDA62E /* HLMention+UITextView.swift */,
 				0571E355243849F600CDA62E /* HLMention+String.swift */,
 				05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */,
-				05B25D5F243D8D2100E0051A /* HLMention+Int.swift */,
+				05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */,
 			);
 			path = HLMention;
+			sourceTree = "<group>";
+		};
+		05B25D74243EC74300E0051A /* HLMentionTableView */ = {
+			isa = PBXGroup;
+			children = (
+				AC54014224350458007189AB /* HLMentionTableViewCell.swift */,
+				05B25D76243EC79400E0051A /* HLMentionTableViewCell.xib */,
+			);
+			path = HLMentionTableView;
 			sourceTree = "<group>";
 		};
 		AC54014324350458007189AB /* HoaLDMentionsTextField */ = {
 			isa = PBXGroup;
 			children = (
 				0571E354243849CB00CDA62E /* HLMention */,
-				AC54014224350458007189AB /* HLMentionTableViewCell.swift */,
 				ACF3C349243503720085AE41 /* HLMentionViewController.swift */,
 			);
 			path = HoaLDMentionsTextField;
@@ -276,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACF3C352243503730085AE41 /* LaunchScreen.storyboard in Resources */,
+				05B25D78243EC79400E0051A /* HLMentionTableViewCell.xib in Resources */,
 				ACF3C34F243503730085AE41 /* Assets.xcassets in Resources */,
 				ACF3C34D243503720085AE41 /* Main.storyboard in Resources */,
 			);
@@ -309,10 +324,11 @@
 				05B25D5C243AD81200E0051A /* HLMentionSearchInfo.swift in Sources */,
 				05B25D5E243C574100E0051A /* HLMention+NSMutableAttributedString.swift in Sources */,
 				0571E35824384A3400CDA62E /* HLMention+UITextView.swift in Sources */,
+				05B25D90243EE0FD00E0051A /* HLInstant.swift in Sources */,
 				ACF3C348243503720085AE41 /* SceneDelegate.swift in Sources */,
 				AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */,
 				AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */,
-				05B25D60243D8D2100E0051A /* HLMention+Int.swift in Sources */,
+				05B25D60243D8D2100E0051A /* HLMention+UITableView.swift in Sources */,
 				AC4267EF243A0A8E00049450 /* HLMention+Display.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

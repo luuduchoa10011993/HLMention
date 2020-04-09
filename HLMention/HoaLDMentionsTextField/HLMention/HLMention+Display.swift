@@ -24,6 +24,16 @@ extension HLMentionsTextView {
         self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : hlFont]
     }
 
+    /* for swift 4.2 then open this */
+    /*
+     func hlSetTypingAttributes() {
+         let paraStyle: NSParagraphStyle = NSParagraphStyle()
+         self.typingAttributes[NSAttributedString.Key.foregroundColor.rawValue] = UIColor.darkText
+         self.typingAttributes[NSAttributedString.Key.paragraphStyle.rawValue] = paraStyle
+         self.typingAttributes[NSAttributedString.Key.font.rawValue] = hlFont
+     }
+     */
+    
     func mentionInfoIsValidInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
         let newRange: NSRange = {

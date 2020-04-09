@@ -17,8 +17,27 @@ protocol HLMentionsTextViewDelegate: class {
 
 class HLMentionsTextView: UITextView {
     
+    /* TableView object*/
+    @IBOutlet weak var hlTableView: UITableView?
     @IBOutlet weak var hlTableViewDataSource: UITableViewDataSource?
     @IBOutlet weak var hlTableViewDelegate: UITableViewDelegate?
+    @IBOutlet weak var hlTableViewHeightConstaint: NSLayoutConstraint!
+    
+    var hlTableViewHeight: CGFloat = 220
+    var _kMentionInfosTableView = [HLMentionInfo]()
+    var kMentionInfosTableView:[HLMentionInfo] {
+        get {
+            return _kMentionInfosTableView
+        }
+        set {
+            _kMentionInfosTableView = newValue
+            if let tableView = hlTableView {
+                tableView.reloadData()
+            }
+        }
+    }
+    
+    
     weak var hlDelegate: HLMentionsTextViewDelegate?
     
     //full all data or data need to setup
@@ -33,6 +52,7 @@ class HLMentionsTextView: UITextView {
     
     // data need control
     var kMentionInfos = [HLMentionInfo]()
+    
     
     // search
     private var hlMentionSearchInfo = HLMentionSearchInfo()
@@ -74,6 +94,19 @@ class HLMentionsTextView: UITextView {
         self.delegate = self
         hlResetData()
         hlAttributeStringMentionInfo()
+        hlInitTableView()
+    }
+    
+    func hlInitTableView() {
+        guard let tableView = hlTableView else { return }
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = UIColor.gray
+        tableView.tableFooterView = UIView()
+        tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
+        if hlTableViewHeightConstaint.constant > 0 {
+            hlTableViewHeight = hlTableViewHeightConstaint.constant
+        }
     }
     
     func hlResetData() {
@@ -115,6 +148,10 @@ class HLMentionsTextView: UITextView {
             if currentWord.stringFrom(start: 0, end: 1) == String(kMentionSymbol) {
                 hlMentionSearchInfo.kRange = NSRange(location: getCurrentWordLocation(), length: currentWord.count)
                 hlMentionSearchInfo.kText = String(currentWord.dropFirst())
+                
+                if hlMentionSearchInfo.kText.isEmpty {
+                    return self.mentionInfosSearchFrom(hlMentionSearchInfo.kText,from: kMentionInfos)
+                }
                 
                 for mentionInfo in kMentionInfos {
                     if (mentionInfo.kRange.location + mentionInfo.kRange.length == hlMentionSearchInfo.kRange.location)
@@ -270,7 +307,6 @@ extension HLMentionsTextView: UITextViewDelegate {
                     self.replace(textRange, withText: text)
                     return false
                 }
-                
 
                 for mentionInfo in mentionInfos {
                     hlRemoveMentionInfo(mention: mentionInfo)
@@ -311,10 +347,9 @@ extension HLMentionsTextView: UITextViewDelegate {
             hlUpdateMentionLocation()
         } else if let kListMentionInfos = kListMentionInfos {
             if let mentionInfos = hlHandleSearch(from: kListMentionInfos) {
-                if let delegate = hlDelegate {
-                    delegate.hlMentionsTextViewMentionInfos(self, mentionInfos: mentionInfos)
-                    return
-                }
+                kMentionInfosTableView = mentionInfos
+                hlTableView?.reloadData()
+                return
             }
         } else {
             if let searchText = hlHandleSearchString() {
@@ -330,6 +365,5 @@ extension HLMentionsTextView: UITextViewDelegate {
         hlSetTypingAttributes()
         hlSetCurrentCursorLocation(index: currentCursorLocation)
         kUndoText = text
-        
     }
 }

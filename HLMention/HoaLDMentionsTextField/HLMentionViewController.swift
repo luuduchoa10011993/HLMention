@@ -11,7 +11,7 @@ import UIKit
 class HLMentionViewController: UIViewController {
     
     @IBOutlet weak var mentionTextView: HLMentionsTextView!
-    @IBOutlet weak var tbListUserTag: UITableView!
+//    @IBOutlet weak var tbListUserTag: UITableView!
     
     @IBOutlet weak var postBtn: UIButton!
     let text = "::00:: đẹp trai ::04:: đẹp gái"
@@ -20,14 +20,12 @@ class HLMentionViewController: UIViewController {
                                         HLMentionInfo("06", "Donald Trump"), HLMentionInfo("07", "Hoà cute phô mai que")]
     
     //tableview data
-    var kMentionInfosTableView: [HLMentionInfo] = []
+//    var kMentionInfosTableView: [HLMentionInfo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tbListUserTag.tableFooterView = UIView()
-        
         mentionTextView.hlDelegate = self
-//        mentionTextView.kListMentionInfos = kMentionInfos
+        mentionTextView.kListMentionInfos = kMentionInfos
 //        mentionTextView.HLtext = text
 //        mentionTextView.kMentionInfos = getDemoData()
         mentionTextView.hlResetData()
@@ -47,15 +45,6 @@ class HLMentionViewController: UIViewController {
         super.viewDidAppear(animated)
         mentionTextView.becomeFirstResponder()
     }
-    
-    func refreshMentionList(_ removeAll: Bool = true) {
-        if removeAll {
-            kMentionInfosTableView.removeAll()
-        } else {
-            kMentionInfosTableView = kMentionInfos
-        }
-        tbListUserTag.reloadData()
-    }
     @IBAction func postTouched(_ sender: UIButton) {
        let object = mentionTextView.getTextAndMentionInfos()
         let string = "\(object?.text) (\(object?.mentionInfos.count)"
@@ -63,48 +52,17 @@ class HLMentionViewController: UIViewController {
     }
     
 }
-
-//  MARK: - UITableView Delegate - DataSource
-extension HLMentionViewController: UITableViewDelegate, UITableViewDataSource{
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        tableView.isHidden = kMentionInfosTableView.count == 0 ? true : false
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if kMentionInfosTableView.count > 5 {
-            return 5
-        }
-        return kMentionInfosTableView.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HLMentionTableViewCell.self), for: indexPath) as! HLMentionTableViewCell
-        cell.display(kMentionInfosTableView[indexPath.item])
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell:HLMentionTableViewCell = tableView.cellForRow(at: indexPath) as? HLMentionTableViewCell else { return }
-        let mentionInfo = cell.getMentionInfo()
-        mentionTextView.hlInsertMentionInfoWhenSearch(mentionInfo: mentionInfo.copyObject())
-        refreshMentionList()
-    }
-}
-
 //  MARK: - HLMentionsTextViewDelegate
 
 extension HLMentionViewController: HLMentionsTextViewDelegate {
     func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
         if let mentionInfos = mentionInfos {
-            kMentionInfosTableView = mentionInfos
-            tbListUserTag.reloadData()
+//            kMentionInfosTableView = mentionInfos
+//            tbListUserTag.reloadData()
         }
     }
     
     func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String) {
         postBtn.setTitle(searchText, for: UIControl.State.normal)
     }
-
 }
