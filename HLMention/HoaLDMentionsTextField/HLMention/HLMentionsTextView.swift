@@ -120,7 +120,7 @@ class HLMentionsTextView: UITextView {
         hlAttributeStringMentionInfo()
         hlSetTypingAttributes()
         hlMentionSearchInfo.removeAll()
-        _hlMentionInfosTableView.removeAll()
+        hlMentionInfosTableView.removeAll()
     }
     
     func hlSetDisplayText() {
