@@ -8,9 +8,9 @@
 
 import UIKit
 
-protocol HLMentionsTextViewDelegate: class {
-    func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
-    func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String)
+@objc protocol HLMentionsTextViewDelegate: class {
+    @objc optional func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
+    @objc optional func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String)
     
     /* if you want anythings just add from UITextView delegate*/
 }
@@ -100,9 +100,16 @@ class HLMentionsTextView: UITextView {
         guard let tableView = hlTableView else { return }
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = UIColor.gray
+        tableView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
         tableView.tableFooterView = UIView()
         tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
+        
+        let layer: CALayer = tableView.layer
+        layer.borderWidth = 1.0
+        layer.borderColor = UIColor.black.cgColor
+        layer.cornerRadius = 5.0
+        layer.masksToBounds = true
+        
         if hlTableViewHeightConstaint.constant > 0 {
             hlTableViewHeight = hlTableViewHeightConstaint.constant
         }
@@ -301,9 +308,6 @@ class HLMentionsTextView: UITextView {
                     hlRemoveMentionInfo(mention: mentionInfo)
                 }
                 kMentionCurrentCursorLocation = range.location - range.length
-                //                removeMentionInfoAndUpdateLocation(mentionInfo: mentionInfo)
-                
-                
                 
                 kMentionCurrentCursorLocation = mentionInfo.kRange.location + text.count
                 if text.isValidCharacterBackSpace() {
@@ -346,7 +350,7 @@ class HLMentionsTextView: UITextView {
         } else {
             if let searchText = hlHandleSearchString() {
                 if let delegate = hlDelegate {
-                    delegate.hlMentionsTextViewCallBackFromSearch(self, searchText: searchText)
+                    delegate.hlMentionsTextViewCallBackFromSearch?(self, searchText: searchText)
                     return
                 }
             }

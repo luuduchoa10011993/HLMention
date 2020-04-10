@@ -57,11 +57,17 @@ class HLMentionViewController: UIViewController {
 
 extension HLMentionViewController: HLMentionsTextViewDelegate {
     func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
+        
+    }
+    
+    /*
+    func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
         if let mentionInfos = mentionInfos {
 //            hlMentionInfosTableView = mentionInfos
 //            tbListUserTag.reloadData()
         }
     }
+    */
     
     func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String) {
         postBtn.setTitle(searchText, for: UIControl.State.normal)
