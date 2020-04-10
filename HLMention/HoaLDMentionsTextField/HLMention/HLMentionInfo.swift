@@ -74,7 +74,19 @@ class HLMentionInfo: NSObject {
         return false
     }
     
-    static public func mentionInfoFrom(user: [AnyObject]) -> [HLMentionInfo]? {
+    static public func mentionInfoFrom(users: [AnyObject]) -> [HLMentionInfo]? {
+        var mentionsInfos = [HLMentionInfo]()
+        for user in users {
+            let mentionInfo = HLMentionInfo("", "")
+            mentionInfo.kAct = .typeAt
+            mentionInfo.kType = .user
+            mentionsInfos.append(mentionInfo)
+        }
+        
+        if !mentionsInfos.isEmpty {
+            return mentionsInfos
+        }
+        
         return nil
     }
     

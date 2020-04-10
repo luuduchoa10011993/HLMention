@@ -55,7 +55,7 @@ class HLMentionsTextView: UITextView {
     
     
     // search
-    private var hlMentionSearchInfo = HLMentionSearchInfo()
+    var hlMentionSearchInfo = HLMentionSearchInfo()
     
     private var kLastCursorLocation = 0
     private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
@@ -71,7 +71,7 @@ class HLMentionsTextView: UITextView {
     
 //    var kMentionLastEditLocation: Int = 0
     
-    func getTextAndMentionInfos() -> (text: String, mentionInfos: [HLMentionInfo])? {
+    func getTextAndMentionInfos() -> (attributeText: NSAttributedString, mentionInfos: [HLMentionInfo])? {
         
         
         var mentionInfos = [HLMentionInfo]()
@@ -81,13 +81,13 @@ class HLMentionsTextView: UITextView {
             }
         }
         
-        guard var mentionText = text else {
-            return nil
-        }
+        let mentionAttributeText = NSMutableAttributedString(attributedString: attributedText)
+        mentionAttributeText.hlAttributeStringRemoveAttributes()
         for mentionInfo in kMentionInfos {
-            mentionText = mentionText.replacingOccurrences(of: "\(kMentionSymbol)\(mentionInfo.kName)", with: mentionInfo.getTagID())
+            mentionAttributeText.replaceCharacters(in: mentionInfo.kRange, with: mentionInfo.getTagID())
+//            mentionText = mentionText.replacingOccurrences(of: "\(kMentionSymbol)\(mentionInfo.kName)", with: mentionInfo.getTagID())
         }
-        return(mentionText, mentionInfos)
+        return(mentionAttributeText, mentionInfos)
     }
     
     override func awakeFromNib() {
@@ -113,6 +113,7 @@ class HLMentionsTextView: UITextView {
         hlAttributeStringMentionInfo()
         hlSetTypingAttributes()
         hlMentionSearchInfo.removeAll()
+        _hlMentionInfosTableView.removeAll()
     }
     
     func hlSetDisplayText() {
@@ -135,7 +136,7 @@ class HLMentionsTextView: UITextView {
     
     func hlAttributeStringMentionInfo() {
         let attributedText: NSMutableAttributedString = NSMutableAttributedString(attributedString: self.attributedText)
-        attributedText.hlAttributeStringRemoveRanges()
+        attributedText.hlAttributeStringRemoveAttributes()
         attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: kMentionInfos),
                                                      highLightColor: hlHighlightColor)
         self.attributedText = attributedText
@@ -202,17 +203,10 @@ class HLMentionsTextView: UITextView {
         }
     }
     
-    func hlInsertMentionInfoWhenSearch(mentionInfo: HLMentionInfo) {
-//        if hlMentionSearchInfo.kIsSearch {
-            hlInsertMentionInfo(mentionInfo: mentionInfo, at: hlMentionSearchInfo.kRange)
-//        }
-    }
-    
     func hlInsertMentionInfo(mentionInfo: HLMentionInfo,at range: NSRange) {
         guard let textRange = textRangeFromLocation(start: range.location, end: range.location + range.length) else { return }
         
         let insertString = String(kMentionSymbol) + mentionInfo.kName
-        self.replace(textRange, withText: insertString)
         
         let mention = mentionInfo.copy() as! HLMentionInfo
         mention.kRange = NSRange(location: range.location,
@@ -221,10 +215,9 @@ class HLMentionsTextView: UITextView {
         hlUpdateMentionInfosRange(range: NSRange(location: range.location, length: range.length), insertTextCount: insertString.count)
         self.kMentionInfos.append(mention)
         
-        hlAttributeStringMentionInfo()
-        hlSetCurrentCursorLocation(index: range.location + insertString.count)
-        hlSetTypingAttributes()
         kTextViewDidChange = false
+        self.replace(textRange, withText: insertString)
+        hlSetCurrentCursorLocation(index: range.location + insertString.count)
     }
     
     // remove MentionInfo
@@ -331,6 +324,8 @@ class HLMentionsTextView: UITextView {
     
     func hlTextViewDidChange(_ textView: UITextView) {
         if !kTextViewDidChange {
+            hlAttributeStringMentionInfo()
+            hlSetTypingAttributes()
             kTextViewDidChange = true
             return
         }
@@ -340,7 +335,9 @@ class HLMentionsTextView: UITextView {
             hlUpdateMentionLocation()
         } else if self.kReplacementText == " " && self.kRange.length == 0 {
             hlUpdateMentionLocation()
-        } else if let kListMentionInfos = kListMentionInfos {
+            hlMentionInfosTableView.removeAll()
+        }
+        if let kListMentionInfos = kListMentionInfos {
             if let mentionInfos = hlHandleSearch(from: kListMentionInfos) {
                 hlMentionInfosTableView = mentionInfos
                 hlTableView?.reloadData()
@@ -363,6 +360,7 @@ class HLMentionsTextView: UITextView {
     }
 }
 
+/*
 extension HLMentionsTextView: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // backspace data -> range (0,1), replacementString = ""
@@ -450,3 +448,4 @@ extension HLMentionsTextView: UITextViewDelegate {
         kUndoText = text
     }
 }
+*/

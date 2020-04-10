@@ -48,7 +48,7 @@ class HLMentionViewController: UIViewController {
     }
     @IBAction func postTouched(_ sender: UIButton) {
        let object = mentionTextView.getTextAndMentionInfos()
-        let string = "\(object?.text) (\(object?.mentionInfos.count)"
+        let string = "\(object?.attributeText.string) (\(object?.mentionInfos.count)"
         postBtn.setTitle(string, for: UIControl.State.normal)
     }
     

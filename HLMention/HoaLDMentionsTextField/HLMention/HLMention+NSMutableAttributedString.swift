@@ -10,7 +10,7 @@ import UIKit
 
 extension NSMutableAttributedString {
     
-    func hlAttributeStringRemoveRanges() {
+    func hlAttributeStringRemoveAttributes() {
         self.removeAttribute(NSAttributedString.Key.foregroundColor, range: NSMakeRange(0, self.length))
     }
     
@@ -19,6 +19,10 @@ extension NSMutableAttributedString {
         for range in ranges {
             self.addAttributes(attribute, range: range)
         }
+    }
+    
+    func hlAttributeStringReplace(range: NSRange,with text: String) {
+        self.replaceCharacters(in: range, with: text)
     }
 }
 
