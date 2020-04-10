@@ -24,13 +24,13 @@ class HLMentionsTextView: UITextView {
     @IBOutlet weak var hlTableViewHeightConstaint: NSLayoutConstraint!
     
     var hlTableViewHeight: CGFloat = 220
-    var _kMentionInfosTableView = [HLMentionInfo]()
-    var kMentionInfosTableView:[HLMentionInfo] {
+    var _hlMentionInfosTableView = [HLMentionInfo]()
+    var hlMentionInfosTableView:[HLMentionInfo] {
         get {
-            return _kMentionInfosTableView
+            return _hlMentionInfosTableView
         }
         set {
-            _kMentionInfosTableView = newValue
+            _hlMentionInfosTableView = newValue
             if let tableView = hlTableView {
                 tableView.reloadData()
             }
@@ -91,7 +91,6 @@ class HLMentionsTextView: UITextView {
     }
     
     override func awakeFromNib() {
-        self.delegate = self
         hlResetData()
         hlAttributeStringMentionInfo()
         hlInitTableView()
@@ -278,6 +277,90 @@ class HLMentionsTextView: UITextView {
         }
     }
     
+    func hlTextView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // backspace data -> range (0,1), replacementString = ""
+        // a -> range (1,0), replacementString = a
+        kRange = range
+        kReplacementText = text
+        
+        if text == String(kMentionSymbol) {
+            hlMentionSearchInfo.kRange = NSRange(location: range.location, length:text.count)
+        } else if self.kReplacementText == " " && self.kRange.length == 0 {
+            return true
+        }
+        
+        // remove when editing word
+        if let mentionInfos = mentionInfoIsValidInRange(range: range, replacementString: text) {
+            kMentionInfoRemoved = true
+            if let mentionInfo = mentionInfos.first,
+                (text.isEmpty || text.count == 1) && mentionInfos.count == 1 {
+                
+                if (range.location >= mentionInfo.kRange.location) && (range.location < mentionInfo.kRange.location + mentionInfo.kRange.length) {
+                    guard let textRange = textRangeFromLocation(start: mentionInfo.kRange.location, end: mentionInfo.kRange.location + mentionInfo.kRange.length) else { return false}
+                    hlRemoveMentionInfo(mention: mentionInfo)
+                    kRange = mentionInfo.kRange
+                    kReplacementText = ""
+                    self.replace(textRange, withText: text)
+                    return false
+                }
+                
+                for mentionInfo in mentionInfos {
+                    hlRemoveMentionInfo(mention: mentionInfo)
+                }
+                kMentionCurrentCursorLocation = range.location - range.length
+                //                removeMentionInfoAndUpdateLocation(mentionInfo: mentionInfo)
+                
+                
+                
+                kMentionCurrentCursorLocation = mentionInfo.kRange.location + text.count
+                if text.isValidCharacterBackSpace() {
+                    kMentionCurrentCursorLocation -= range.length
+                }
+                return false
+            }
+            
+            // mention info have more than one and replacementStri@ng count > 1
+            for mentionInfo in mentionInfos {
+                hlRemoveMentionInfo(mention: mentionInfo)
+            }
+            kMentionCurrentCursorLocation = range.location - range.length
+            return false
+        }
+        return true
+    }
+    
+    func hlTextViewDidChange(_ textView: UITextView) {
+        if !kTextViewDidChange {
+            kTextViewDidChange = true
+            return
+        }
+        
+        let currentCursorLocation = getCurrentCursorLocation()
+        if kUndoText.count != text.count && !kMentionInfos.isEmpty {
+            hlUpdateMentionLocation()
+        } else if self.kReplacementText == " " && self.kRange.length == 0 {
+            hlUpdateMentionLocation()
+        } else if let kListMentionInfos = kListMentionInfos {
+            if let mentionInfos = hlHandleSearch(from: kListMentionInfos) {
+                hlMentionInfosTableView = mentionInfos
+                hlTableView?.reloadData()
+                return
+            }
+        } else {
+            if let searchText = hlHandleSearchString() {
+                if let delegate = hlDelegate {
+                    delegate.hlMentionsTextViewCallBackFromSearch(self, searchText: searchText)
+                    return
+                }
+            }
+        }
+        
+        kLastCursorLocation = currentCursorLocation
+        hlAttributeStringMentionInfo()
+        hlSetTypingAttributes()
+        hlSetCurrentCursorLocation(index: currentCursorLocation)
+        kUndoText = text
+    }
 }
 
 extension HLMentionsTextView: UITextViewDelegate {
@@ -347,7 +430,7 @@ extension HLMentionsTextView: UITextViewDelegate {
             hlUpdateMentionLocation()
         } else if let kListMentionInfos = kListMentionInfos {
             if let mentionInfos = hlHandleSearch(from: kListMentionInfos) {
-                kMentionInfosTableView = mentionInfos
+                hlMentionInfosTableView = mentionInfos
                 hlTableView?.reloadData()
                 return
             }

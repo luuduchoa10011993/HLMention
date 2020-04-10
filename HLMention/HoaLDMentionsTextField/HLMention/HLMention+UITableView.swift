@@ -13,7 +13,7 @@ import UIKit
 extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if _kMentionInfosTableView.isEmpty {
+        if _hlMentionInfosTableView.isEmpty {
             hlHideTableView()
         } else {
             hlShowTableView()
@@ -22,15 +22,15 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if _kMentionInfosTableView.count > 5 {
+        if _hlMentionInfosTableView.count > 5 {
             return 5
         }
-        return _kMentionInfosTableView.count
+        return _hlMentionInfosTableView.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HLMentionTableViewCell.self), for: indexPath) as! HLMentionTableViewCell
-        cell.display(_kMentionInfosTableView[indexPath.item])
+        cell.display(_hlMentionInfosTableView[indexPath.item])
         return cell
     }
     
@@ -43,9 +43,9 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     
     func refreshMentionList(_ removeAll: Bool = true) {
         if removeAll {
-            _kMentionInfosTableView.removeAll()
+            _hlMentionInfosTableView.removeAll()
         } else {
-            _kMentionInfosTableView = kMentionInfos
+            _hlMentionInfosTableView = kMentionInfos
         }
         if let tableView = hlTableView {
             tableView.reloadData()

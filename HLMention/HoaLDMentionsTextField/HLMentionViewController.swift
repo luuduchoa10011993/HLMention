@@ -20,11 +20,12 @@ class HLMentionViewController: UIViewController {
                                         HLMentionInfo("06", "Donald Trump"), HLMentionInfo("07", "Hoà cute phô mai que")]
     
     //tableview data
-//    var kMentionInfosTableView: [HLMentionInfo] = []
+//    var hlMentionInfosTableView: [HLMentionInfo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mentionTextView.hlDelegate = self
+        mentionTextView.delegate = self
         mentionTextView.kListMentionInfos = kMentionInfos
 //        mentionTextView.HLtext = text
 //        mentionTextView.kMentionInfos = getDemoData()
@@ -57,12 +58,22 @@ class HLMentionViewController: UIViewController {
 extension HLMentionViewController: HLMentionsTextViewDelegate {
     func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?) {
         if let mentionInfos = mentionInfos {
-//            kMentionInfosTableView = mentionInfos
+//            hlMentionInfosTableView = mentionInfos
 //            tbListUserTag.reloadData()
         }
     }
     
     func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String) {
         postBtn.setTitle(searchText, for: UIControl.State.normal)
+    }
+}
+
+extension HLMentionViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        return mentionTextView.hlTextView(textView, shouldChangeTextIn: range, replacementText: text)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        mentionTextView.hlTextViewDidChange(textView)
     }
 }
