@@ -98,12 +98,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		050CD40524417ED800570565 /* HLMentionInfo */ = {
+			isa = PBXGroup;
+			children = (
+				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
+			);
+			path = HLMentionInfo;
+			sourceTree = "<group>";
+		};
 		0571E354243849CB00CDA62E /* HLMention */ = {
 			isa = PBXGroup;
 			children = (
+				050CD40524417ED800570565 /* HLMentionInfo */,
 				05B25D74243EC74300E0051A /* HLMentionTableView */,
 				05B25D8F243EE0FD00E0051A /* HLInstant.swift */,
-				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
 				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
 				AC54014424350458007189AB /* HLMentionsTextView.swift */,
 				AC4267EE243A0A8E00049450 /* HLMention+Display.swift */,

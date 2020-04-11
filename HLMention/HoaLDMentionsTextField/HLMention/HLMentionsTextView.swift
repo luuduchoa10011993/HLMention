@@ -76,7 +76,7 @@ class HLMentionsTextView: UITextView {
         
         var mentionInfos = [HLMentionInfo]()
         for mentionInfo in kMentionInfos {
-            if mentionInfo.kAct == .typeAt {
+            if mentionInfo.kAct == .at {
                 mentionInfos.append(mentionInfo)
             }
         }

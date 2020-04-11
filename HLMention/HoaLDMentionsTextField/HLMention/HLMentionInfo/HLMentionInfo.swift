@@ -14,7 +14,17 @@ enum MentionInfoType: String {
 }
 
 enum MentionInfoActType: String {
-    case typeAt = "with";
+    case emoji = "emoji"
+    case media = "media"
+    case sticker = "sticker"
+    case gif = "gif"
+    case area = "area"
+    case img = "img"
+    case user = "user"
+    case with = "with"
+    case text = "text"
+    case link = "link"
+    case at = "at"
     case typeSearch = "search" // if want to be a search name must have at least 1 charater
 }
 
@@ -23,7 +33,7 @@ class HLMentionInfo: NSObject {
     var kName = ""
     var kImage: UIImage?
     var kImageName = ""
-    var kAct: MentionInfoActType = .typeAt
+    var kAct: MentionInfoActType = .at
     var kType: MentionInfoType = .user
     var kRange = NSRange(location: 0,length: 0)
     
@@ -78,7 +88,7 @@ class HLMentionInfo: NSObject {
         var mentionsInfos = [HLMentionInfo]()
         for user in users {
             let mentionInfo = HLMentionInfo("", "")
-            mentionInfo.kAct = .typeAt
+            mentionInfo.kAct = .at
             mentionInfo.kType = .user
             mentionsInfos.append(mentionInfo)
         }
