@@ -21,12 +21,20 @@ enum MentionInfoActType: String {
 class HLMentionInfo: NSObject {
     var kId = ""
     var kName = ""
+    var kImage: UIImage?
+    var kImageName = ""
     var kAct: MentionInfoActType = .typeAt
     var kType: MentionInfoType = .user
     var kRange = NSRange(location: 0,length: 0)
     
     
-    
+    override func copy() -> Any {
+        let mentionInfo = HLMentionInfo(kId, kName)
+        mentionInfo.kAct = kAct
+        mentionInfo.kType = kType
+        mentionInfo.kRange = kRange
+        return mentionInfo
+    }
 //    var locationBeenMention = UITextRange
     
     init(_ id: String,_ name: String) {
@@ -36,10 +44,6 @@ class HLMentionInfo: NSObject {
     
     func getTagID() -> String {
         return "::\(kId)::"
-    }
-    
-    func getDisplayName() -> String {
-        return "\(kName)"
     }
     
     func copyObject() -> HLMentionInfo {
@@ -68,6 +72,26 @@ class HLMentionInfo: NSObject {
             }
         }
         return false
+    }
+    
+    static public func mentionInfoFrom(users: [AnyObject]) -> [HLMentionInfo]? {
+        var mentionsInfos = [HLMentionInfo]()
+        for user in users {
+            let mentionInfo = HLMentionInfo("", "")
+            mentionInfo.kAct = .typeAt
+            mentionInfo.kType = .user
+            mentionsInfos.append(mentionInfo)
+        }
+        
+        if !mentionsInfos.isEmpty {
+            return mentionsInfos
+        }
+        
+        return nil
+    }
+    
+    static public func praserMentionInfo() -> [AnyObject]? {
+        return nil
     }
     
     /*

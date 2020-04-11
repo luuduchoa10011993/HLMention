@@ -10,7 +10,7 @@ import UIKit
 
 extension String {
     
-    func HDlowercase() -> String {
+    func hlLowercase() -> String {
         return lowercased()
     }
     
@@ -42,6 +42,13 @@ extension String {
         return String(string[range])
     }
     
+    mutating func stringFrom(start: Int, end: Int) -> String {
+        let string = self
+        let startString = string.index(string.startIndex, offsetBy: start)
+        let endString = string.index(string.startIndex, offsetBy: end)
+        return String(string[startString..<endString])
+    }
+    
     func isValidCharacterBackSpace() -> Bool {
         return (strcmp(self.cString(using: String.Encoding.utf8)!, "\\b") == -92)
     }
@@ -51,7 +58,7 @@ extension String {
     mutating func stringRawToStringTagUser(_ userInfos: [HLMentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
-            rawString = rawString.replacingOccurrences(of: userInfo.getDisplayName(), with: userInfo.getTagID())
+            rawString = rawString.replacingOccurrences(of: userInfo.kName, with: userInfo.getTagID())
         }
         return rawString
     }
@@ -60,7 +67,7 @@ extension String {
     mutating func stringTagUserToStringRaw(_ userInfos: [HLMentionInfo]) -> String {
         var rawString = self
         for userInfo in userInfos {
-            rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.getDisplayName())
+            rawString = rawString.replacingOccurrences(of: userInfo.getTagID(), with: userInfo.kName)
         }
         return rawString
     }

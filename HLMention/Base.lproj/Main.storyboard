@@ -24,62 +24,46 @@
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="hlTableView" destination="69I-Bb-CAi" id="OoP-Pd-wV3"/>
+                                    <outlet property="hlTableViewDataSource" destination="69I-Bb-CAi" id="hGR-Pc-Drb"/>
+                                    <outlet property="hlTableViewDelegate" destination="69I-Bb-CAi" id="bEJ-km-EfZ"/>
+                                    <outlet property="hlTableViewHeightConstaint" destination="22I-Lf-0to" id="2e5-iR-Axs"/>
+                                </connections>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6LD-V8-Vbk">
+                                <rect key="frame" x="8" y="180" width="398" height="30"/>
+                                <state key="normal" title="Post"/>
+                                <connections>
+                                    <action selector="postTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3QJ-3J-78U"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="69I-Bb-CAi">
                                 <rect key="frame" x="20" y="222" width="374" height="300"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="22I-Lf-0to"/>
                                 </constraints>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="HLMentionTableViewCell" rowHeight="96" id="Utn-SZ-kaf" userLabel="HLMentionTableViewCell" customClass="HLMentionTableViewCell" customModule="HLMention" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="374" height="96"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Utn-SZ-kaf" id="xGO-fP-696">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="96"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MgX-me-qsA">
-                                                    <rect key="frame" x="20" y="33" width="334" height="30"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="30" id="dDs-80-dCd"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="MgX-me-qsA" firstAttribute="centerY" secondItem="xGO-fP-696" secondAttribute="centerY" id="CXI-n4-KuJ"/>
-                                                <constraint firstItem="MgX-me-qsA" firstAttribute="leading" secondItem="xGO-fP-696" secondAttribute="leadingMargin" id="IOw-ML-zOO"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="MgX-me-qsA" secondAttribute="trailing" id="uz4-Lw-SQL"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="lbNameUser" destination="MgX-me-qsA" id="ZCl-gz-J5n"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="sd4-nS-XYs"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="cUt-Yw-Zdq"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="6LD-V8-Vbk" secondAttribute="bottom" constant="12" id="7x0-B1-GKK"/>
+                            <constraint firstItem="6LD-V8-Vbk" firstAttribute="centerX" secondItem="m3o-Tm-xeQ" secondAttribute="centerX" id="8yE-wL-ym6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="m3o-Tm-xeQ" secondAttribute="trailing" constant="8" id="9BK-f4-hhW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="69I-Bb-CAi" secondAttribute="trailing" constant="20" id="G35-10-7fu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6LD-V8-Vbk" secondAttribute="trailing" constant="8" id="Lxi-MH-21d"/>
+                            <constraint firstItem="6LD-V8-Vbk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="TE5-kx-kTP"/>
                             <constraint firstItem="m3o-Tm-xeQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="ciD-7q-bPA"/>
-                            <constraint firstItem="69I-Bb-CAi" firstAttribute="top" secondItem="m3o-Tm-xeQ" secondAttribute="bottom" constant="50" id="eIL-59-4Af"/>
                             <constraint firstItem="69I-Bb-CAi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ijZ-3l-cxU"/>
                             <constraint firstItem="m3o-Tm-xeQ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="sXC-vu-j0N"/>
+                            <constraint firstItem="6LD-V8-Vbk" firstAttribute="top" secondItem="m3o-Tm-xeQ" secondAttribute="bottom" constant="8" id="zbM-vA-vHw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="mentionTextView" destination="m3o-Tm-xeQ" id="WTb-xu-k1x"/>
-                        <outlet property="tbListUserTag" destination="69I-Bb-CAi" id="MMC-4d-K0u"/>
+                        <outlet property="postBtn" destination="6LD-V8-Vbk" id="jN3-AG-vnb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
