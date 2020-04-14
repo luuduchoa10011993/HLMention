@@ -19,13 +19,26 @@ extension HLMentionsTextView {
         return ranges
     }
     
-    func hlSetTypingAttributes() {
-        let paraStyle: NSParagraphStyle = NSParagraphStyle()
-        self.typingAttributes = [NSAttributedString.Key.foregroundColor : UIColor.darkText, NSAttributedString.Key.paragraphStyle : paraStyle, NSAttributedString.Key.font : hlFont]
+     func hlSetTypingAttributes() {
+        hlSetTypingAttributes(dict: hlTypingAttributes)
+     }
+    
+    private func hlSetTypingAttributes(dict :Dictionary<String, Any>) {
+        self.typingAttributes = [NSAttributedString.Key.foregroundColor : dict[NSAttributedString.Key.foregroundColor.rawValue] as Any,
+                                 NSAttributedString.Key.paragraphStyle : dict[NSAttributedString.Key.paragraphStyle.rawValue] as Any,
+                                 NSAttributedString.Key.font : dict[NSAttributedString.Key.font.rawValue] as Any]
     }
 
     /* for swift 4.2 then open this */
     /*
+     
+     private func hlSetTypingAttributes(dict :Dictionary<String, Any>) {
+         let keys = Array(dict.keys)
+         for key in keys {
+             self.typingAttributes[key] = dict[key]
+         }
+     }
+     
      func hlSetTypingAttributes() {
          let paraStyle: NSParagraphStyle = NSParagraphStyle()
          self.typingAttributes[NSAttributedString.Key.foregroundColor.rawValue] = UIColor.darkText

@@ -53,6 +53,22 @@ extension String {
         return (strcmp(self.cString(using: String.Encoding.utf8)!, "\\b") == -92)
     }
     
+    func indexof(char: Character) -> Int? {
+        return index(of: char)?.encodedOffset
+    }
+    
+    func indexOfString(text: String) -> Int {
+        let index2 = self.index(self.startIndex, offsetBy: 2) //will call succ 2 times
+        let lastChar: Character = self[index2] //now we can index!
+
+        let characterIndex2 = self.index(self.startIndex, offsetBy: 2)
+        let lastChar2 = self[characterIndex2] //will do the same as above
+
+        let range: Range<String.Index> = self.range(of: text)!
+        let index: Int = self.distance(from: self.startIndex, to: range.lowerBound)
+        return index
+    }
+    
     //replace TagUserString -> TagUserRawString
     // Ex: "I'm [:[userID]:] and i live in Toronto
     mutating func stringRawToStringTagUser(_ userInfos: [HLMentionInfo]) -> String {
