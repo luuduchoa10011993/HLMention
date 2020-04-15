@@ -19,6 +19,7 @@ class HLInstant {
     
     var hlMentionSymbol : Character = "@" // default value is @ [at]
     var hlText: String = ""
+    var hlHighlightColor : UIColor = UIColor.red
     
     var kRange = NSRange()
     var kReplacementText = ""

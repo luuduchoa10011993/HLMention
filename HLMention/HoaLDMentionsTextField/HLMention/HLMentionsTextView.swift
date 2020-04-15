@@ -17,13 +17,14 @@ import UIKit
 
 class HLMentionsTextView: UITextView {
     
+    var hlStore = HLInstant()
+    
     /* TableView object*/
     @IBOutlet weak var hlTableView: UITableView?
     @IBOutlet weak var hlTableViewDataSource: UITableViewDataSource?
     @IBOutlet weak var hlTableViewDelegate: UITableViewDelegate?
     @IBOutlet weak var hlTableViewHeightConstaint: NSLayoutConstraint!
-    
-    var hlStore = HLInstant()
+
     
     var hlMentionInfosTableView:[HLMentionInfo] {
         get {
@@ -67,7 +68,6 @@ class HLMentionsTextView: UITextView {
     
 //    var hlFont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
 //    var hlTextColor : UIColor = UIColor.darkText
-    var hlHighlightColor : UIColor = UIColor.red
     
     
     
@@ -167,7 +167,7 @@ class HLMentionsTextView: UITextView {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(attributedString: self.attributedText)
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
-                                                         highLightColor: hlHighlightColor)
+                                                         highLightColor: hlStore.hlHighlightColor)
             self.attributedText = attributedText
         } else {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(string: hlText,
@@ -176,7 +176,7 @@ class HLMentionsTextView: UITextView {
                                                                                       NSAttributedString.Key.font: UIFont.systemFont(ofSize: UIFont.systemFontSize)])
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
-                                                         highLightColor: hlHighlightColor)
+                                                         highLightColor: hlStore.hlHighlightColor)
             self.attributedText = attributedText
             hlText = ""
         }
