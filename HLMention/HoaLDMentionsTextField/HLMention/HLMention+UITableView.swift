@@ -13,7 +13,7 @@ import UIKit
 extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if _hlMentionInfosTableView.isEmpty {
+        if hlStore.hlMentionInfosTableView.isEmpty {
             hlHideTableView()
         } else {
             hlShowTableView()
@@ -22,15 +22,15 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if _hlMentionInfosTableView.count > 5 {
-            return 5
+        if hlStore.hlMentionInfosTableView.count > hlStore.hlTableViewMax {
+            return hlStore.hlTableViewMax
         }
-        return _hlMentionInfosTableView.count
+        return hlStore.hlMentionInfosTableView.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: HLMentionTableViewCell.self), for: indexPath) as! HLMentionTableViewCell
-        cell.display(_hlMentionInfosTableView[indexPath.item])
+        cell.display(hlStore.hlMentionInfosTableView[indexPath.item])
         return cell
     }
     
@@ -43,9 +43,9 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     
     func refreshMentionList(_ removeAll: Bool = true) {
         if removeAll {
-            _hlMentionInfosTableView.removeAll()
+            hlStore.hlMentionInfosTableView.removeAll()
         } else {
-            _hlMentionInfosTableView = kMentionInfos
+            hlStore.hlMentionInfosTableView = hlStore.hlMentionInfos
         }
         if let tableView = hlTableView {
             tableView.reloadData()
@@ -61,6 +61,6 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     func hlShowTableView() {
         guard let tableView = hlTableView else { return }
         tableView.isHidden = false
-        hlTableViewHeightConstaint.constant = hlTableViewHeight
+        hlTableViewHeightConstaint.constant = hlStore.hlTableViewHeight
     }
 }

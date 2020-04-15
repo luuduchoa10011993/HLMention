@@ -10,7 +10,18 @@ import UIKit
 
 class HLInstant {
     // iOS
-    public static var systemVersion = UIDevice.current.systemVersion
+//    public static var systemVersion = UIDevice.current.systemVersion
     
+    var hlMentionInfosTableView = [HLMentionInfo]()
+    var hlTableViewMax = 5
+    
+    var hlTableViewHeight: CGFloat = 220
+    
+    var hlMentionSymbol : Character = "@" // default value is @ [at]
+    var hlText: String = ""
+    
+    var kRange = NSRange()
+    var kReplacementText = ""
+    var hlMentionInfos = [HLMentionInfo]()
 }
 

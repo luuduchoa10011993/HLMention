@@ -58,7 +58,7 @@ extension HLMentionsTextView {
         }()
         
         let sumRange = newRange.location + newRange.length
-        for mentionInfo in kMentionInfos {
+        for mentionInfo in hlStore.hlMentionInfos {
             if hlSelectedTextRangeContentMentionRange(range: mentionInfo.kRange) {
                 mentionInfos.append(mentionInfo)
             } else {
