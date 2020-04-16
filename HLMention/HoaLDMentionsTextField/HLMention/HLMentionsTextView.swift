@@ -17,14 +17,13 @@ import UIKit
 
 class HLMentionsTextView: UITextView {
     
-    var hlStore = HLInstant()
-    
     /* TableView object*/
     @IBOutlet weak var hlTableView: UITableView?
     @IBOutlet weak var hlTableViewDataSource: UITableViewDataSource?
     @IBOutlet weak var hlTableViewDelegate: UITableViewDelegate?
     @IBOutlet weak var hlTableViewHeightConstaint: NSLayoutConstraint!
-
+    
+    var hlStore = HLInstant()
     
     var hlMentionInfosTableView:[HLMentionInfo] {
         get {
@@ -68,6 +67,7 @@ class HLMentionsTextView: UITextView {
     
 //    var hlFont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
 //    var hlTextColor : UIColor = UIColor.darkText
+    var hlHighlightColor : UIColor = UIColor.red
     
     
     
@@ -88,20 +88,14 @@ class HLMentionsTextView: UITextView {
 //    var kMentionLastEditLocation: Int = 0
     
     func getTextAndMentionInfos() -> (attributeText: NSAttributedString, mentionInfos: [HLMentionInfo])? {
-        
-        
-        var mentionInfos = [HLMentionInfo]()
-        for mentionInfo in hlStore.hlMentionInfos {
-           if mentionInfo.kAct == .at {
-                mentionInfos.append(mentionInfo)
-            }
-        }
+        let mentionInfos = hlStore.hlMentionInfos
         
         let mentionAttributeText = NSMutableAttributedString(attributedString: attributedText)
         mentionAttributeText.hlAttributeStringRemoveAttributes()
-        for mentionInfo in hlStore.hlMentionInfos {
+        for mentionInfo in mentionInfos {
             mentionAttributeText.replaceCharacters(in: mentionInfo.kRange, with: mentionInfo.getTagID())
-//            mentionText = mentionText.replacingOccurrences(of: "\(kMentionSymbol)\(mentionInfo.kName)", with: mentionInfo.getTagID())
+            hlUpdateMentionInfosRange(range: mentionInfo.kRange, insertTextCount: mentionInfo.getTagID().count)
+            print(mentionAttributeText.string)
         }
         return(mentionAttributeText, mentionInfos)
     }
@@ -116,7 +110,7 @@ class HLMentionsTextView: UITextView {
         guard let tableView = hlTableView else { return }
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = UIColor.gray.withAlphaComponent(0.3)
+        tableView.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
         tableView.tableFooterView = UIView()
         tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
         
@@ -136,6 +130,13 @@ class HLMentionsTextView: UITextView {
         hlSetDisplayText()
         hlAttributeStringMentionInfo()
         hlMentionSearchInfo.removeAll()
+        hlMentionInfosTableView.removeAll()
+    }
+    
+    func hlRemoveData() {
+        hlMentionSearchInfo.removeAll()
+        kListMentionInfos?.removeAll()
+        hlStore.hlMentionInfos.removeAll()
         hlMentionInfosTableView.removeAll()
     }
     
@@ -167,7 +168,7 @@ class HLMentionsTextView: UITextView {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(attributedString: self.attributedText)
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
-                                                         highLightColor: hlStore.hlHighlightColor)
+                                                         highLightColor: hlHighlightColor)
             self.attributedText = attributedText
         } else {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(string: hlText,
@@ -176,7 +177,7 @@ class HLMentionsTextView: UITextView {
                                                                                       NSAttributedString.Key.font: UIFont.systemFont(ofSize: UIFont.systemFontSize)])
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
-                                                         highLightColor: hlStore.hlHighlightColor)
+                                                         highLightColor: hlHighlightColor)
             self.attributedText = attributedText
             hlText = ""
         }
