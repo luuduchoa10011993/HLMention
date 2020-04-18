@@ -102,11 +102,11 @@ class HLMentionsTextView: UITextView {
     
     func hlInitTableView() {
         guard let tableView = hlTableView else { return }
+        tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = hlStore.hlTableViewBackgroundColor
         tableView.tableFooterView = UIView()
-        tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
+        tableView.backgroundColor = hlStore.hlTableViewBackgroundColor
         
         let layer: CALayer = tableView.layer
         layer.borderWidth = hlStore.hlTaBleViewBorderWidth
