@@ -101,6 +101,7 @@
 		050CD40524417ED800570565 /* HLMentionInfo */ = {
 			isa = PBXGroup;
 			children = (
+				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
 				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
 			);
 			path = HLMentionInfo;
@@ -112,13 +113,12 @@
 				050CD40524417ED800570565 /* HLMentionInfo */,
 				05B25D74243EC74300E0051A /* HLMentionTableView */,
 				05B25D8F243EE0FD00E0051A /* HLInstant.swift */,
-				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
 				AC54014424350458007189AB /* HLMentionsTextView.swift */,
 				AC4267EE243A0A8E00049450 /* HLMention+Display.swift */,
 				0571E35724384A3400CDA62E /* HLMention+UITextView.swift */,
+				05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */,
 				0571E355243849F600CDA62E /* HLMention+String.swift */,
 				05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */,
-				05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */,
 			);
 			path = HLMention;
 			sourceTree = "<group>";

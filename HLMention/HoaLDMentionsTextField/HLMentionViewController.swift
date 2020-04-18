@@ -29,6 +29,7 @@ class HLMentionViewController: UIViewController {
         mentionTextView.kListMentionInfos = kMentionInfos
 //        mentionTextView.HLtext = text
 //        mentionTextView.kMentionInfos = getDemoData()
+        mentionTextView.hlStore.hlTableViewBackgroundColor = UIColor.white
         mentionTextView.hlResetData()
     }
     

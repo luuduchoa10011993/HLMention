@@ -17,6 +17,7 @@ class HLMentionSearchInfo: NSObject {
     var kFirstTextAfterkText = ""
     var kFirstTextAfterkTextRange = NSRange(location: 0,length: 0)
     
+    
     func removeAll() {
         kIsSearch = false
         kText.removeAll()

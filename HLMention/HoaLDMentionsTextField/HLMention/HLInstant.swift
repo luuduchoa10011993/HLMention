@@ -13,16 +13,25 @@ class HLInstant {
 //    public static var systemVersion = UIDevice.current.systemVersion
     
     var hlMentionInfosTableView = [HLMentionInfo]()
-    var hlTableViewMax = 5
     
-    var hlTableViewHeight: CGFloat = 220
+    var hlTableViewBackgroundColor: UIColor = UIColor.gray.withAlphaComponent(0.8)
+    var hlTableViewMax: Int = 5
+    var hlTableViewHeight: CGFloat = 100
+    var hlTaBleViewBorderColor = UIColor.black.cgColor
+    var hlTaBleViewBorderWidth: CGFloat = 1.0
+    var hlTaBleViewCornerRadius: CGFloat = 5.0
+    var hlTaBleViewMasksToBounds: Bool = true
     
     var hlMentionSymbol : Character = "@" // default value is @ [at]
     var hlText: String = ""
     var hlHighlightColor : UIColor = UIColor.red
     
-    var kRange = NSRange()
-    var kReplacementText = ""
+    var kRange = NSRange() /* don't touch */
+    var kReplacementText = "" /* don't touch */
     var hlMentionInfos = [HLMentionInfo]()
+    
+    // search
+    var hlMentionSearchInfo = HLMentionSearchInfo() /* don't touch */
+    var hlHowManyCharacterBeginSearch: Int = 0
 }
 

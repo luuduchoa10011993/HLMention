@@ -37,8 +37,12 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell:HLMentionTableViewCell = tableView.cellForRow(at: indexPath) as? HLMentionTableViewCell else { return }
         let mentionInfo = cell.getMentionInfo()
-        hlInsertMentionInfo(mentionInfo: mentionInfo.copyObject(), at: self.hlMentionSearchInfo.kRange)
+        hlInsertMentionInfo(mentionInfo: mentionInfo.copyObject(), at: self.hlStore.hlMentionSearchInfo.kRange)
         refreshMentionList()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
     
     func refreshMentionList(_ removeAll: Bool = true) {
