@@ -32,7 +32,7 @@ class HLMentionInfo: NSObject {
     var kId = ""
     var kName = ""
     var kImage: UIImage?
-    var kImageName = ""
+    var kImageName: String?
     var kAct: MentionInfoActType = .at
     var kType: MentionInfoType = .user
     var kRange = NSRange(location: 0,length: 0)
@@ -85,14 +85,16 @@ class HLMentionInfo: NSObject {
     }
     
     static public func mentionInfoFrom(users: [AnyObject]) -> [HLMentionInfo]? {
-        var mentionsInfos = [HLMentionInfo]()
+        let mentionsInfos = [HLMentionInfo]()
+        /*
         for user in users {
             let mentionInfo = HLMentionInfo("", "")
+            mentionInfo.kImageName = user.avatar
             mentionInfo.kAct = .at
             mentionInfo.kType = .user
             mentionsInfos.append(mentionInfo)
         }
-        
+        */
         if !mentionsInfos.isEmpty {
             return mentionsInfos
         }

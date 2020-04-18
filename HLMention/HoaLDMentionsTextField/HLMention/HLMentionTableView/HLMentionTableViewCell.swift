@@ -16,7 +16,7 @@ class HLMentionTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setupImageView()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -28,6 +28,11 @@ class HLMentionTableViewCell: UITableViewCell {
     func display(_ mentionInfo: HLMentionInfo) {
         self.mentionInfo = mentionInfo
         self.hlLblName.text = mentionInfo.kName
+    }
+    
+    func setupImageView() {
+        hlImageView.clipsToBounds = true
+        hlImageView.cornerRadius = 10.0
     }
     
     func getMentionInfo() -> HLMentionInfo {
