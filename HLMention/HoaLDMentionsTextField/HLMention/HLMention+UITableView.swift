@@ -42,7 +42,11 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let height = hlStore.hlTableViewCellHeight{
+            return height
+        }
         return UITableView.automaticDimension
+        
     }
     
     func refreshMentionList(_ removeAll: Bool = true) {

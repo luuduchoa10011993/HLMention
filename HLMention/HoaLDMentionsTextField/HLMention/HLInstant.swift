@@ -17,7 +17,8 @@ class HLInstant {
     var hlTableViewBackgroundColor: UIColor = UIColor.gray.withAlphaComponent(0.8)
     var hlTableViewMax: Int = 5
     var hlTableViewHeight: CGFloat = 100
-    var hlTaBleViewBorderColor = UIColor.black.cgColor
+    var hlTableViewCellHeight: CGFloat?
+    var hlTaBleViewBorderColor = UIColor.black.withAlphaComponent(0.5).cgColor
     var hlTaBleViewBorderWidth: CGFloat = 1.0
     var hlTaBleViewCornerRadius: CGFloat = 5.0
     var hlTaBleViewMasksToBounds: Bool = true
