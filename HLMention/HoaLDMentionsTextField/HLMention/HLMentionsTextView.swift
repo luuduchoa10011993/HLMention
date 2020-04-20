@@ -27,7 +27,7 @@ class HLMentionsTextView: UITextView {
     
     var hlMentionInfosTableView:[HLMentionInfo] {
         get {
-            return hlStore.hlMentionInfosTableView`
+            return hlStore.hlMentionInfosTableView
         }
         set {
             hlStore.hlMentionInfosTableView = newValue
