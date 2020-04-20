@@ -322,38 +322,58 @@ class HLMentionsTextView: UITextView {
         
         // remove when editing word
         if let mentionInfos = mentionInfoIsValidInRange(range: range, replacementString: text) {
-            kMentionInfoRemoved = true
-            if let mentionInfo = mentionInfos.first,
-                (text.isEmpty || text.count == 1) && mentionInfos.count == 1 {
-                
-                if (range.location >= mentionInfo.kRange.location)
-                    && (range.location < mentionInfo.kRange.location + mentionInfo.kRange.length)
-                    && range.length <= mentionInfo.kRange.length {
-                    guard let textRange = textRangeFromLocation(start: mentionInfo.kRange.location, end: mentionInfo.kRange.location + mentionInfo.kRange.length) else { return false}
-                    hlRemoveMentionInfo(mention: mentionInfo)
-                    hlStore.kRange = mentionInfo.kRange
-                    hlStore.kReplacementText = ""
-                    self.replace(textRange, withText: text)
-                    return false
+//            kMentionInfoRemoved = true
+//            if let mentionInfo = mentionInfos.first,
+//                (text.isEmpty || text.count == 1) && mentionInfos.count == 1 {
+//                if (range.location >= mentionInfo.kRange.location)
+//                    && (range.location < mentionInfo.kRange.location + mentionInfo.kRange.length)
+//                    && range.length <= mentionInfo.kRange.length {
+//                    guard let textRange = textRangeFromLocation(start: mentionInfo.kRange.location, end: mentionInfo.kRange.location + mentionInfo.kRange.length) else { return false}
+//                    hlRemoveMentionInfo(mention: mentionInfo)
+//                    hlStore.kRange = mentionInfo.kRange
+//                    hlStore.kReplacementText = ""
+//                    self.replace(textRange, withText: text)
+//                    return false
+//                }
+//
+//                for mentionInfo in mentionInfos {
+//                    hlRemoveMentionInfo(mention: mentionInfo)
+//                }
+//                kMentionCurrentCursorLocation = range.location - range.length
+//
+//                kMentionCurrentCursorLocation = mentionInfo.kRange.location + text.count
+//                if text.isValidCharacterBackSpace() {
+//                    kMentionCurrentCursorLocation -= range.length
+//                }
+//                return false
+//            }
+            
+            // detect new range location remove string to replace
+            var newRange = NSRange(location: range.location, length: range.length)
+            
+            for mentionInfo in mentionInfos {
+                if newRange.location > mentionInfo.kRange.location {
+                    newRange.length += (newRange.location - mentionInfo.kRange.location)
+                    newRange.location = mentionInfo.kRange.location
                 }
                 
-                for mentionInfo in mentionInfos {
-                    hlRemoveMentionInfo(mention: mentionInfo)
+                if newRange.location + newRange.length < mentionInfo.kRange.location + mentionInfo.kRange.length {
+                    newRange.length = mentionInfo.kRange.location + mentionInfo.kRange.length
                 }
-                kMentionCurrentCursorLocation = range.location - range.length
-                
-                kMentionCurrentCursorLocation = mentionInfo.kRange.location + text.count
-                if text.isValidCharacterBackSpace() {
-                    kMentionCurrentCursorLocation -= range.length
-                }
-                return false
             }
+            
+            //            hlStore.kRange = mentionInfo.kRange
+            hlStore.kReplacementText = ""
             
             // mention info have more than one and replacementStri@ng count > 1
             for mentionInfo in mentionInfos {
                 hlRemoveMentionInfo(mention: mentionInfo)
             }
-            kMentionCurrentCursorLocation = range.location - range.length
+            
+            kMentionCurrentCursorLocation = newRange.location - newRange.length
+            if let textRange = textRangeFromLocation(start: newRange.location, end: newRange.location + newRange.length) {
+                self.replace(textRange, withText: text)
+            }
             return false
         }
         return true
