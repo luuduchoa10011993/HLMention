@@ -70,8 +70,12 @@ extension HLMentionViewController: HLMentionsTextViewDelegate {
     }
     */
     
-    func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String) {
-        postBtn.setTitle(searchText, for: UIControl.State.normal)
+    func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String?) {
+        if let searchText = searchText {
+            postBtn.setTitle(searchText, for: UIControl.State.normal)
+        } else {
+            postBtn.setTitle("Post", for: UIControl.State.normal)
+        }
     }
 }
 
