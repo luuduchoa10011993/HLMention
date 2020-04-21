@@ -70,7 +70,6 @@ class HLMentionsTextView: UITextView {
     
     private var kLastCursorLocation = 0
     private var kMentionCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
-    private var kMentionInfoRemoved: Bool = false
 
     // don't touch
     private var kMentionInfoInsertInfrontRange: NSRange?
@@ -322,32 +321,6 @@ class HLMentionsTextView: UITextView {
         
         // remove when editing word
         if let mentionInfos = mentionInfoIsValidInRange(range: range, replacementString: text) {
-//            kMentionInfoRemoved = true
-//            if let mentionInfo = mentionInfos.first,
-//                (text.isEmpty || text.count == 1) && mentionInfos.count == 1 {
-//                if (range.location >= mentionInfo.kRange.location)
-//                    && (range.location < mentionInfo.kRange.location + mentionInfo.kRange.length)
-//                    && range.length <= mentionInfo.kRange.length {
-//                    guard let textRange = textRangeFromLocation(start: mentionInfo.kRange.location, end: mentionInfo.kRange.location + mentionInfo.kRange.length) else { return false}
-//                    hlRemoveMentionInfo(mention: mentionInfo)
-//                    hlStore.kRange = mentionInfo.kRange
-//                    hlStore.kReplacementText = ""
-//                    self.replace(textRange, withText: text)
-//                    return false
-//                }
-//
-//                for mentionInfo in mentionInfos {
-//                    hlRemoveMentionInfo(mention: mentionInfo)
-//                }
-//                kMentionCurrentCursorLocation = range.location - range.length
-//
-//                kMentionCurrentCursorLocation = mentionInfo.kRange.location + text.count
-//                if text.isValidCharacterBackSpace() {
-//                    kMentionCurrentCursorLocation -= range.length
-//                }
-//                return false
-//            }
-            
             // detect new range location remove string to replace
             var newRange = NSRange(location: range.location, length: range.length)
             
@@ -365,7 +338,7 @@ class HLMentionsTextView: UITextView {
             //            hlStore.kRange = mentionInfo.kRange
             hlStore.kReplacementText = ""
             
-            // mention info have more than one and replacementStri@ng count > 1
+            // mention info have more than one and replacementString count > 1
             for mentionInfo in mentionInfos {
                 hlRemoveMentionInfo(mention: mentionInfo)
             }
