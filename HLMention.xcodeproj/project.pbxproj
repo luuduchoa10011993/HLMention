@@ -137,6 +137,16 @@
 			path = HLMentionExtentions;
 			sourceTree = "<group>";
 		};
+		05913BCD24503CEC00152AB5 /* Podspec Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				050AE71A244ECE98009428A7 /* HLMention.podspec */,
+				050AE719244ECE98009428A7 /* LICENSE */,
+				050AE718244ECE98009428A7 /* README.md */,
+			);
+			path = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
 		05B25D74243EC74300E0051A /* HLMentionTableView */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,9 +159,7 @@
 		ACF3C339243503720085AE41 = {
 			isa = PBXGroup;
 			children = (
-				050AE71A244ECE98009428A7 /* HLMention.podspec */,
-				050AE719244ECE98009428A7 /* LICENSE */,
-				050AE718244ECE98009428A7 /* README.md */,
+				05913BCD24503CEC00152AB5 /* Podspec Metadata */,
 				ACF3C344243503720085AE41 /* HLMention */,
 				ACF3C35B243503730085AE41 /* HLMentionTests */,
 				ACF3C366243503730085AE41 /* HLMentionUITests */,
