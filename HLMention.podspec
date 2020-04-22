@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '13.0'
   s.requires_arc = true
 
-  s.source_files = 'HLMention/**/*'
+  s.source_files = 'HLMention/*'
 #  s.resources = 'Pod/Assets/*'
 
 
