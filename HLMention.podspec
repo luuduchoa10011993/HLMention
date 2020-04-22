@@ -19,8 +19,9 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '13.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes'
-  s.resources = 'Pod/Assets/*'
+  s.source_files = 'HLMention/**/*'
+#  s.resources = 'Pod/Assets/*'
+
 
   s.frameworks = 'UIKit'
   s.module_name = 'HLMention'
