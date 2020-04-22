@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "HLMention"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.homepage         = "https://github.com/aldhoa/HLMention"
   s.author           = { 'LUU DUC HOA' => 'luuduchoa10011993@gmail.com' }
