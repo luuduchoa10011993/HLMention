@@ -41,6 +41,18 @@ extension UITextView {
         return self.textRange(from: newPosition, to: position)
     }
     
+    func hlSelectedRange(from selectedRange: UITextRange) -> NSRange {
+        let beginning: UITextPosition = self.beginningOfDocument
+
+        let selectionStart: UITextPosition = selectedRange.start
+        let selectionEnd: UITextPosition = selectedRange.end
+
+        let location = self.offset(from: beginning, to: selectionStart)
+        let length = self.offset(from: selectionStart, to: selectionEnd)
+
+        return NSMakeRange(location, length)
+    }
+    
     func getCurrentCursorLocation() -> Int {
         if let selectedRange = self.selectedTextRange {
             return self.offset(from: self.beginningOfDocument, to: selectedRange.start)

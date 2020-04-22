@@ -257,6 +257,22 @@ class HLMentionsTextView: UITextView {
         hlSetCurrentCursorLocation(index: range.location + insertString.count)
     }
     
+    func hlInsertMentionInfo(mentionInfo: HLMentionInfo,at textRange: UITextRange) {
+        let range = hlSelectedRange(from: textRange)
+        let insertString = String(kMentionSymbol) + mentionInfo.kName
+        
+        let mention = mentionInfo.copy() as! HLMentionInfo
+        mention.kRange = NSRange(location: range.location,
+                                 length: insertString.count)
+        
+        hlUpdateMentionInfosRange(range: NSRange(location: range.location, length: range.length), insertTextCount: insertString.count)
+        hlStore.hlMentionInfos.append(mention)
+        
+        kTextViewDidChange = false
+        self.replace(textRange, withText: insertString)
+        hlSetCurrentCursorLocation(index: range.location + insertString.count)
+    }
+    
     // remove MentionInfo
     func removeMentionInfoAndUpdateLocation(mentionInfo: HLMentionInfo) {
         if var string = text {

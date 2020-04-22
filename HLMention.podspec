@@ -9,10 +9,10 @@
 Pod::Spec.new do |s|
   s.name             = "HLMention"
   s.version          = "0.1.0"
-  s.summary          = "HLMention help developer to user tag user for textview custom."
-  s.homepage         = "https://github.com/aldhoa/HLMention"
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  s.homepage         = "https://github.com/aldhoa/HLMention"
   s.author           = { 'LUU DUC HOA' => 'luuduchoa10011993@gmail.com' }
+  s.summary          = "HLMention help developer to user tag user for textview custom for iOS"
   s.source           = { :git => "https://github.com/aldhoa/HLMention.git", :tag => s.version }
   s.social_media_url = ''
 

@@ -118,15 +118,23 @@
 			children = (
 				050CD40524417ED800570565 /* HLMentionInfo */,
 				05B25D74243EC74300E0051A /* HLMentionTableView */,
+				05913BC924501F1500152AB5 /* HLMentionExtentions */,
 				05B25D8F243EE0FD00E0051A /* HLInstant.swift */,
 				AC54014424350458007189AB /* HLMentionsTextView.swift */,
+			);
+			path = HLMention;
+			sourceTree = "<group>";
+		};
+		05913BC924501F1500152AB5 /* HLMentionExtentions */ = {
+			isa = PBXGroup;
+			children = (
 				AC4267EE243A0A8E00049450 /* HLMention+Display.swift */,
 				0571E35724384A3400CDA62E /* HLMention+UITextView.swift */,
 				05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */,
 				0571E355243849F600CDA62E /* HLMention+String.swift */,
 				05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */,
 			);
-			path = HLMention;
+			path = HLMentionExtentions;
 			sourceTree = "<group>";
 		};
 		05B25D74243EC74300E0051A /* HLMentionTableView */ = {
@@ -136,15 +144,6 @@
 				05B25D76243EC79400E0051A /* HLMentionTableViewCell.xib */,
 			);
 			path = HLMentionTableView;
-			sourceTree = "<group>";
-		};
-		AC54014324350458007189AB /* HoaLDMentionsTextField */ = {
-			isa = PBXGroup;
-			children = (
-				0571E354243849CB00CDA62E /* HLMention */,
-				ACF3C349243503720085AE41 /* HLMentionViewController.swift */,
-			);
-			path = HoaLDMentionsTextField;
 			sourceTree = "<group>";
 		};
 		ACF3C339243503720085AE41 = {
@@ -173,7 +172,8 @@
 		ACF3C344243503720085AE41 /* HLMention */ = {
 			isa = PBXGroup;
 			children = (
-				AC54014324350458007189AB /* HoaLDMentionsTextField */,
+				0571E354243849CB00CDA62E /* HLMention */,
+				ACF3C349243503720085AE41 /* HLMentionViewController.swift */,
 				ACF3C345243503720085AE41 /* AppDelegate.swift */,
 				ACF3C347243503720085AE41 /* SceneDelegate.swift */,
 				ACF3C34B243503720085AE41 /* Main.storyboard */,
