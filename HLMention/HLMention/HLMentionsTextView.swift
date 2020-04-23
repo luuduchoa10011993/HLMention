@@ -118,6 +118,7 @@ class HLMentionsTextView: UITextView {
     }
     
     func hlSetDisplayText() {
+        if hlStore.hlText.isEmpty { return }
         var mentionText = hlStore.hlText
         for mentionInfo in hlStore.hlMentionInfos {
             let findString = mentionInfo.getTagID()
