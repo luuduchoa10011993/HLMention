@@ -328,7 +328,7 @@ class HLMentionsTextView: UITextView {
         
         hlStore.hlRange = range
         hlStore.hlReplacementText = text
-        
+        hlCurrentCursorLocation = range.location + text.count
         if text == String(hlStore.hlMentionSymbol) {
             hlStore.hlMentionSearchInfo.kRange = NSMakeRange(range.location, text.count)
         } else if hlStore.hlReplacementText == " " && hlStore.hlRange.length == 0 {
@@ -366,6 +366,7 @@ class HLMentionsTextView: UITextView {
             hlTableView?.reloadData()
             return
         }
+        
         if let delegate = hlDelegate {
             if let searchText = hlHandleSearchString(with: currentWord), hlStore.hlReplacementText != " " {
                 delegate.hlMentionsTextViewCallBackFromSearch?(self, searchText: searchText)
