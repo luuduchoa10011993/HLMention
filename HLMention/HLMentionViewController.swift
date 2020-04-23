@@ -26,7 +26,7 @@ class HLMentionViewController: UIViewController {
         super.viewDidLoad()
         mentionTextView.hlDelegate = self
         mentionTextView.delegate = self
-        mentionTextView.kListMentionInfos = kMentionInfos
+        mentionTextView.hlStore.hlListMentionInfos = kMentionInfos
         mentionTextView.hlStore.hlText = text
         mentionTextView.hlStore.hlMentionInfos = getDemoData()
         mentionTextView.hlStore.hlTableViewBackgroundColor = UIColor.white
@@ -35,10 +35,10 @@ class HLMentionViewController: UIViewController {
     
     func getDemoData() -> [HLMentionInfo] {
         let HoaLD = HLMentionInfo("00", "Hoa")
-        HoaLD.kRange = NSRange(location: 0, length: 4)
+        HoaLD.kRange = NSMakeRange(0, HoaLD.kName.count)
         
         let VyNK = HLMentionInfo("04", "Nguyễn Kiều Vy")
-        VyNK.kRange = NSRange(location: 14, length: 15)
+        VyNK.kRange = NSMakeRange(13, VyNK.kName.count)
         
         return [HoaLD, VyNK]
     }

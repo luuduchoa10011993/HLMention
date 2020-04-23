@@ -23,6 +23,8 @@ class HLMentionsTextView: UITextView {
     @IBOutlet weak var hlTableViewDelegate: UITableViewDelegate?
     @IBOutlet weak var hlTableViewHeightConstaint: NSLayoutConstraint!
     
+    private var hlTextViewDidChange = true
+    
     var hlStore = HLInstant()
     
     var hlMentionInfosTableView:[HLMentionInfo] {
@@ -36,31 +38,11 @@ class HLMentionsTextView: UITextView {
             }
         }
     }
-    var hlText: String {
-        get {
-            return hlStore.hlText
-        }
-        set {
-            hlStore.hlText = newValue
-        }
-    }
     
     weak var hlDelegate: HLMentionsTextViewDelegate?
     
-    //HL Search offline data
-    var kListMentionInfos: [HLMentionInfo]?
     
     //full all data or data need to setup
-    var kMentionSymbol : Character {
-        get {
-            return hlStore.hlMentionSymbol
-        }
-        set {
-            hlStore.hlMentionSymbol = newValue
-        }
-    }
-    
-
     var hlTypingAttributes: Dictionary<String, Any> = [NSAttributedString.Key.foregroundColor.rawValue: UIColor.darkText,
                                                       NSAttributedString.Key.paragraphStyle.rawValue: NSParagraphStyle(),
                                                       NSAttributedString.Key.font.rawValue: UIFont.systemFont(ofSize: UIFont.systemFontSize)]
@@ -68,17 +50,11 @@ class HLMentionsTextView: UITextView {
 //    var hlFont : UIFont = UIFont.systemFont(ofSize: UIFont.systemFontSize)
 //    var hlTextColor : UIColor = UIColor.darkText
     
-    private var kLastCursorLocation = 0
     private var hlCurrentCursorLocation: Int = 0 // after edit or doing text change -> set this
 
     // don't touch
     private var kMentionInfoInsertInfrontRange: NSRange?
     private var hlUndoText = ""
-    
-
-    var hlTextViewDidChange = true
-    
-//    var kMentionLastEditLocation: Int = 0
     
     func getTextAndMentionInfos() -> (attributeText: NSAttributedString, mentionInfos: [HLMentionInfo])? {
         let mentionInfos = hlStore.hlMentionInfos
@@ -98,13 +74,10 @@ class HLMentionsTextView: UITextView {
         hlAttributeStringMentionInfo()
         hlInitTextView()
         hlInitTableView()
-        
     }
     
     func hlInitTextView() {
-        if returnKeyType == .default {
-            returnKeyType = .default
-        }
+        returnKeyType = .default
     }
     
     func hlInitTableView() {
@@ -139,43 +112,33 @@ class HLMentionsTextView: UITextView {
     
     func hlRemoveData() {
         hlStore.hlMentionSearchInfo.removeAll()
-        kListMentionInfos?.removeAll()
+        hlStore.hlListMentionInfos?.removeAll()
         hlStore.hlMentionInfos.removeAll()
         hlMentionInfosTableView.removeAll()
     }
     
     func hlSetDisplayText() {
-        var mentionText = hlText
+        var mentionText = hlStore.hlText
         for mentionInfo in hlStore.hlMentionInfos {
             let findString = mentionInfo.getTagID()
-            let replaceString = "\(kMentionSymbol)\(mentionInfo.kName)"
+            let replaceString = mentionInfo.kName
             if mentionInfo.kRange.length == 0 && mentionInfo.kRange.location == 0 {
-                mentionInfo.kRange = NSRange(location: mentionText.indexOfString(text: findString), length: replaceString.count)
+                mentionInfo.kRange = NSMakeRange(mentionText.indexOfString(text: findString), replaceString.count)
             }
             mentionText = mentionText.replacingOccurrences(of: findString, with: replaceString)
         }
-        hlText = mentionText
-    }
-    
-    func hlGetMentionInfoText() -> String{
-        guard var mentionText = text else {
-            return ""
-        }
-        for mentionInfo in hlStore.hlMentionInfos {
-            mentionText = mentionText.replacingOccurrences(of: "\(kMentionSymbol)\(mentionInfo.kName)", with: mentionInfo.getTagID())
-        }
-        return mentionText
+        hlStore.hlText = mentionText
     }
     
     func hlAttributeStringMentionInfo() {
-        if hlText.isEmpty {
+        if hlStore.hlText.isEmpty {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(attributedString: self.attributedText)
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
                                                          highLightColor: hlStore.hlHighlightColor)
             self.attributedText = attributedText
         } else {
-            let attributedText: NSMutableAttributedString = NSMutableAttributedString(string: hlText,
+            let attributedText: NSMutableAttributedString = NSMutableAttributedString(string: hlStore.hlText,
                                                                                       attributes: [NSAttributedString.Key.foregroundColor: UIColor.darkText,
                                                                                       NSAttributedString.Key.paragraphStyle: NSParagraphStyle(),
                                                                                       NSAttributedString.Key.font: UIFont.systemFont(ofSize: UIFont.systemFontSize)])
@@ -183,15 +146,15 @@ class HLMentionsTextView: UITextView {
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
                                                          highLightColor: hlStore.hlHighlightColor)
             self.attributedText = attributedText
-            hlText = ""
+            hlStore.hlText = ""
         }
     }
     
     func hlHandleSearch(from kMentionInfos: [HLMentionInfo], with word: String) -> [HLMentionInfo]? {
         var currentWord = word
-        if currentWord.count >= (String(kMentionSymbol).count + hlStore.hlHowManyCharacterBeginSearch) {
-            if currentWord.stringFrom(start: 0, end: 1) == String(kMentionSymbol) {
-                hlStore.hlMentionSearchInfo.kRange = NSRange(location: getCurrentWordLocation(), length: currentWord.count)
+        if currentWord.count >= (String(hlStore.hlMentionSymbol).count + hlStore.hlHowManyCharacterBeginSearch) {
+            if currentWord.stringFrom(start: 0, end: 1) == String(hlStore.hlMentionSymbol) {
+                hlStore.hlMentionSearchInfo.kRange = NSMakeRange(getCurrentWordLocation(), currentWord.count)
                 hlStore.hlMentionSearchInfo.kText = String(currentWord.dropFirst())
                 
                 if !hlStore.hlMentionSearchInfo.kText.isEmpty {
@@ -213,9 +176,9 @@ class HLMentionsTextView: UITextView {
 
     func hlHandleSearchString(with word: String) -> String? {
         var currentWord = word
-        if currentWord.count >= (String(kMentionSymbol).count + hlStore.hlHowManyCharacterBeginSearch) {
-            if currentWord.stringFrom(start: 0, end: 1) == String(kMentionSymbol) {
-                hlStore.hlMentionSearchInfo.kRange = NSRange(location: getCurrentWordLocation(), length: currentWord.count)
+        if currentWord.count >= (String(hlStore.hlMentionSymbol).count + hlStore.hlHowManyCharacterBeginSearch) {
+            if currentWord.stringFrom(start: 0, end: 1) == String(hlStore.hlMentionSymbol) {
+                hlStore.hlMentionSearchInfo.kRange = NSMakeRange(getCurrentWordLocation(), currentWord.count)
                 hlStore.hlMentionSearchInfo.kText = String(currentWord.dropFirst())
                 return hlStore.hlMentionSearchInfo.kText
             }
@@ -226,7 +189,7 @@ class HLMentionsTextView: UITextView {
     func rangeTextInsertInfrontMention(range: NSRange, replacementString: String) -> NSRange? {
         for mentionInfo in hlStore.hlMentionInfos {
             if range.location == mentionInfo.kRange.location {
-                return NSRange(location: range.location, length: replacementString.count)
+                return NSMakeRange(range.location, replacementString.count)
             }
         }
         return nil
@@ -251,13 +214,12 @@ class HLMentionsTextView: UITextView {
     func hlInsertMentionInfo(mentionInfo: HLMentionInfo,at range: NSRange) {
         guard let textRange = textRangeFromLocation(start: range.location, end: range.location + range.length) else { return }
         
-        let insertString = String(kMentionSymbol) + mentionInfo.kName
+        let insertString = mentionInfo.kName
         
         let mention = mentionInfo.copy() as! HLMentionInfo
-        mention.kRange = NSRange(location: range.location,
-                                 length: insertString.count)
+        mention.kRange = NSMakeRange(range.location, insertString.count)
         
-        hlUpdateMentionInfosRange(range: NSRange(location: range.location, length: range.length), insertTextCount: insertString.count)
+        hlUpdateMentionInfosRange(range: NSMakeRange(range.location, range.length), insertTextCount: insertString.count)
         hlStore.hlMentionInfos.append(mention)
         
         hlTextViewDidChange = false
@@ -267,13 +229,12 @@ class HLMentionsTextView: UITextView {
     
     func hlInsertMentionInfo(mentionInfo: HLMentionInfo,at textRange: UITextRange) {
         let range = hlSelectedRange(from: textRange)
-        let insertString = String(kMentionSymbol) + mentionInfo.kName
+        let insertString = mentionInfo.kName
         
         let mention = mentionInfo.copy() as! HLMentionInfo
-        mention.kRange = NSRange(location: range.location,
-                                 length: insertString.count)
+        mention.kRange = NSMakeRange(range.location, insertString.count)
         
-        hlUpdateMentionInfosRange(range: NSRange(location: range.location, length: range.length), insertTextCount: insertString.count)
+        hlUpdateMentionInfosRange(range: NSMakeRange(range.location, range.length), insertTextCount: insertString.count)
         hlStore.hlMentionInfos.append(mention)
         
         hlTextViewDidChange = false
@@ -298,7 +259,7 @@ class HLMentionsTextView: UITextView {
     }
     
     func hlUpdateMentionLocation() {
-        hlUpdateMentionInfosRange(range: hlStore.kRange, insertTextCount: hlStore.kReplacementText.count)
+        hlUpdateMentionInfosRange(range: hlStore.hlRange, insertTextCount: hlStore.hlReplacementText.count)
     }
     
     func hlUpdateMentionInfosRange(range: NSRange, insertTextCount: Int) {
@@ -310,7 +271,7 @@ class HLMentionsTextView: UITextView {
         }
         
         if insertTextCount > 0 {
-            hlUpdatekMentionInfosInsertRange(range: NSRange(location: range.location, length: insertTextCount))
+            hlUpdatekMentionInfosInsertRange(range: NSMakeRange(range.location, insertTextCount))
         }
     }
     
@@ -351,7 +312,7 @@ class HLMentionsTextView: UITextView {
             }
             
             //            hlStore.kRange = mentionInfo.kRange
-            hlStore.kReplacementText = ""
+            hlStore.hlReplacementText = ""
             
             // mention info have more than one and replacementString count > 1
             for mentionInfo in mentionInfos {
@@ -365,12 +326,12 @@ class HLMentionsTextView: UITextView {
             return false
         }
         
-        hlStore.kRange = range
-        hlStore.kReplacementText = text
+        hlStore.hlRange = range
+        hlStore.hlReplacementText = text
         
-        if text == String(kMentionSymbol) {
-            hlStore.hlMentionSearchInfo.kRange = NSRange(location: range.location, length:text.count)
-        } else if hlStore.kReplacementText == " " && hlStore.kRange.length == 0 {
+        if text == String(hlStore.hlMentionSymbol) {
+            hlStore.hlMentionSearchInfo.kRange = NSMakeRange(range.location, text.count)
+        } else if hlStore.hlReplacementText == " " && hlStore.hlRange.length == 0 {
             return true
         }
         
@@ -387,17 +348,16 @@ class HLMentionsTextView: UITextView {
             return
         }
         
-//        let currentCursorLocation = getCurrentCursorLocation()
         if hlUndoText.count != text.count && !hlStore.hlMentionInfos.isEmpty {
             hlUpdateMentionLocation()
             hlAttributeStringMentionInfo()
-        } else if hlStore.kReplacementText == " " && hlStore.kRange.length == 0 {
+        } else if hlStore.hlReplacementText == " " && hlStore.hlRange.length == 0 {
             hlUpdateMentionLocation()
             hlMentionInfosTableView.removeAll()
         }
         
         let currentWord = self.currentWord()
-        if let kListMentionInfos = kListMentionInfos {
+        if let kListMentionInfos = hlStore.hlListMentionInfos {
             if let mentionInfos = hlHandleSearch(from: kListMentionInfos,with: currentWord) {
                 hlMentionInfosTableView = mentionInfos
             } else {
@@ -407,7 +367,7 @@ class HLMentionsTextView: UITextView {
             return
         }
         if let delegate = hlDelegate {
-            if let searchText = hlHandleSearchString(with: currentWord), hlStore.kReplacementText != " " {
+            if let searchText = hlHandleSearchString(with: currentWord), hlStore.hlReplacementText != " " {
                 delegate.hlMentionsTextViewCallBackFromSearch?(self, searchText: searchText)
                 return
             } else {
@@ -415,7 +375,6 @@ class HLMentionsTextView: UITextView {
             }
         }
         
-        kLastCursorLocation = hlCurrentCursorLocation
         hlAttributeStringMentionInfo()
         hlSetTypingAttributes()
         hlSetCurrentCursorLocation(index: hlCurrentCursorLocation)

@@ -23,12 +23,14 @@ class HLInstant {
     var hlTaBleViewCornerRadius: CGFloat = 5.0
     var hlTaBleViewMasksToBounds: Bool = true
     
+    //HL Search offline data
+    var hlListMentionInfos: [HLMentionInfo]?
     var hlMentionSymbol : Character = "@" // default value is @ [at]
     var hlText: String = ""
     var hlHighlightColor : UIColor = UIColor.red
     
-    var kRange = NSRange() /* don't touch */
-    var kReplacementText = "" /* don't touch */
+    var hlRange = NSRange() /* don't touch */
+    var hlReplacementText = "" /* don't touch */
     var hlMentionInfos = [HLMentionInfo]()
     
     // search

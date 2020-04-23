@@ -107,8 +107,8 @@
 		050CD40524417ED800570565 /* HLMentionInfo */ = {
 			isa = PBXGroup;
 			children = (
-				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
 				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
+				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
 			);
 			path = HLMentionInfo;
 			sourceTree = "<group>";
