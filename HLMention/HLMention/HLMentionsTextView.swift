@@ -341,6 +341,7 @@ class HLMentionsTextView: UITextView {
     
     func hlTextViewDidChange(_ textView: UITextView) {
         
+        test()
         if !hlTextViewDidChange {
             hlAttributeStringMentionInfo()
             hlSetTypingAttributes()
@@ -381,5 +382,22 @@ class HLMentionsTextView: UITextView {
         hlSetTypingAttributes()
         hlSetCurrentCursorLocation(index: hlCurrentCursorLocation)
         hlUndoText = text
+    }
+    
+    func test() {
+        let attributedText = NSAttributedString(string: "Hello, playground", attributes: [
+          .foregroundColor: UIColor.red,
+          .backgroundColor: UIColor.green,
+          .ligature: 1,
+          .strikethroughStyle: 1
+        ])
+
+        // retrieve attributes
+        let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
+
+        // iterate each attribute
+        for attr in attributes {
+          print(attr.key, attr.value)
+        }
     }
 }

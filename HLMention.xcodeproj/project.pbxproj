@@ -12,6 +12,7 @@
 		050AE71D244ECE98009428A7 /* HLMention.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 050AE71A244ECE98009428A7 /* HLMention.podspec */; };
 		0571E356243849F600CDA62E /* HLMention+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E355243849F600CDA62E /* HLMention+String.swift */; };
 		0571E35824384A3400CDA62E /* HLMention+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E35724384A3400CDA62E /* HLMention+UITextView.swift */; };
+		057D3F3424596FD9000D91C8 /* image01.png in Resources */ = {isa = PBXBuildFile; fileRef = 057D3F3324596FD9000D91C8 /* image01.png */; };
 		05B25D5C243AD81200E0051A /* HLMentionSearchInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */; };
 		05B25D5E243C574100E0051A /* HLMention+NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */; };
 		05B25D60243D8D2100E0051A /* HLMention+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */; };
@@ -54,6 +55,7 @@
 		050AE71A244ECE98009428A7 /* HLMention.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HLMention.podspec; sourceTree = "<group>"; };
 		0571E355243849F600CDA62E /* HLMention+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+String.swift"; sourceTree = "<group>"; };
 		0571E35724384A3400CDA62E /* HLMention+UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITextView.swift"; sourceTree = "<group>"; };
+		057D3F3324596FD9000D91C8 /* image01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image01.png; sourceTree = "<group>"; };
 		05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionSearchInfo.swift; sourceTree = "<group>"; };
 		05B25D5D243C574100E0051A /* HLMention+NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+NSMutableAttributedString.swift"; sourceTree = "<group>"; };
 		05B25D5F243D8D2100E0051A /* HLMention+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITableView.swift"; sourceTree = "<group>"; };
@@ -125,6 +127,14 @@
 			path = HLMention;
 			sourceTree = "<group>";
 		};
+		057D3F3224596F36000D91C8 /* MetaData */ = {
+			isa = PBXGroup;
+			children = (
+				057D3F3324596FD9000D91C8 /* image01.png */,
+			);
+			path = MetaData;
+			sourceTree = "<group>";
+		};
 		05913BC924501F1500152AB5 /* HLMentionExtentions */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +162,7 @@
 				050AE71A244ECE98009428A7 /* HLMention.podspec */,
 				050AE719244ECE98009428A7 /* LICENSE */,
 				050AE718244ECE98009428A7 /* README.md */,
+				057D3F3224596F36000D91C8 /* MetaData */,
 				ACF3C344243503720085AE41 /* HLMention */,
 				ACF3C35B243503730085AE41 /* HLMentionTests */,
 				ACF3C366243503730085AE41 /* HLMentionUITests */,
@@ -307,6 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				050AE71C244ECE98009428A7 /* LICENSE in Resources */,
+				057D3F3424596FD9000D91C8 /* image01.png in Resources */,
 				ACF3C352243503730085AE41 /* LaunchScreen.storyboard in Resources */,
 				05B25D78243EC79400E0051A /* HLMentionTableViewCell.xib in Resources */,
 				050AE71D244ECE98009428A7 /* HLMention.podspec in Resources */,

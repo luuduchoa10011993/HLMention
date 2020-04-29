@@ -18,7 +18,7 @@ class HLInstant {
     var hlTableViewMax: Int = 5
     var hlTableViewHeight: CGFloat = 100
     var hlTableViewCellHeight: CGFloat?
-    var hlTaBleViewBorderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+    var hlTaBleViewBorderColor: CGColor = UIColor.black.withAlphaComponent(0.5).cgColor
     var hlTaBleViewBorderWidth: CGFloat = 1.0
     var hlTaBleViewCornerRadius: CGFloat = 5.0
     var hlTaBleViewMasksToBounds: Bool = true
@@ -37,4 +37,3 @@ class HLInstant {
     var hlMentionSearchInfo = HLMentionSearchInfo() /* don't touch */
     var hlHowManyCharacterBeginSearch: Int = 0
 }
-
