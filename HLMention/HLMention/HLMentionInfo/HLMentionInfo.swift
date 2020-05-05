@@ -52,6 +52,14 @@ class HLMentionInfo: NSObject {
         self.kName = name
     }
     
+    init(_ id: String,_ name: String, _ image: String?) {
+        self.kId = id
+        self.kName = name
+        if let image = image {
+            self.kImageName = image
+        }
+    }
+    
     func getTagID() -> String {
         return "::\(kId)::"
     }

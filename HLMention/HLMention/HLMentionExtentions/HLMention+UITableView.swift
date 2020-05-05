@@ -38,6 +38,7 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
         guard let cell:HLMentionTableViewCell = tableView.cellForRow(at: indexPath) as? HLMentionTableViewCell else { return }
         let mentionInfo = cell.getMentionInfo()
         hlInsertMentionInfo(mentionInfo: mentionInfo.copyObject(), at: self.hlStore.hlMentionSearchInfo.kRange)
+        hlStore.hlMentionSearchInfo.removeAll()
         refreshMentionList()
     }
     

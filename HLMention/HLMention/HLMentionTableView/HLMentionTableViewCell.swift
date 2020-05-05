@@ -28,6 +28,7 @@ class HLMentionTableViewCell: UITableViewCell {
     func display(_ mentionInfo: HLMentionInfo) {
         self.mentionInfo = mentionInfo
         self.hlLblName.text = mentionInfo.kName
+        self.hlImageView.image = mentionInfo.kImage
     }
     
     func setupImageView() {

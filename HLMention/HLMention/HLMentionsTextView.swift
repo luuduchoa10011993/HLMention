@@ -62,9 +62,11 @@ class HLMentionsTextView: UITextView {
         let mentionAttributeText = NSMutableAttributedString(attributedString: attributedText)
         mentionAttributeText.hlAttributeStringRemoveAttributes()
         for mentionInfo in mentionInfos {
-            mentionAttributeText.replaceCharacters(in: mentionInfo.kRange, with: mentionInfo.getTagID())
-            hlUpdateMentionInfosRange(range: mentionInfo.kRange, insertTextCount: mentionInfo.getTagID().count)
-            print(mentionAttributeText.string)
+            if mentionInfo.kAct == .with {
+                mentionAttributeText.replaceCharacters(in: mentionInfo.kRange, with: mentionInfo.getTagID())
+                hlUpdateMentionInfosRange(range: mentionInfo.kRange, insertTextCount: mentionInfo.getTagID().count)
+                print(mentionAttributeText.string)
+            }
         }
         return(mentionAttributeText, mentionInfos)
     }
@@ -87,12 +89,13 @@ class HLMentionsTextView: UITextView {
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = hlStore.hlTableViewBackgroundColor
+        tableView.separatorColor = UIColor.clear
         
         let layer: CALayer = tableView.layer
-        layer.borderWidth = hlStore.hlTaBleViewBorderWidth
-        layer.borderColor = hlStore.hlTaBleViewBorderColor
-        layer.cornerRadius = hlStore.hlTaBleViewCornerRadius
-        layer.masksToBounds = hlStore.hlTaBleViewMasksToBounds
+        layer.borderWidth = hlStore.hlTableViewBorderWidth
+        layer.borderColor = hlStore.hlTableViewBorderColor
+        layer.cornerRadius = hlStore.hlTableViewCornerRadius
+        layer.masksToBounds = hlStore.hlTableViewMasksToBounds
         
         if hlTableViewHeightConstaint.constant > 0 {
             if hlTableViewHeightConstaint.constant <= hlStore.hlTableViewHeight {
@@ -121,12 +124,14 @@ class HLMentionsTextView: UITextView {
         if hlStore.hlText.isEmpty { return }
         var mentionText = hlStore.hlText
         for mentionInfo in hlStore.hlMentionInfos {
-            let findString = mentionInfo.getTagID()
-            let replaceString = mentionInfo.kName
-            if mentionInfo.kRange.length == 0 && mentionInfo.kRange.location == 0 {
-                mentionInfo.kRange = NSMakeRange(mentionText.indexOfString(text: findString), replaceString.count)
+            if mentionInfo.kAct == .with {
+                let findString = mentionInfo.getTagID()
+                let replaceString = mentionInfo.kName
+                if mentionInfo.kRange.length == 0 && mentionInfo.kRange.location == 0 {
+                    mentionInfo.kRange = NSMakeRange(mentionText.indexOfString(text: findString), replaceString.count)
+                }
+                mentionText = mentionText.replacingOccurrences(of: findString, with: replaceString)
             }
-            mentionText = mentionText.replacingOccurrences(of: findString, with: replaceString)
         }
         hlStore.hlText = mentionText
     }
@@ -341,7 +346,6 @@ class HLMentionsTextView: UITextView {
     
     func hlTextViewDidChange(_ textView: UITextView) {
         
-        test()
         if !hlTextViewDidChange {
             hlAttributeStringMentionInfo()
             hlSetTypingAttributes()

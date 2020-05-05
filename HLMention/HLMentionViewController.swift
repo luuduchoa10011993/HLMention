@@ -24,6 +24,11 @@ class HLMentionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        kMentionInfos[0].kImage = UIImage(named: "image01")
+        kMentionInfos[3].kImage = UIImage(named: "image02")
+        
+        
         mentionTextView.hlDelegate = self
         mentionTextView.delegate = self
         mentionTextView.hlStore.hlListMentionInfos = kMentionInfos
