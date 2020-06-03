@@ -323,6 +323,7 @@ class HLMentionsTextView: UITextView {
             // mention info have more than one and replacementString count > 1
             for mentionInfo in mentionInfos {
                 hlRemoveMentionInfo(mention: mentionInfo)
+                hlUpdatekMentionInfosRemoveRange(range: mentionInfo.kRange)
             }
             hlTextViewDidChange = false
             hlCurrentCursorLocation = newRange.location + text.count

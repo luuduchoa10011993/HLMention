@@ -18,7 +18,7 @@ extension UITextView {
         let rangeLength = range.location + range.length
         if startLocation <= range.location && rangeLength <= endLocation {
             return true
-        } else if range.location > startLocation && range.location < endLocation && endLocation < rangeLength {
+        } else if range.location >= startLocation && range.location < endLocation && endLocation < rangeLength {
             return true
         } else if startLocation < range.location && range.location < endLocation {
             return true
