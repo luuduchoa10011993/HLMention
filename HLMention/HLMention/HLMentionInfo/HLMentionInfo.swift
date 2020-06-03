@@ -33,7 +33,7 @@ class HLMentionInfo: NSObject {
     var kName = ""
     var kImage: UIImage?
     var kImageName: String?
-    var kAct: MentionInfoActType = .at
+    var kAct: MentionInfoActType = .with
     var kType: MentionInfoType = .user
     var kRange = NSRange(location: 0,length: 0)
     
