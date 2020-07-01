@@ -326,7 +326,7 @@ class HLMentionsTextView: UITextView {
                 hlUpdatekMentionInfosRemoveRange(range: mentionInfo.kRange)
             }
             hlTextViewDidChange = false
-            hlCurrentCursorLocation = newRange.location + text.count
+            hlCurrentCursorLocation = newRange.location + text.lengthOfBytes(using: String.Encoding.utf8)
             if let textRange = textRangeFromLocation(start: newRange.location, end: newRange.location + newRange.length) {
                 self.replace(textRange, withText: text)
             }
@@ -335,9 +335,9 @@ class HLMentionsTextView: UITextView {
         
         hlStore.hlRange = range
         hlStore.hlReplacementText = text
-        hlCurrentCursorLocation = range.location + text.count
+        hlCurrentCursorLocation = range.location + text.lengthOfBytes(using: String.Encoding.utf8)
         if text == String(hlStore.hlMentionSymbol) {
-            hlStore.hlMentionSearchInfo.kRange = NSMakeRange(range.location, text.count)
+            hlStore.hlMentionSearchInfo.kRange = NSMakeRange(range.location, text.lengthOfBytes(using: String.Encoding.utf8))
         } else if hlStore.hlReplacementText == " " && hlStore.hlRange.length == 0 {
             return true
         }
