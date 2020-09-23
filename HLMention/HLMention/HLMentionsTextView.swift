@@ -160,7 +160,7 @@ class HLMentionsTextView: UITextView {
         var currentWord = word
         if currentWord.count >= (String(hlStore.hlMentionSymbol).count + hlStore.hlHowManyCharacterBeginSearch) {
             if currentWord.stringFrom(start: 0, end: 1) == String(hlStore.hlMentionSymbol) {
-                hlStore.hlMentionSearchInfo.kRange = NSMakeRange(getCurrentWordLocation(), currentWord.count)
+                hlStore.hlMentionSearchInfo.kRange = NSMakeRange(getCurrentWordLocation(), currentWord.utf16.count)
                 hlStore.hlMentionSearchInfo.kText = String(currentWord.dropFirst())
                 
                 if !hlStore.hlMentionSearchInfo.kText.isEmpty {
@@ -184,7 +184,7 @@ class HLMentionsTextView: UITextView {
         var currentWord = word
         if currentWord.count >= (String(hlStore.hlMentionSymbol).count + hlStore.hlHowManyCharacterBeginSearch) {
             if currentWord.stringFrom(start: 0, end: 1) == String(hlStore.hlMentionSymbol) {
-                hlStore.hlMentionSearchInfo.kRange = NSMakeRange(getCurrentWordLocation(), currentWord.count)
+                hlStore.hlMentionSearchInfo.kRange = NSMakeRange(getCurrentWordLocation(), currentWord.utf16.count)
                 hlStore.hlMentionSearchInfo.kText = String(currentWord.dropFirst())
                 return hlStore.hlMentionSearchInfo.kText
             }
@@ -223,14 +223,14 @@ class HLMentionsTextView: UITextView {
         let insertString = mentionInfo.kName
         
         let mention = mentionInfo.copy() as! HLMentionInfo
-        mention.kRange = NSMakeRange(range.location, insertString.count)
+        mention.kRange = NSMakeRange(range.location, insertString.utf16.count)
         
-        hlUpdateMentionInfosRange(range: NSMakeRange(range.location, range.length), insertTextCount: insertString.count)
+        hlUpdateMentionInfosRange(range: NSMakeRange(range.location, range.length), insertTextCount: insertString.utf16.count)
         hlStore.hlMentionInfos.append(mention)
         
         hlTextViewDidChange = false
         self.replace(textRange, withText: insertString)
-        hlSetCurrentCursorLocation(index: range.location + insertString.count)
+        hlSetCurrentCursorLocation(index: range.location + insertString.utf16.count)
     }
     
     func hlInsertMentionInfo(mentionInfo: HLMentionInfo,at textRange: UITextRange) {
@@ -238,14 +238,14 @@ class HLMentionsTextView: UITextView {
         let insertString = mentionInfo.kName
         
         let mention = mentionInfo.copy() as! HLMentionInfo
-        mention.kRange = NSMakeRange(range.location, insertString.count)
+        mention.kRange = NSMakeRange(range.location, insertString.utf16.count)
         
-        hlUpdateMentionInfosRange(range: NSMakeRange(range.location, range.length), insertTextCount: insertString.count)
+        hlUpdateMentionInfosRange(range: NSMakeRange(range.location, range.length), insertTextCount: insertString.utf16.count)
         hlStore.hlMentionInfos.append(mention)
         
         hlTextViewDidChange = false
         self.replace(textRange, withText: insertString)
-        hlSetCurrentCursorLocation(index: range.location + insertString.count)
+        hlSetCurrentCursorLocation(index: range.location + insertString.utf16.count)
     }
     
     // remove MentionInfo
@@ -265,7 +265,7 @@ class HLMentionsTextView: UITextView {
     }
     
     func hlUpdateMentionLocation() {
-        hlUpdateMentionInfosRange(range: hlStore.hlRange, insertTextCount: hlStore.hlReplacementText.count)
+        hlUpdateMentionInfosRange(range: hlStore.hlRange, insertTextCount: hlStore.hlReplacementText.utf16.count)
     }
     
     func hlUpdateMentionInfosRange(range: NSRange, insertTextCount: Int) {
@@ -326,7 +326,8 @@ class HLMentionsTextView: UITextView {
                 hlUpdatekMentionInfosRemoveRange(range: mentionInfo.kRange)
             }
             hlTextViewDidChange = false
-            hlCurrentCursorLocation = newRange.location + text.lengthOfBytes(using: String.Encoding.utf8)
+            hlCurrentCursorLocation = newRange.location + text.utf16.count
+//            hlCurrentCursorLocation = range.location + text.count
             if let textRange = textRangeFromLocation(start: newRange.location, end: newRange.location + newRange.length) {
                 self.replace(textRange, withText: text)
             }
@@ -335,9 +336,13 @@ class HLMentionsTextView: UITextView {
         
         hlStore.hlRange = range
         hlStore.hlReplacementText = text
-        hlCurrentCursorLocation = range.location + text.lengthOfBytes(using: String.Encoding.utf8)
+        
+//        let textcount = text.count
+        let textcount = text.utf16.count
+        
+        hlCurrentCursorLocation = range.location + textcount
         if text == String(hlStore.hlMentionSymbol) {
-            hlStore.hlMentionSearchInfo.kRange = NSMakeRange(range.location, text.lengthOfBytes(using: String.Encoding.utf8))
+            hlStore.hlMentionSearchInfo.kRange = NSMakeRange(range.location, textcount)
         } else if hlStore.hlReplacementText == " " && hlStore.hlRange.length == 0 {
             return true
         }
@@ -346,7 +351,6 @@ class HLMentionsTextView: UITextView {
     }
     
     func hlTextViewDidChange(_ textView: UITextView) {
-        
         if !hlTextViewDidChange {
             hlAttributeStringMentionInfo()
             hlSetTypingAttributes()
@@ -374,6 +378,16 @@ class HLMentionsTextView: UITextView {
             return
         }
         
+        hlAttributeStringMentionInfo()
+        hlSetTypingAttributes()
+        
+        if hlUndoText.count != text.count {
+            hlSetCurrentCursorLocation(index: hlCurrentCursorLocation)
+//            hlSetCurrentCursorLocation(index: (hlStore.hlRange.location + hlStore.hlReplacementText.count))
+            
+        }
+        hlUndoText = text
+        
         if let delegate = hlDelegate {
             if let searchText = hlHandleSearchString(with: currentWord), hlStore.hlReplacementText != " " {
                 delegate.hlMentionsTextViewCallBackFromSearch?(self, searchText: searchText)
@@ -382,11 +396,6 @@ class HLMentionsTextView: UITextView {
                 delegate.hlMentionsTextViewCallBackFromSearch?(self, searchText: nil)
             }
         }
-        
-        hlAttributeStringMentionInfo()
-        hlSetTypingAttributes()
-        hlSetCurrentCursorLocation(index: hlCurrentCursorLocation)
-        hlUndoText = text
     }
     
     func test() {
