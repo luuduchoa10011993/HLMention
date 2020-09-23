@@ -46,8 +46,7 @@ extension HLMentionsTextView: UITableViewDelegate, UITableViewDataSource{
         if let height = hlStore.hlTableViewCellHeight{
             return height
         }
-        return UITableView.automaticDimension
-        
+        return UITableViewAutomaticDimension
     }
     
     func refreshMentionList(_ removeAll: Bool = true) {
