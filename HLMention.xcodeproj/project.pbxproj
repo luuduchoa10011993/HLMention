@@ -10,6 +10,9 @@
 		050AE71B244ECE98009428A7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 050AE718244ECE98009428A7 /* README.md */; };
 		050AE71C244ECE98009428A7 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 050AE719244ECE98009428A7 /* LICENSE */; };
 		050AE71D244ECE98009428A7 /* HLMention.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 050AE71A244ECE98009428A7 /* HLMention.podspec */; };
+		056F86EE2540190500DC26BB /* HLMentionImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056F86EC2540190500DC26BB /* HLMentionImageCollectionViewCell.swift */; };
+		056F86EF2540190500DC26BB /* HLMentionImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 056F86ED2540190500DC26BB /* HLMentionImageCollectionViewCell.xib */; };
+		056F871625403BFA00DC26BB /* HLMentionImageInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056F871525403BFA00DC26BB /* HLMentionImageInfo.swift */; };
 		0571E356243849F600CDA62E /* HLMention+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E355243849F600CDA62E /* HLMention+String.swift */; };
 		0571E35824384A3400CDA62E /* HLMention+UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0571E35724384A3400CDA62E /* HLMention+UITextView.swift */; };
 		057D3F3424596FD9000D91C8 /* image01.png in Resources */ = {isa = PBXBuildFile; fileRef = 057D3F3324596FD9000D91C8 /* image01.png */; };
@@ -53,6 +56,9 @@
 		050AE718244ECE98009428A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		050AE719244ECE98009428A7 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		050AE71A244ECE98009428A7 /* HLMention.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = HLMention.podspec; sourceTree = "<group>"; };
+		056F86EC2540190500DC26BB /* HLMentionImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		056F86ED2540190500DC26BB /* HLMentionImageCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HLMentionImageCollectionViewCell.xib; sourceTree = "<group>"; };
+		056F871525403BFA00DC26BB /* HLMentionImageInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HLMentionImageInfo.swift; sourceTree = "<group>"; };
 		0571E355243849F600CDA62E /* HLMention+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+String.swift"; sourceTree = "<group>"; };
 		0571E35724384A3400CDA62E /* HLMention+UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HLMention+UITextView.swift"; sourceTree = "<group>"; };
 		057D3F3324596FD9000D91C8 /* image01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image01.png; sourceTree = "<group>"; };
@@ -111,8 +117,18 @@
 			children = (
 				AC8FCE1E24350A3300EAB060 /* HLMentionInfo.swift */,
 				05B25D5B243AD81200E0051A /* HLMentionSearchInfo.swift */,
+				056F871525403BFA00DC26BB /* HLMentionImageInfo.swift */,
 			);
 			path = HLMentionInfo;
+			sourceTree = "<group>";
+		};
+		056F86EB254018C900DC26BB /* HLImageCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				056F86EC2540190500DC26BB /* HLMentionImageCollectionViewCell.swift */,
+				056F86ED2540190500DC26BB /* HLMentionImageCollectionViewCell.xib */,
+			);
+			path = HLImageCollectionView;
 			sourceTree = "<group>";
 		};
 		0571E354243849CB00CDA62E /* HLMention */ = {
@@ -120,6 +136,7 @@
 			children = (
 				050CD40524417ED800570565 /* HLMentionInfo */,
 				05B25D74243EC74300E0051A /* HLMentionTableView */,
+				056F86EB254018C900DC26BB /* HLImageCollectionView */,
 				05913BC924501F1500152AB5 /* HLMentionExtentions */,
 				05B25D8F243EE0FD00E0051A /* HLInstant.swift */,
 				AC54014424350458007189AB /* HLMentionsTextView.swift */,
@@ -325,6 +342,7 @@
 				050AE71B244ECE98009428A7 /* README.md in Resources */,
 				ACF3C34F243503730085AE41 /* Assets.xcassets in Resources */,
 				ACF3C34D243503720085AE41 /* Main.storyboard in Resources */,
+				056F86EF2540190500DC26BB /* HLMentionImageCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,7 +379,9 @@
 				AC8FCE1F24350A3300EAB060 /* HLMentionInfo.swift in Sources */,
 				AC54014724350458007189AB /* HLMentionsTextView.swift in Sources */,
 				05B25D60243D8D2100E0051A /* HLMention+UITableView.swift in Sources */,
+				056F871625403BFA00DC26BB /* HLMentionImageInfo.swift in Sources */,
 				AC4267EF243A0A8E00049450 /* HLMention+Display.swift in Sources */,
+				056F86EE2540190500DC26BB /* HLMentionImageCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

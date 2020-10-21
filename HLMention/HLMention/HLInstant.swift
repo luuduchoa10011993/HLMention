@@ -10,7 +10,7 @@ import UIKit
 
 public class HLInstant {
     // iOS
-//    public static var systemVersion = UIDevice.current.systemVersion
+    //    public static var systemVersion = UIDevice.current.systemVersion
     private var _hlMentionInfosTableView = [HLMentionInfo]() // display on tableview
     public var hlMentionInfosTableView: [HLMentionInfo]! {
         get {
@@ -28,9 +28,6 @@ public class HLInstant {
         }
     }
     
-    
-    
-    
     public var hlTableViewBackgroundColor: UIColor = UIColor.white
     public var hlTableViewMax: Int = 999
     public var hlTableViewHeight: CGFloat = 100
@@ -39,6 +36,8 @@ public class HLInstant {
     public var hlTableViewBorderWidth: CGFloat = 1.0
     public var hlTableViewCornerRadius: CGFloat = 5.0
     public var hlTableViewMasksToBounds: Bool = true
+    
+    public var hlCollectionViewData: []?
     
     //HL Search offline data
     public var hlHighlightColor : UIColor = UIColor.red
@@ -55,7 +54,7 @@ public class HLInstant {
                 _hlListMentionInfos = newValue
             } else {
                 if let newValue = newValue {
-//                    var data = [HLMentionInfo]()
+                    //                    var data = [HLMentionInfo]()
                     newValue.forEach { (mention) in
                         mention.kName = "\(hlMentionSymbol)\(mention.kName)"
                         mention.kRange = NSRange(location: mention.kRange.location, length: mention.kRange.length + 1) // hlMentionSymbol = 1

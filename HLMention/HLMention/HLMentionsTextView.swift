@@ -17,11 +17,17 @@ import UIKit
 
 public class HLMentionsTextView: UITextView {
     
-    /* TableView object*/
+    /* TableView object */
     @IBOutlet public weak var hlTableView: UITableView?
     @IBOutlet public weak var hlTableViewDataSource: UITableViewDataSource?
     @IBOutlet public weak var hlTableViewDelegate: UITableViewDelegate?
     @IBOutlet public weak var hlTableViewHeightConstaint: NSLayoutConstraint!
+    
+    /* CollectionView object */
+    @IBOutlet public weak var hlCollectionView: UICollectionView?
+    @IBOutlet public weak var hlCollectionViewDataSource: UICollectionViewDataSource?
+    @IBOutlet public weak var hlCollectionViewDelegate: UICollectionViewDelegate?
+    @IBOutlet public weak var hlCollectionViewHeightConstaint: NSLayoutConstraint!
     
     private var hlTextViewDidChange = true
     
@@ -89,7 +95,6 @@ public class HLMentionsTextView: UITextView {
     }
     
     public func hlInitTableView() {
-
         guard let tableView = hlTableView else { return }
         tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
         tableView.delegate = self
@@ -109,8 +114,12 @@ public class HLMentionsTextView: UITextView {
                 hlStore.hlTableViewHeight = hlTableViewHeightConstaint.constant
             }
         }
-//        hlHideTableView()
         tableView.reloadData()
+    }
+    
+    public hlInitCollectionView() {
+        guard let collectionView = hlCollectionView else { return }
+        collectionView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
     }
     
     public func hlResetData() {
@@ -120,6 +129,7 @@ public class HLMentionsTextView: UITextView {
         hlStore.hlMentionSearchInfo.removeAll()
         hlMentionInfosTableView.removeAll()
         hlInitTableView()
+        hlInitCollectionView()
     }
     
     public func hlRemoveData() {

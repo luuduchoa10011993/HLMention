@@ -15,8 +15,8 @@ class HLMentionViewController: UIViewController {
     
     @IBOutlet weak var postBtn: UIButton!
     let text = "::00:: đẹp trai ::04:: đẹp gái"
-    let kMentionInfos: [HLMentionInfo] = [HLMentionInfo("00", "Hoa"), HLMentionInfo("01", "Vuong Khac Duy"), HLMentionInfo("02", "Dương"),
-                                        HLMentionInfo("03", "Nguyễn Đoàn Nguyên An"), HLMentionInfo("04", "Nguyễn Kiều Vy"), HLMentionInfo("05", "Nguyễn Duy Ngân"),
+    let kMentionInfos: [HLMentionInfo] = [HLMentionInfo("00", "Hoa"), HLMentionInfo("01", "Tên họ gái"), HLMentionInfo("02", "Linh"),
+                                        HLMentionInfo("03", "Gái họ tên"), HLMentionInfo("04", "Nguyễn Kiều Vy"), HLMentionInfo("05", "Big Boobs Girl"),
                                         HLMentionInfo("06", "Donald Trump"), HLMentionInfo("07", "Hoà cute phô mai que")]
     
     //tableview data
