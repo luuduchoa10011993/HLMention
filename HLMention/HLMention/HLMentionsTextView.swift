@@ -8,26 +8,26 @@
 
 import UIKit
 
-@objc protocol HLMentionsTextViewDelegate: class {
+@objc public protocol HLMentionsTextViewDelegate: class {
     @objc optional func hlMentionsTextViewMentionInfos(_ textView: HLMentionsTextView, mentionInfos: [HLMentionInfo]?)
     @objc optional func hlMentionsTextViewCallBackFromSearch(_ textView: HLMentionsTextView, searchText: String?)
     
     /* if you want anythings just add from UITextView delegate*/
 }
 
-class HLMentionsTextView: UITextView {
+public class HLMentionsTextView: UITextView {
     
     /* TableView object*/
-    @IBOutlet weak var hlTableView: UITableView?
-    @IBOutlet weak var hlTableViewDataSource: UITableViewDataSource?
-    @IBOutlet weak var hlTableViewDelegate: UITableViewDelegate?
-    @IBOutlet weak var hlTableViewHeightConstaint: NSLayoutConstraint!
+    @IBOutlet public weak var hlTableView: UITableView?
+    @IBOutlet public weak var hlTableViewDataSource: UITableViewDataSource?
+    @IBOutlet public weak var hlTableViewDelegate: UITableViewDelegate?
+    @IBOutlet public weak var hlTableViewHeightConstaint: NSLayoutConstraint!
     
     private var hlTextViewDidChange = true
     
-    var hlStore = HLInstant()
+    public var hlStore = HLInstant()
     
-    var hlMentionInfosTableView:[HLMentionInfo] {
+    public var hlMentionInfosTableView:[HLMentionInfo] {
         get {
             return hlStore.hlMentionInfosTableView
         }
@@ -35,11 +35,16 @@ class HLMentionsTextView: UITextView {
             hlStore.hlMentionInfosTableView = newValue
             if let tableView = hlTableView {
                 tableView.reloadData()
+                if newValue.isEmpty {
+                    hlHideTableView()
+                } else {
+                    hlShowTableView()
+                }
             }
         }
     }
     
-    weak var hlDelegate: HLMentionsTextViewDelegate?
+    public weak var hlDelegate: HLMentionsTextViewDelegate?
     
     
     //full all data or data need to setup
@@ -55,8 +60,9 @@ class HLMentionsTextView: UITextView {
     // don't touch
     private var kMentionInfoInsertInfrontRange: NSRange?
     private var hlUndoText = ""
+    private var initLayout = false
     
-    func getTextAndMentionInfos() -> (attributeText: NSAttributedString, mentionInfos: [HLMentionInfo])? {
+    public func getTextAndMentionInfos() -> (attributeText: NSAttributedString, mentionInfos: [HLMentionInfo])? {
         let mentionInfos = hlStore.hlMentionInfos
         
         let mentionAttributeText = NSMutableAttributedString(attributedString: attributedText)
@@ -71,18 +77,19 @@ class HLMentionsTextView: UITextView {
         return(mentionAttributeText, mentionInfos)
     }
     
-    override func awakeFromNib() {
-        hlResetData()
-        hlAttributeStringMentionInfo()
+    public override func awakeFromNib() {
         hlInitTextView()
         hlInitTableView()
+        hlAttributeStringMentionInfo()
+        hlResetData()
     }
     
-    func hlInitTextView() {
+    public func hlInitTextView() {
         returnKeyType = .default
     }
     
-    func hlInitTableView() {
+    public func hlInitTableView() {
+
         guard let tableView = hlTableView else { return }
         tableView.register(UINib(nibName: String(describing: HLMentionTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: HLMentionTableViewCell.self))
         tableView.delegate = self
@@ -102,9 +109,11 @@ class HLMentionsTextView: UITextView {
                 hlStore.hlTableViewHeight = hlTableViewHeightConstaint.constant
             }
         }
+//        hlHideTableView()
+        tableView.reloadData()
     }
     
-    func hlResetData() {
+    public func hlResetData() {
         hlSetTypingAttributes()
         hlSetDisplayText()
         hlAttributeStringMentionInfo()
@@ -113,22 +122,23 @@ class HLMentionsTextView: UITextView {
         hlInitTableView()
     }
     
-    func hlRemoveData() {
+    public func hlRemoveData() {
         hlStore.hlMentionSearchInfo.removeAll()
         hlStore.hlListMentionInfos?.removeAll()
         hlStore.hlMentionInfos.removeAll()
         hlMentionInfosTableView.removeAll()
     }
     
-    func hlSetDisplayText() {
+    public func hlSetDisplayText() {
         if hlStore.hlText.isEmpty { return }
         var mentionText = hlStore.hlText
         for mentionInfo in hlStore.hlMentionInfos {
             if mentionInfo.kAct == .with {
                 let findString = mentionInfo.getTagID()
                 let replaceString = mentionInfo.kName
-                if mentionInfo.kRange.length == 0 && mentionInfo.kRange.location == 0 {
-                    mentionInfo.kRange = NSMakeRange(mentionText.indexOfString(text: findString), replaceString.count)
+                if let indexOfString = mentionText.indexOfString(text: findString),
+                    mentionInfo.kRange.length == 0 && mentionInfo.kRange.location == 0 {
+                    mentionInfo.kRange = NSMakeRange(indexOfString, replaceString.count)
                 }
                 mentionText = mentionText.replacingOccurrences(of: findString, with: replaceString)
             }
@@ -136,12 +146,13 @@ class HLMentionsTextView: UITextView {
         hlStore.hlText = mentionText
     }
     
-    func hlAttributeStringMentionInfo() {
+    public func hlAttributeStringMentionInfo() {
         if hlStore.hlText.isEmpty {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(attributedString: self.attributedText)
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
-                                                         highLightColor: hlStore.hlHighlightColor)
+                                                         highLightColor: hlStore.hlHighlightColor,
+                                                         boldFont: nil)
             self.attributedText = attributedText
         } else {
             let attributedText: NSMutableAttributedString = NSMutableAttributedString(string: hlStore.hlText,
@@ -150,7 +161,8 @@ class HLMentionsTextView: UITextView {
                                                                                       NSAttributedString.Key.font: UIFont.systemFont(ofSize: UIFont.systemFontSize)])
             attributedText.hlAttributeStringRemoveAttributes()
             attributedText.hlAttributeStringInsertRanges(ranges: hlAttributeRangesFrom(mentionInfos: hlStore.hlMentionInfos),
-                                                         highLightColor: hlStore.hlHighlightColor)
+                                                         highLightColor: hlStore.hlHighlightColor,
+                                                         boldFont: nil)
             self.attributedText = attributedText
             hlStore.hlText = ""
         }
@@ -165,6 +177,11 @@ class HLMentionsTextView: UITextView {
                 
                 if !hlStore.hlMentionSearchInfo.kText.isEmpty {
                     return self.mentionInfosSearchFrom(hlStore.hlMentionSearchInfo.kText,from: kMentionInfos)
+                }
+                
+                // offline
+                if hlStore.hlMentionSearchInfo.kText.isEmpty && hlStore.hlListMentionInfos != nil {
+                    return kMentionInfos
                 }
                 
                 for mentionInfo in kMentionInfos {
@@ -201,12 +218,23 @@ class HLMentionsTextView: UITextView {
         return nil
     }
     
+    func hlMentionIsAlreadyBeenTag(mentionInfo: HLMentionInfo) -> Bool {
+        for mention in hlStore.hlMentionInfos {
+            if mention.kId == mentionInfo.kId {
+                return true
+            }
+        }
+        return false
+    }
+    
     func mentionInfosSearchFrom(_ string: String,from kListMentionInfos: [HLMentionInfo]) -> [HLMentionInfo]? {
         if string.isEmpty { return kListMentionInfos }
         var mentionInfos = [HLMentionInfo]()
         for mentionInfo in kListMentionInfos {
             if mentionInfo.kName.hlLowercase().contains(string.hlLowercase()) {
-                mentionInfos.append(mentionInfo)
+                if !hlMentionIsAlreadyBeenTag(mentionInfo: mentionInfo) {
+                    mentionInfos.append(mentionInfo)
+                }
             }
         }
         
@@ -298,7 +326,7 @@ class HLMentionsTextView: UITextView {
         }
     }
     
-    func hlTextView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+    public func hlTextView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // backspace data -> range (0,1), replacementString = ""
         // a -> range (1,0), replacementString = a
         
@@ -350,7 +378,11 @@ class HLMentionsTextView: UITextView {
         return true
     }
     
-    func hlTextViewDidChange(_ textView: UITextView) {
+    public func hlTextViewDidChange(_ textView: UITextView) {
+        
+        if let tableView = self.hlTableView {
+            tableView.superview?.bringSubviewToFront(tableView)
+        }
         if !hlTextViewDidChange {
             hlAttributeStringMentionInfo()
             hlSetTypingAttributes()

@@ -14,15 +14,28 @@ extension NSMutableAttributedString {
         self.removeAttribute(NSAttributedString.Key.foregroundColor, range: NSMakeRange(0, self.length))
     }
     
-    func hlAttributeStringInsertRanges(ranges: [NSRange], highLightColor: UIColor) {
-        let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor ]
-        for range in ranges {
-            self.addAttributes(attribute, range: range)
+    public func hlAttributeStringInsertRanges(ranges: [NSRange], highLightColor: UIColor, boldFont: UIFont?) {
+        if boldFont != nil {
+            let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor, NSAttributedString.Key.font: boldFont ]
+            for range in ranges {
+                self.addAttributes(attribute as [NSAttributedString.Key : Any], range: range)
+            }
+        } else {
+            let attribute = [ NSAttributedString.Key.foregroundColor: highLightColor ]
+            for range in ranges {
+                self.addAttributes(attribute, range: range)
+            }
         }
     }
     
-    func hlAttributeStringReplace(range: NSRange,with text: String) {
+    public func hlAttributeStringReplace(range: NSRange,with text: String) {
         self.replaceCharacters(in: range, with: text)
+    }
+    
+    public func setAsLink(range: NSRange, linkURL:String) {
+        if range.location != NSNotFound {
+            self.addAttribute(.link, value: linkURL, range: range)
+        }
     }
 }
 

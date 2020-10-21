@@ -27,13 +27,13 @@ extension UITextView {
         }
         return false
     }
+    
     func textRangeFromLocation(start: Int, end: Int) -> UITextRange? {
-        let startPosition = self.position(from: self.beginningOfDocument, offset: start)
-        let endPosition = self.position(from: self.beginningOfDocument, offset: end)
-        if startPosition == nil && endPosition == nil {
-            return nil
+        if let startPosition = self.position(from: self.beginningOfDocument, offset: start),
+            let endPosition = self.position(from: self.beginningOfDocument, offset: end) {
+            return textRange(from: startPosition, to: endPosition)
         }
-        return textRange(from: startPosition!, to: endPosition!)
+        return nil
     }
     
     func getRange(from position: UITextPosition, offset: Int) -> UITextRange? {
@@ -61,11 +61,10 @@ extension UITextView {
     }
     
     func hlSetCurrentCursorLocation(index: Int) {
-        let startPosition = self.position(from: self.beginningOfDocument, offset: index)
-        let endPosition = self.position(from: self.beginningOfDocument, offset: index)
 
-        if startPosition != nil && endPosition != nil {
-            self.selectedTextRange = self.textRange(from: startPosition!, to: endPosition!)
+        if let startPosition = self.position(from: self.beginningOfDocument, offset: index),
+            let endPosition = self.position(from: self.beginningOfDocument, offset: index) {
+            self.selectedTextRange = self.textRange(from: startPosition, to: endPosition)
         }
     }
     

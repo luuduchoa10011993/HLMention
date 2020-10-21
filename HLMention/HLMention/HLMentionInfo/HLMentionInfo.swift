@@ -8,12 +8,12 @@
 
 import UIKit
 
-enum MentionInfoType: String {
+public enum MentionInfoType: String {
     case user = "user";
     case group = "group"
 }
 
-enum MentionInfoActType: String {
+public enum MentionInfoActType: String {
     case emoji = "emoji"
     case media = "media"
     case sticker = "sticker"
@@ -28,39 +28,36 @@ enum MentionInfoActType: String {
     case typeSearch = "search" // if want to be a search name must have at least 1 charater
 }
 
-class HLMentionInfo: NSObject {
-    var kId = ""
-    var kName = ""
-    var kImage: UIImage?
-    var kImageName: String?
-    var kAct: MentionInfoActType = .with
-    var kType: MentionInfoType = .user
-    var kRange = NSRange(location: 0,length: 0)
+public class HLMentionInfo: NSObject {
+    public var kId = ""
+    public var kName = ""
+    public var kImage: UIImage?
+    public var kImageName: String?
+    public var kAct: MentionInfoActType = .with
+    public var kType: MentionInfoType = .user
+    public var kRange = NSRange(location: 0,length: 0)
+    public var kSerial = 0 as Int // Số thứ tự theo tuần tự được tag.
+    public var kGender = "Male"
+//    var type : PostSubDataType?
     
     
-    override func copy() -> Any {
+    public override func copy() -> Any {
         let mentionInfo = HLMentionInfo(kId, kName)
         mentionInfo.kAct = kAct
         mentionInfo.kType = kType
         mentionInfo.kRange = kRange
+        mentionInfo.kImageName = kImageName
+        mentionInfo.kImage = kImage
         return mentionInfo
     }
-//    var locationBeenMention = UITextRange
+    //    var locationBeenMention = UITextRange
     
-    init(_ id: String,_ name: String) {
+    public init(_ id: String,_ name: String) {
         self.kId = id
         self.kName = name
     }
     
-    init(_ id: String,_ name: String, _ image: String?) {
-        self.kId = id
-        self.kName = name
-        if let image = image {
-            self.kImageName = image
-        }
-    }
-    
-    func getTagID() -> String {
+    public func getTagID() -> String {
         return "::\(kId)::"
     }
     
@@ -69,6 +66,8 @@ class HLMentionInfo: NSObject {
         mentionInfo.kAct = kAct
         mentionInfo.kType = kType
         mentionInfo.kRange = kRange
+        mentionInfo.kImageName = kImageName
+        mentionInfo.kImage = kImage
         return mentionInfo
     }
     

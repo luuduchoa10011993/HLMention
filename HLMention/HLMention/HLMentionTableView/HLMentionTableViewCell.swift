@@ -32,10 +32,8 @@ class HLMentionTableViewCell: UITableViewCell {
     }
     
     func setupImageView() {
-        hlImageView.clipsToBounds = true
-        let layer: CALayer = hlImageView.layer
-        layer.cornerRadius = 10.0
-        layer.masksToBounds = true
+        self.hlImageView.clipsToBounds = true
+        self.hlImageView.layer.cornerRadius = hlImageView.bounds.height / 2
     }
     
     func getMentionInfo() -> HLMentionInfo {

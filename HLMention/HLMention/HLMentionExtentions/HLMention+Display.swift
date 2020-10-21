@@ -11,7 +11,7 @@ import UIKit
 
 extension HLMentionsTextView {
     
-    func hlAttributeRangesFrom(mentionInfos: [HLMentionInfo]) -> [NSRange] {
+    public func hlAttributeRangesFrom(mentionInfos: [HLMentionInfo]) -> [NSRange] {
         var ranges = [NSRange]()
         for mentionInfo in mentionInfos {
             ranges.append(mentionInfo.kRange)
@@ -19,9 +19,9 @@ extension HLMentionsTextView {
         return ranges
     }
     
-     func hlSetTypingAttributes() {
+    public func hlSetTypingAttributes() {
         hlSetTypingAttributes(dict: hlTypingAttributes)
-     }
+    }
     
     private func hlSetTypingAttributes(dict :Dictionary<String, Any>) {
         self.typingAttributes = [NSAttributedString.Key.foregroundColor : dict[NSAttributedString.Key.foregroundColor.rawValue] as Any,
@@ -47,7 +47,7 @@ extension HLMentionsTextView {
      }
      */
     
-    func mentionInfoIsValidInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
+    public func mentionInfoIsValidInRange(range: NSRange, replacementString: String) -> [HLMentionInfo]? {
         var mentionInfos = [HLMentionInfo]()
         let newRange: NSRange = {
             if replacementString.isValidCharacterBackSpace() {

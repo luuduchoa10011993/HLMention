@@ -8,14 +8,14 @@
 
 import Foundation
 
-class HLMentionSearchInfo: NSObject {
+public class HLMentionSearchInfo: NSObject {
     
      // use for insert select mention in tableview. Ex: "@|H"
-    var kIsSearch = false
-    var kText = ""
-    var kRange = NSRange(location: 0,length: 0)
-    var kFirstTextAfterkText = ""
-    var kFirstTextAfterkTextRange = NSRange(location: 0,length: 0)
+    public var kIsSearch = false
+    public var kText = ""
+    public var kRange = NSRange(location: 0,length: 0)
+    public var kFirstTextAfterkText = ""
+    public var kFirstTextAfterkTextRange = NSRange(location: 0,length: 0)
     
     
     func removeAll() {
